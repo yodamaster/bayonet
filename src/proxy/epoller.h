@@ -1,11 +1,11 @@
 /*=============================================================================
-#  Author:          DanteZhu - http://www.vimer.cn
-#  Email:           dantezhu@vip.qq.com
+#  Author:          dantezhu - http://www.vimer.cn
+#  Email:           zny2008@gmail.com
 #  FileName:        epoller.h
 #  Description:     定义epoll专用的socket和epoller池
 #  Version:         1.0
-#  LastChange:      2010-11-02 00:00:34
-#  History:
+#  LastChange:      2010-11-02 00:48:39
+#  History:         
 =============================================================================*/
 #ifndef _EPOLLER_H_
 #define _EPOLLER_H_
