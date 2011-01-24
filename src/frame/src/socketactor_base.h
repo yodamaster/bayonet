@@ -18,6 +18,9 @@ public:
     CSocketActorBase () {}
     virtual ~CSocketActorBase () {}
 
+    //设置协议类型
+    int SetProto(int protoType);
+
     virtual int SetEvent(int event);
 
     virtual int OnRecv();

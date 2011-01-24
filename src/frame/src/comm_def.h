@@ -9,6 +9,12 @@
 =============================================================================*/
 #ifndef _COMM_DEF_H_
 #define _COMM_DEF_H_
+enum APPFSM
+{
+    APP_FSM_ALLOVER=-1,//所有流程已经走完
+    APP_FSM_KEEP=0,//保持当前状态
+};
+
 enum SOCKETFSM
 {
     SOCKET_FSM_ALLOVER=-1,//所有流程已经走完

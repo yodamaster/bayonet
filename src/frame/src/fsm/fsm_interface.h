@@ -23,11 +23,11 @@ public:
     /**
      * @brief   关联状态机的管理器
      *
-     * @param   mapFsmMgr
+     * @param   ptrMapFsmMgr
      *
      * @return  0
      */
-    virtual int AttachFsmMgr(map<int, IFsm*> *mapFsmMgr)=0;
+    virtual int AttachFsmMgr(map<int, IFsm*> *ptrMapFsmMgr)=0;
 
     /**
      * @brief   关联上层的actor

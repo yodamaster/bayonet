@@ -22,13 +22,13 @@ using namespace std;
 class CActorBase : public IActor
 {
 public:
-    CActorBase () : m_Fsm(NULL),m_mapFsmMgr(NULL),m_pUpperActor(NULL) {}
+    CActorBase () : m_Fsm(NULL),m_ptrMapFsmMgr(NULL),m_pUpperActor(NULL) {}
 
     virtual ~CActorBase () {}
 
-    int AttachFsmMgr(map<int, IFsm*> * mapFsmMgr)
+    int AttachFsmMgr(map<int, IFsm*> * ptrMapFsmMgr)
     {
-        m_mapFsmMgr = mapFsmMgr;
+        m_ptrMapFsmMgr = ptrMapFsmMgr;
         return 0;
     }
     int AttachUpperActor(IActor* pActor)
@@ -43,7 +43,7 @@ public:
 
     int ProcessState()
     {
-        if (m_mapFsmMgr == NULL)
+        if (m_ptrMapFsmMgr == NULL)
         {
             return -1;
         }
@@ -53,7 +53,7 @@ public:
 
     int ChangeState(int destState)
     {
-        if (m_mapFsmMgr == NULL)
+        if (m_ptrMapFsmMgr == NULL)
         {
             return -1;
         }
@@ -74,7 +74,7 @@ public:
             return destState;
         }
         IFsm * destFsm = NULL;
-        destFsm = (*m_mapFsmMgr)[destState];
+        destFsm = (*m_ptrMapFsmMgr)[destState];
         int state = doChangeFsm(destFsm);
         return ChangeState(state);
     }
@@ -101,7 +101,7 @@ private:
 
 protected:
     IFsm* m_Fsm;
-    map<int, IFsm*> *m_mapFsmMgr;
+    map<int, IFsm*> *m_ptrMapFsmMgr;
     IActor* m_pUpperActor;
 };
 #endif
