@@ -30,6 +30,23 @@ public:
             _ins = new CSyncFrame();
         return _ins;
     }
+    /**
+     * @brief   初始化监听
+     *
+     * @param   ip          ip
+     * @param   port        port
+     * @param   protoType   协议
+     *
+     * @return  0           succ
+     *          else        fail
+     */
+    int Init(string ip, int port, int protoType);
+
+    //执行监听
+    int ServeForEver()
+    {
+        return 0;
+    }
 protected:
     CSyncFrame()
     {
