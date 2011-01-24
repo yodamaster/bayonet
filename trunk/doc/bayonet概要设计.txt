@@ -1,1 +1,25 @@
-一直更新不了
+一.accept之后，是要进入第一个状态的，怎么进入呢？
+1.如果不用action
+两层状态机，一定是先出现上层。那么这个时候，一定要进入一个状态初始状态，要想进入一个状态，就必须的先有一个actor。
+
+初始化的状态，就是要把那个accept的socket呀，注册上.
+然后socket转化成onrecive状态.
+
+<!--=============================================================================-->
+accept()
+actor=new SocketActor()
+changestate(waitrecv)
+
+在socketActor的action中，直接调用
+appactor=new AppActor()
+appactor.setgloblsocket()
+
+所以业务要做的倒是很简单了
+
+1.注册一个用来accept之后socket回调工厂函数，用来生成一个socketActor
+2.实现所有的state和对应的action
+
+调用方式
+regFuncOnAccept(socketid),changestate
+
+regAppState(int,Fsm);
