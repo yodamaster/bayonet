@@ -15,9 +15,7 @@
 #include <set>
 #include <map>
 
-#include "fsm_interface.h"
 #include "fsm_achieve.h"
-
 #include "appfsm_interface.h"
 
 using namespace std;
@@ -109,11 +107,11 @@ private:
     CChildActorSet m_ChildActorSet;
 };
 
-class CAppFsm : public IFsm
+class CAppFsmBase : public IFsm
 {
 public:
-    CAppFsm () {}
-    virtual ~CAppFsm () {}
+    CAppFsmBase () {}
+    virtual ~CAppFsmBase () {}
     virtual int Init(IActor* obj)
     {
         CAppActorBase * pAppActor = (CAppActorBase*)obj;

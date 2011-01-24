@@ -3,6 +3,7 @@ CXX = g++
 TARGET = test
 
 C_FLAGS += -g -Wall -pthread
+INC+=-I./fsm/
 
 all: $(TARGET)
 
