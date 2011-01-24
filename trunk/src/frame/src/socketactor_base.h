@@ -11,7 +11,7 @@
 #define _SOCKETACTOR_BASE_H_
 #include "fsm_achieve.h"
 
-class CSocketActorBase
+class CSocketActorBase:public CActorBase
 {
 public:
     CSocketActorBase () {}
