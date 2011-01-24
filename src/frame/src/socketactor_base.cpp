@@ -38,7 +38,7 @@ int CSocketActorBase::OnError()
 }
 int CSocketActorBase::OnRecvOver()
 {
-    return HandleRecvOver();
+    return HandleRecvOver(NULL,0,m_pUpperActor);
 }
 
 int CSocketActorBase::OnSendOver()

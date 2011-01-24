@@ -52,15 +52,24 @@ protected:
     // 发送包接收完毕
     virtual int HandleSendOver()=0;
     // 回应包接受完毕
-    virtual int HandleRecvOver()=0;
+    virtual int HandleRecvOver(const char *buf, int len,IActor *pActor)=0;
     // socket close完毕
-    virtual int HandleCloseOver()=0;
+    virtual int HandleCloseOver()
+    {
+        return SOCKET_FSM_ALLOVER;
+    }
 
     virtual int HandleTimeout(
-            int timeout_ms)=0;
+            int timeout_ms)
+    {
+        return SOCKET_FSM_ALLOVER;
+    }
 
     virtual int HandleError(
-            int err_no)=0;
+            int err_no)
+    {
+        return SOCKET_FSM_ALLOVER;
+    }
     //=============================================================================
 };
 
