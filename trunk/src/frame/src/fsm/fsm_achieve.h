@@ -60,12 +60,17 @@ public:
 
         if (0 == destState)
         {
-            //此次处理结束
+            //此次处理结束,但是并没有退出这个状态
             return 0;
         }
         else if (destState < 0)
         {
             //需要关闭整个请求
+            if (m_Fsm)
+            {
+                m_Fsm->Fini(this);
+                m_Fsm = NULL;
+            }
             return destState;
         }
         IFsm * destFsm = NULL;
