@@ -9,12 +9,20 @@
 =============================================================================*/
 #include "socketactor_base.h"
 
+int CSocketActorBase::SetEvent(int event)
+{
+    return 0;
+}
 int CSocketActorBase::OnRecv()
 {
     return 0;
 }
 
 int CSocketActorBase::OnSend()
+{
+    return 0;
+}
+int CSocketActorBase::OnClose()
 {
     return 0;
 }
@@ -27,4 +35,18 @@ int CSocketActorBase::OnTimeout()
 int CSocketActorBase::OnError()
 {
     return HandleError(1);
+}
+int CSocketActorBase::OnRecvOver()
+{
+    return HandleRecvOver();
+}
+
+int CSocketActorBase::OnSendOver()
+{
+    return HandleSendOver();
+}
+
+int CSocketActorBase::OnCloseOver()
+{
+    return HandleCloseOver();
 }
