@@ -32,6 +32,6 @@ protected:
     virtual int HandleInput(
             const char *buf,
             int len)=0;
-    virtual int HandleRecvOver(const char *buf, int len,IActor *pActor)=0;
+    virtual int HandleRecvOver(const char *buf, int len)=0;
 };
 #endif
