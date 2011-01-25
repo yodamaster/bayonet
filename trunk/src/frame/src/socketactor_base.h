@@ -23,6 +23,8 @@ public:
 
     virtual int SetEvent(int event);
 
+    virtual int OnInit();
+
     virtual int OnRecv();
 
     virtual int OnRecvOver();
@@ -42,20 +44,6 @@ public:
     //=============================================================================
     //业务需要继承实现
 protected:
-    // 为发送打包
-    virtual int HandleEncode(
-            char *buf,
-            int &len)=0;
-
-    // 回应包完整性检查
-    virtual int HandleInput(
-            const char *buf,
-            int len)=0;
-
-    // 发送包接收完毕
-    virtual int HandleSendOver()=0;
-    // 回应包接受完毕
-    virtual int HandleRecvOver(const char *buf, int len,IActor *pActor)=0;
     // socket close完毕
     virtual int HandleCloseOver()
     {
@@ -73,6 +61,22 @@ protected:
     {
         return SOCKET_FSM_ALLOVER;
     }
+
+    // 为发送打包
+    virtual int HandleEncode(
+            char *buf,
+            int &len)=0;
+
+    // 回应包完整性检查
+    virtual int HandleInput(
+            const char *buf,
+            int len)=0;
+
+    virtual int HandleInit()=0;
+    // 发送包接收完毕
+    virtual int HandleSendOver()=0;
+    // 回应包接受完毕
+    virtual int HandleRecvOver(const char *buf, int len,IActor *pActor)=0;
     //=============================================================================
 };
 
