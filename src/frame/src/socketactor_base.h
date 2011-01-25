@@ -54,19 +54,19 @@ protected:
     // socket close完毕
     virtual int HandleCloseOver()
     {
-        return SOCKET_FSM_ALLOVER;
+        return SOCKET_FSM_FINI;
     }
 
     virtual int HandleTimeout(
             int timeout_ms)
     {
-        return SOCKET_FSM_ALLOVER;
+        return SOCKET_FSM_CLOSING;
     }
 
     virtual int HandleError(
             int err_no)
     {
-        return SOCKET_FSM_ALLOVER;
+        return SOCKET_FSM_CLOSING;
     }
 
     // 为发送打包
