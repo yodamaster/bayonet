@@ -28,7 +28,7 @@ public:
     CEPoller();
     ~CEPoller();
 
-    int Create(int maxfd);
+    int Create(int size);
     int AddEpollIO(int fd,unsigned flag);
     int ModEpollIO(int fd,unsigned flag);
     int SetEpollIO(int fd,unsigned flag);

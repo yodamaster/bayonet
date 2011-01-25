@@ -9,12 +9,12 @@ CEPoller::~CEPoller()
 {
 }
 
-int CEPoller::Create(int maxfd)
+int CEPoller::Create(int size)
 {
-    m_epollFd = epoll_create(maxfd);
+    m_epollFd = epoll_create(size);
     if ( m_epollFd <= 0 )
     {
-        snprintf(m_szErrMsg,NET_ERRMSG_SIZE,"epoller init error,size:%d,error:%s\n",maxfd,strerror(errno));
+        snprintf(m_szErrMsg,NET_ERRMSG_SIZE,"epoller init error,size:%d,error:%s\n",size,strerror(errno));
         return -1;
     }
 
