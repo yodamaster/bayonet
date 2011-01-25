@@ -7,15 +7,15 @@
 #  LastChange:      2011-01-24 20:23:53
 #  History:         
 =============================================================================*/
-#ifndef _SOCKETACTOR_BASE_H_
-#define _SOCKETACTOR_BASE_H_
+#ifndef _SOCKETACTOR_LISTEN_H_
+#define _SOCKETACTOR_LISTEN_H_
 #include "comm_def.h"
 #include "fsm_achieve.h"
 
 class CSocketActorListen:public CSocketActorBase
 {
 public:
-    virtual CSocketActorListen() {}
+    virtual ~CSocketActorListen() {}
 
     virtual int OnRecv();
 

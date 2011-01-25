@@ -10,7 +10,8 @@ H_EXT= .h
 INC+=-I./src/fsm
 
 OBJECTS = $(OBJ_DIR)actorset$(OBJ_EXT)\
-		  $(OBJ_DIR)socketactor_base$(OBJ_EXT)
+		  $(OBJ_DIR)socketactor_base$(OBJ_EXT)\
+		  $(OBJ_DIR)epoller$(OBJ_EXT)\
 
 
 LIB_TARGET = $(LIB_DIR)libbayonet$(LIB_EXT)
