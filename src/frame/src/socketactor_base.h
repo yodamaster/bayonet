@@ -11,20 +11,29 @@
 #define _SOCKETACTOR_BASE_H_
 #include "comm_def.h"
 #include "fsm_achieve.h"
+#include "epoller.h"
 
 //=============================================================================
+class CEPoller;
 class CSocketActorBase:public CActorBase
 {
 public:
-    CSocketActorBase ():m_SocketId(-1) {}
+    CSocketActorBase ():m_SocketFd(-1),m_epoller(NULL) {}
     virtual ~CSocketActorBase () {}
 
     //设置协议类型
     int SetProto(int protoType);
 
-    int SetSocketId(int socketId);
+    int SetSocketFd(int socketId);
+    int GetSocketFd();
 
-    virtual int SetEvent(int event);
+    int AttachEpoller(CEPoller* epoller);
+
+    int DetachEpoller();
+
+    virtual int SetEvent(unsigned event);
+
+    virtual int CheckTimeOut(struct timeval& now_time);
 
     virtual int OnInit();
 
@@ -47,7 +56,8 @@ public:
     virtual int OnError();
 
 protected:
-    int m_SocketId;
+    int m_SocketFd;
+    CEPoller* m_epoller;
 
     //业务需要继承实现
 protected:
