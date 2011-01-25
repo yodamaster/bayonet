@@ -84,7 +84,7 @@ protected:
     // 发送包接收完毕
     virtual int HandleSendOver()=0;
     // 回应包接受完毕
-    virtual int HandleRecvOver(const char *buf, int len,IActor *pActor)=0;
+    virtual int HandleRecvOver(const char *buf, int len)=0;
     //=============================================================================
 };
 
