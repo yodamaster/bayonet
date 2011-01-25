@@ -9,7 +9,7 @@ LIB_EXT= .a
 H_EXT= .h
 INC+=-I./src/fsm
 
-OBJECTS = $(OBJ_DIR)actorset$(OBJ_EXT)\
+OBJECTS = $(OBJ_DIR)socketactor_set$(OBJ_EXT)\
 		  $(OBJ_DIR)socketactor_base$(OBJ_EXT)\
 		  $(OBJ_DIR)epoller$(OBJ_EXT)\
 
