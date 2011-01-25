@@ -25,6 +25,8 @@ public:
 
     virtual int OnInit();
 
+    virtual int OnFini();
+
     virtual int OnRecv();
 
     virtual int OnRecvOver();
@@ -44,6 +46,11 @@ public:
     //=============================================================================
     //业务需要继承实现
 protected:
+    //清理
+    virtual int HandleFini()
+    {
+        return SOCKET_FSM_ALLOVER;
+    }
     // socket close完毕
     virtual int HandleCloseOver()
     {
@@ -72,6 +79,7 @@ protected:
             const char *buf,
             int len)=0;
 
+    //初始化
     virtual int HandleInit()=0;
     // 发送包接收完毕
     virtual int HandleSendOver()=0;

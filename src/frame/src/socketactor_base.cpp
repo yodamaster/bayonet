@@ -17,6 +17,10 @@ int CSocketActorBase::OnInit()
 {
     return HandleInit();
 }
+int CSocketActorBase::OnFini()
+{
+    return HandleFini();
+}
 int CSocketActorBase::OnRecv()
 {
     return 0;

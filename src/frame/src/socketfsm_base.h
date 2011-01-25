@@ -45,6 +45,18 @@ public:
         return pSocketActor->OnInit();
     }
 };
+class CSocketFsmFini: public CSocketFsmBase
+{
+public:
+    CSocketFsmFini () {}
+    virtual ~CSocketFsmFini () {}
+
+    virtual int Process(IActor* pActor)
+    {
+        CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
+        return pSocketActor->OnFini();
+    }
+};
 //=============================================================================
 class CSocketFsmWaitSend : public CSocketFsmBase
 {
