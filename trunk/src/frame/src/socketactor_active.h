@@ -1,19 +1,19 @@
 /*=============================================================================
 #  Author:          dantezhu - http://www.vimer.cn
 #  Email:           zny2008@gmail.com
-#  FileName:        socketactor_accept.h
+#  FileName:        socketactor_active.h
 #  Description:     
 #  Version:         1.0
-#  LastChange:      2011-01-24 23:51:59
+#  LastChange:      2011-01-25 11:53:08
 #  History:         
 =============================================================================*/
-#ifndef _SOCKETACTOR_ACCEPT_H_
-#define _SOCKETACTOR_ACCEPT_H_
+#ifndef _SOCKETACTOR_ACTIVE_H_
+#define _SOCKETACTOR_ACTIVE_H_
 #include "socketactor_base.h"
-class CSocketActorAccept
+class CSocketActorActive
 {
 public:
-    virtual ~CSocketActorAccept () {}
+    virtual ~CSocketActorActive () {}
 
 protected:
     virtual int HandleInit()
