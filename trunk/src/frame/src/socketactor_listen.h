@@ -15,6 +15,8 @@
 class CSocketActorListen:public CSocketActorBase
 {
 public:
+    virtual CSocketActorListen() {}
+
     virtual int OnRecv();
 
     virtual int OnSend();

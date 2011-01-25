@@ -9,13 +9,40 @@
 =============================================================================*/
 #include "socketactor_base.h"
 
-int CSocketActorBase::SetEvent(int event)
+int CSocketActorBase::AttachEpoller(CEPoller* epoller)
 {
+    m_epoller = epoller;
+    if ( m_epoller ) m_epoller->AttachSocket(this);
+        
     return 0;
 }
-int CSocketActorBase::SetSocketId(int socketId)
+int CSocketActorBase::DetachEpoller()
 {
-    m_SocketId = socketId;
+    if ( m_epoller ) m_epoller->DetachSocket(this);
+    m_epoller = NULL;
+
+    return 0; 
+}
+int CSocketActorBase::SetEvent(unsigned event)
+{
+    if ( !m_epoller ) return -1;
+
+    if ( m_epoller->ModEpollIO(m_SocketFd,event) < 0 )
+        return m_epoller->AddEpollIO(m_SocketFd,event);
+
+    return 0;
+}
+int CSocketActorBase::SetSocketFd(int socketFd)
+{
+    m_SocketFd = socketFd;
+    return 0;
+}
+int CSocketActorBase::GetSocketFd()
+{
+    return m_SocketFd;
+}
+int CSocketActorBase::CheckTimeOut(struct timeval& now_time)
+{
     return 0;
 }
 int CSocketActorBase::OnInit()
