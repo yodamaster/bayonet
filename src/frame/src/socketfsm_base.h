@@ -32,6 +32,7 @@ public:
     }
 
 };
+//=============================================================================
 class CSocketFsmInit: public CSocketFsmBase
 {
 public:
@@ -44,7 +45,7 @@ public:
         return pSocketActor->OnInit();
     }
 };
-
+//=============================================================================
 class CSocketFsmWaitSend : public CSocketFsmBase
 {
 public:
