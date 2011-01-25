@@ -7,14 +7,11 @@
 #  LastChange:      2011-01-25 17:04:07
 #  History:         
 =============================================================================*/
-#ifndef _SOCKETACTOR_LISTEN_CPP_
-#define _SOCKETACTOR_LISTEN_CPP_
 int CSocketActorListen::OnRecv()
 {
     return SOCKET_FSM_RECVOVER;
 }
 int CSocketActorListen::OnSend()
 {
-    return SOCKET_FSM_SENDOVER;
+    return SOCKET_FSM_WAITRECV;
 }
-#endif

@@ -20,6 +20,7 @@
 #include "socketfsm_base.h"
 #include "appfsm_base.h"
 #include "epoller.h"
+#include "socketactor_listen.h"
 
 using namespace std;
 
@@ -37,7 +38,7 @@ typedef struct _StFrameParam
     {
         port = 0;
         protoType = 0;
-        epollSize = NULL;
+        epollSize = 102400;
         epollTimeoutMs = 0;//立即返回
         pSocketActorListen = NULL;
     }
@@ -81,11 +82,11 @@ public:
         {
             return -1;
         }
-        m_epoller.Create(m_epollFdSize);
+        m_epoller.Create(m_StFrameParam.epollSize);
 
         CSocketActorListen* pSocketActorListen = m_StFrameParam.pSocketActorListen;
         pSocketActorListen->AttachEpoller(&m_epoller);
-        pSocketActorListen.ChangeState(SOCKET_FSM_INIT);
+        pSocketActorListen->ChangeState(SOCKET_FSM_INIT);
 
         m_epoller.LoopForEvent(m_StFrameParam.epollTimeoutMs);
 
@@ -95,7 +96,6 @@ protected:
     CSyncFrame()
     {
         static auto_ptr<CSyncFrame> _auto_ptr = auto_ptr<CSyncFrame>(this);
-        m_epollFdSize = 102400;
         RegDefaultSocketFsms();
         RegDefaultAppFsms();
     }

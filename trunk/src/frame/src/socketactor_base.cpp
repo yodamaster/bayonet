@@ -17,6 +17,16 @@ int CSocketActorBase::Init(string ip,int port,int timeout_ms,int protoType)
     m_ProtoType = protoType;
     return 0;
 }
+int CSocketActorBase::SetProtoType(int protoType)
+{
+    m_ProtoType = protoType;
+    return 0;
+}
+int CSocketActorBase::SetTimeout(int timeout_ms)
+{
+    m_TimeoutMs = timeout_ms;
+    return 0;
+}
 
 int CSocketActorBase::AttachEpoller(CEPoller* pEpoller)
 {
@@ -56,6 +66,10 @@ int CSocketActorBase::CheckTimeOut(struct timeval& now_time)
 }
 int CSocketActorBase::OnInit()
 {
+    if (m_SocketFd < 0)
+    {
+        
+    }
     return HandleInit();
 }
 int CSocketActorBase::OnFini()
