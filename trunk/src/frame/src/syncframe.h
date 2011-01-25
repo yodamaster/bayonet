@@ -19,8 +19,29 @@
 #include "comm_def.h"
 #include "socketfsm_base.h"
 #include "appfsm_base.h"
+#include "epoller.h"
 
 using namespace std;
+
+typedef struct _StFrameParam
+{
+    string ip;
+    int port;
+    int protoType;
+    int epollSize;
+    int epollTimeoutMs;
+
+
+    CSocketActorListen* pSocketActorListen;
+    _StFrameParam()
+    {
+        port = 0;
+        protoType = 0;
+        epollSize = NULL;
+        epollTimeoutMs = 0;//立即返回
+        pSocketActorListen = NULL;
+    }
+} StFrameParam;
 class CSyncFrame
 {
 public:
@@ -31,17 +52,7 @@ public:
             _ins = new CSyncFrame();
         return _ins;
     }
-    /**
-     * @brief   初始化监听
-     *
-     * @param   ip          ip
-     * @param   port        port
-     * @param   protoType   协议
-     *
-     * @return  0           succ
-     *          else        fail
-     */
-    int Init(string ip, int port, int protoType);
+    int Init(StFrameParam param);
 
     int RegSocketFsm(int state, IFsm* fsm)
     {
@@ -62,15 +73,29 @@ public:
         return 0;
     }
 
-    //执行监听
-    int ServeForEver()
+    //执行
+    int Process()
     {
+        //必须要传一个socketlisten指针进来
+        if (m_StFrameParam.pSocketActorListen == NULL)
+        {
+            return -1;
+        }
+        m_epoller.Create(m_epollFdSize);
+
+        CSocketActorListen* pSocketActorListen = m_StFrameParam.pSocketActorListen;
+        pSocketActorListen->AttachEpoller(&m_epoller);
+        pSocketActorListen.ChangeState(SOCKET_FSM_INIT);
+
+        m_epoller.LoopForEvent(m_StFrameParam.epollTimeoutMs);
+
         return 0;
     }
 protected:
     CSyncFrame()
     {
         static auto_ptr<CSyncFrame> _auto_ptr = auto_ptr<CSyncFrame>(this);
+        m_epollFdSize = 102400;
         RegDefaultSocketFsms();
         RegDefaultAppFsms();
     }
@@ -103,6 +128,9 @@ protected:
 
     map<int, IFsm*> m_mapFsmMgr;
     map<int, IFsm*> m_mapAppFsmMgr;
+
+    StFrameParam m_StFrameParam;
+    CEPoller m_epoller;
 };
 
 #endif

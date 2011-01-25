@@ -18,11 +18,11 @@ class CEPoller;
 class CSocketActorBase:public CActorBase
 {
 public:
-    CSocketActorBase ():m_SocketFd(-1),m_epoller(NULL) {}
+    CSocketActorBase ():m_SocketFd(-1),m_pEpoller(NULL) {}
     virtual ~CSocketActorBase () {}
 
     //设置协议类型
-    int SetProto(int protoType);
+    int Init(string ip,int port,int timeout_ms,int protoType);
 
     int SetSocketFd(int socketId);
     int GetSocketFd();
@@ -57,7 +57,12 @@ public:
 
 protected:
     int m_SocketFd;
-    CEPoller* m_epoller;
+    CEPoller* m_pEpoller;
+
+    string m_IP;
+    int m_Port;
+    int m_TimeoutMs;
+    int m_ProtoType;
 
     //业务需要继承实现
 protected:

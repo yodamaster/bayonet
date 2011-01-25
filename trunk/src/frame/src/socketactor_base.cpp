@@ -9,26 +9,35 @@
 =============================================================================*/
 #include "socketactor_base.h"
 
-int CSocketActorBase::AttachEpoller(CEPoller* epoller)
+int CSocketActorBase::Init(string ip,int port,int timeout_ms,int protoType)
 {
-    m_epoller = epoller;
-    if ( m_epoller ) m_epoller->AttachSocket(this);
+    m_IP = ip;
+    m_Port = port;
+    m_TimeoutMs = timeout_ms;
+    m_ProtoType = protoType;
+    return 0;
+}
+
+int CSocketActorBase::AttachEpoller(CEPoller* pEpoller)
+{
+    m_pEpoller = pEpoller;
+    if ( m_pEpoller ) m_pEpoller->AttachSocket(this);
         
     return 0;
 }
 int CSocketActorBase::DetachEpoller()
 {
-    if ( m_epoller ) m_epoller->DetachSocket(this);
-    m_epoller = NULL;
+    if ( m_pEpoller ) m_pEpoller->DetachSocket(this);
+    m_pEpoller = NULL;
 
     return 0; 
 }
 int CSocketActorBase::SetEvent(unsigned event)
 {
-    if ( !m_epoller ) return -1;
+    if ( !m_pEpoller ) return -1;
 
-    if ( m_epoller->ModEpollIO(m_SocketFd,event) < 0 )
-        return m_epoller->AddEpollIO(m_SocketFd,event);
+    if ( m_pEpoller->ModEpollIO(m_SocketFd,event) < 0 )
+        return m_pEpoller->AddEpollIO(m_SocketFd,event);
 
     return 0;
 }
