@@ -10,7 +10,7 @@
 #ifndef _SOCKETACTOR_ACTIVE_H_
 #define _SOCKETACTOR_ACTIVE_H_
 #include "socketactor_base.h"
-class CSocketActorActive
+class CSocketActorActive : public CSocketActorData
 {
 public:
     virtual ~CSocketActorActive () {}

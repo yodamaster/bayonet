@@ -13,6 +13,11 @@ int CSocketActorBase::SetEvent(int event)
 {
     return 0;
 }
+int CSocketActorBase::SetSocketId(int socketId)
+{
+    m_SocketId = socketId;
+    return 0;
+}
 int CSocketActorBase::OnInit()
 {
     return HandleInit();
@@ -23,12 +28,12 @@ int CSocketActorBase::OnFini()
 }
 int CSocketActorBase::OnRecv()
 {
-    return 0;
+    return SOCKET_FSM_RECVOVER;
 }
 
 int CSocketActorBase::OnSend()
 {
-    return 0;
+    return SOCKET_FSM_SENDOVER;
 }
 int CSocketActorBase::OnClose()
 {
@@ -46,7 +51,7 @@ int CSocketActorBase::OnError()
 }
 int CSocketActorBase::OnRecvOver()
 {
-    return HandleRecvOver(NULL,0);
+    return HandleRecvOver(NULL, 0);
 }
 
 int CSocketActorBase::OnSendOver()
@@ -58,3 +63,13 @@ int CSocketActorBase::OnCloseOver()
 {
     return HandleCloseOver();
 }
+//=============================================================================
+int CSocketActorData::OnRecv()
+{
+    return SOCKET_FSM_RECVOVER;
+}
+int CSocketActorData::OnSend()
+{
+    return SOCKET_FSM_SENDOVER;
+}
+//=============================================================================
