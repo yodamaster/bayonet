@@ -19,7 +19,8 @@ enum SOCKETFSM
 {
     SOCKET_FSM_ALLOVER=-1,//所有流程已经走完
     SOCKET_FSM_KEEP=0,//保持当前状态
-    SOCKET_FSM_INIT=1,//刚accept的状态
+    SOCKET_FSM_INIT=1,//刚初始化
+    SOCKET_FSM_FINI,//负责释放
     SOCKET_FSM_WAITSEND,
     SOCKET_FSM_SENDING,
     SOCKET_FSM_SENDOVER,
