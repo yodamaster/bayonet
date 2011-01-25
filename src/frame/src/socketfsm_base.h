@@ -32,6 +32,18 @@ public:
     }
 
 };
+class CSocketFsmInit: public CSocketFsmBase
+{
+public:
+    CSocketFsmInit () {}
+    virtual ~CSocketFsmInit () {}
+
+    virtual int Process(IActor* pActor)
+    {
+        CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
+        return pSocketActor->OnInit();
+    }
+};
 
 class CSocketFsmWaitSend : public CSocketFsmBase
 {

@@ -13,6 +13,10 @@ int CSocketActorBase::SetEvent(int event)
 {
     return 0;
 }
+int CSocketActorBase::OnInit()
+{
+    return HandleInit();
+}
 int CSocketActorBase::OnRecv()
 {
     return 0;

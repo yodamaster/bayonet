@@ -16,6 +16,16 @@ public:
     virtual ~CSocketActorAccept () {}
 
 protected:
+    virtual int HandleInit()
+    {
+        return SOCKET_FSM_WAITRECV;
+    }
+    virtual int HandleSendOver()
+    {
+        //TODO
+        //清除数据
+        return SOCKET_FSM_WAITRECV;
+    }
     virtual int HandleEncode(
             char *buf,
             int &len)=0;
@@ -23,12 +33,5 @@ protected:
             const char *buf,
             int len)=0;
     virtual int HandleRecvOver(const char *buf, int len,IActor *pActor)=0;
-
-    virtual int HandleSendOver()
-    {
-        //TODO
-        //清除数据
-        return SOCKET_FSM_WAITRECV;
-    }
 };
 #endif
