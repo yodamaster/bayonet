@@ -13,6 +13,7 @@ enum APPFSM
 {
     APP_FSM_ALLOVER=-1,//所有流程已经走完
     APP_FSM_KEEP=0,//保持当前状态
+    APP_FSM_FINI=1,//析构要调用的，内定，外面不要使用
 };
 
 enum SOCKETFSM
