@@ -2,7 +2,7 @@
 #  Author:          dantezhu - http://www.vimer.cn
 #  Email:           zny2008@gmail.com
 #  FileName:        socketactor_active.h
-#  Description:     
+#  Description:     主动版
 #  Version:         1.0
 #  LastChange:      2011-01-25 11:53:08
 #  History:         

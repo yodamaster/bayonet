@@ -2,9 +2,9 @@
 #  Author:          dantezhu - http://www.vimer.cn
 #  Email:           zny2008@gmail.com
 #  FileName:        socketactor_passive.h
-#  Description:     
+#  Description:     被动版
 #  Version:         1.0
-#  LastChange:      2011-01-25 11:54:42
+#  LastChange:      2011-01-25 12:45:09
 #  History:         
 =============================================================================*/
 #ifndef _SOCKETACTOR_PASSIVE_H_
