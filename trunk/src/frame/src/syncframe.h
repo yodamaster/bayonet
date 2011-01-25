@@ -42,6 +42,27 @@ public:
      */
     int Init(string ip, int port, int protoType);
 
+    int RegSocketFsm(int state, IFsm* fsm)
+    {
+        if (fsm == NULL)
+        {
+            return -1;
+        }
+        m_mapFsmMgr[state] = fsm;
+        fsm.AttachFsmMgr(&m_mapFsmMgr);
+        return 0;
+    }
+    int RegAppFsm(int state, IFsm* fsm)
+    {
+        if (fsm == NULL)
+        {
+            return -1;
+        }
+        m_mapAppFsmMgr[state] = fsm;
+        fsm.AttachFsmMgr(&m_mapAppFsmMgr);
+        return 0;
+    }
+
     //执行监听
     int ServeForEver()
     {
@@ -51,29 +72,33 @@ protected:
     CSyncFrame()
     {
         static auto_ptr<CSyncFrame> _auto_ptr = auto_ptr<CSyncFrame>(this);
-        RegSocketFsm();
+        RegDefaultSocketFsms();
     }
     CSyncFrame(const CSyncFrame&);
 
-    void RegSocketFsm()
+    void RegDefaultSocketFsms()
     {
-        m_mapFsmMgr[SOCKET_FSM_WAITSEND] = new CSocketFsmWaitSend();
-        m_mapFsmMgr[SOCKET_FSM_SENDING] = new CSocketFsmSending();
-        m_mapFsmMgr[SOCKET_FSM_SENDOVER] = new CSocketFsmSendOver();
-        m_mapFsmMgr[SOCKET_FSM_WAITRECV] = new CSocketFsmWaitRecv();
-        m_mapFsmMgr[SOCKET_FSM_RECVING] = new CSocketFsmRecving();
-        m_mapFsmMgr[SOCKET_FSM_RECVOVER] = new CSocketFsmRecvOver();
-        m_mapFsmMgr[SOCKET_FSM_WAITCLOSE] = new CSocketFsmWaitClose();
-        m_mapFsmMgr[SOCKET_FSM_CLOSING] = new CSocketFsmClosing();
-        m_mapFsmMgr[SOCKET_FSM_CLOSEOVER] = new CSocketFsmCloseOver();
-        m_mapFsmMgr[SOCKET_FSM_ERROR] = new CSocketFsmError();
-        m_mapFsmMgr[SOCKET_FSM_TIMEOUT] = new CSocketFsmTimeout();
+        RegSocketFsm(SOCKET_FSM_INIT, new CSocketFsmInit());
+        RegSocketFsm(SOCKET_FSM_FINI, new CSocketFsmFini());
+        RegSocketFsm(SOCKET_FSM_WAITSEND, new CSocketFsmWaitSend());
+        RegSocketFsm(SOCKET_FSM_SENDING, new CSocketFsmSending());
+        RegSocketFsm(SOCKET_FSM_SENDOVER, new CSocketFsmSendOver());
+        RegSocketFsm(SOCKET_FSM_WAITRECV, new CSocketFsmWaitRecv());
+        RegSocketFsm(SOCKET_FSM_RECVING, new CSocketFsmRecving());
+        RegSocketFsm(SOCKET_FSM_RECVOVER, new CSocketFsmRecvOver());
+        RegSocketFsm(SOCKET_FSM_WAITCLOSE, new CSocketFsmWaitClose());
+        RegSocketFsm(SOCKET_FSM_CLOSING, new CSocketFsmClosing());
+        RegSocketFsm(SOCKET_FSM_CLOSEOVER, new CSocketFsmCloseOver());
+        RegSocketFsm(SOCKET_FSM_ERROR, new CSocketFsmError());
+        RegSocketFsm(SOCKET_FSM_TIMEOUT, new CSocketFsmTimeout());
     }
 
+protected:
     virtual ~CSyncFrame(){}
     friend class auto_ptr<CSyncFrame>;
 
     map<int, IFsm*> m_mapFsmMgr;
+    map<int, IFsm*> m_mapAppFsmMgr;
 };
 
 #endif
