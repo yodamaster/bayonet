@@ -12,14 +12,17 @@
 #include "comm_def.h"
 #include "fsm_achieve.h"
 
+//=============================================================================
 class CSocketActorBase:public CActorBase
 {
 public:
-    CSocketActorBase () {}
+    CSocketActorBase ():m_SocketId(-1) {}
     virtual ~CSocketActorBase () {}
 
     //设置协议类型
     int SetProto(int protoType);
+
+    int SetSocketId(int socketId);
 
     virtual int SetEvent(int event);
 
@@ -43,7 +46,9 @@ public:
 
     virtual int OnError();
 
-    //=============================================================================
+protected:
+    int m_SocketId;
+
     //业务需要继承实现
 protected:
     //清理
@@ -69,6 +74,26 @@ protected:
         return SOCKET_FSM_CLOSING;
     }
 
+    //初始化
+    virtual int HandleInit()=0;
+    // 发送包接收完毕
+    virtual int HandleSendOver()=0;
+    // 回应包接受完毕
+    virtual int HandleRecvOver(const char *buf, int len)=0;
+};
+
+//=============================================================================
+class CSocketActorData:public CSocketActorBase
+{
+public:
+    virtual ~CSocketActorData () {}
+
+    virtual int OnRecv();
+
+    virtual int OnSend();
+
+protected:
+    //业务需要继承实现
     // 为发送打包
     virtual int HandleEncode(
             char *buf,
@@ -85,7 +110,7 @@ protected:
     virtual int HandleSendOver()=0;
     // 回应包接受完毕
     virtual int HandleRecvOver(const char *buf, int len)=0;
-    //=============================================================================
 };
+//=============================================================================
 
 #endif

@@ -10,7 +10,7 @@
 #ifndef _SOCKETACTOR_PASSIVE_H_
 #define _SOCKETACTOR_PASSIVE_H_
 #include "socketactor_base.h"
-class CSocketActorPassive
+class CSocketActorPassive : public CSocketActorData
 {
 public:
     virtual ~CSocketActorPassive () {}
