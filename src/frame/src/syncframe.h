@@ -18,6 +18,7 @@
 
 #include "comm_def.h"
 #include "socketfsm_base.h"
+#include "appfsm_base.h"
 
 using namespace std;
 class CSyncFrame
@@ -49,7 +50,6 @@ public:
             return -1;
         }
         m_mapFsmMgr[state] = fsm;
-        fsm.AttachFsmMgr(&m_mapFsmMgr);
         return 0;
     }
     int RegAppFsm(int state, IFsm* fsm)
@@ -59,7 +59,6 @@ public:
             return -1;
         }
         m_mapAppFsmMgr[state] = fsm;
-        fsm.AttachFsmMgr(&m_mapAppFsmMgr);
         return 0;
     }
 
@@ -73,9 +72,14 @@ protected:
     {
         static auto_ptr<CSyncFrame> _auto_ptr = auto_ptr<CSyncFrame>(this);
         RegDefaultSocketFsms();
+        RegDefaultAppFsms();
     }
     CSyncFrame(const CSyncFrame&);
 
+    void RegDefaultAppFsms()
+    {
+        RegAppFsm(APP_FSM_FINI,new CAppFsmFini());
+    }
     void RegDefaultSocketFsms()
     {
         RegSocketFsm(SOCKET_FSM_INIT, new CSocketFsmInit());
