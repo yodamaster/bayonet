@@ -17,6 +17,7 @@
 #include <map>
 
 #include "comm_def.h"
+#include "fl_log.h"
 #include "socketfsm_base.h"
 #include "appfsm_base.h"
 #include "epoller.h"
@@ -26,12 +27,16 @@ using namespace std;
 
 typedef struct _StFrameParam
 {
-    string ip;
-    int port;
-    int protoType;
-    int epollSize;
-    int epollTimeoutMs;
+    string ip;          //ip
+    int port;           //端口
+    int protoType;      //协议类型
+    int epollSize;      //epoll监听的队列大小
+    int epollTimeoutMs; //epoll wait time(毫秒)
 
+    LogLevel iLogLevel;      //log等级(LM_ALL,LM_TRACE,LM_DEBUG,LM_WARNING,LM_ERROR,LM_FATAL,LM_NONE)
+    string logDir;      //log目录
+    string logFileName; //log文件名
+    int iLogMaxSize;    //log文件最大大小
 
     CSocketActorListen* pSocketActorListen;
     _StFrameParam()
@@ -41,6 +46,9 @@ typedef struct _StFrameParam
         epollSize = 102400;
         epollTimeoutMs = 0;//立即返回
         pSocketActorListen = NULL;
+
+        iLogLevel = LM_TRACE;
+        iLogMaxSize = LOG_DEFAULT_SIZE;
     }
 } StFrameParam;
 
@@ -57,6 +65,7 @@ public:
     int Init(StFrameParam param)
     {
         m_StFrameParam = param;
+        log_init(m_StFrameParam.iLogLevel,m_StFrameParam.logDir.c_str(),m_StFrameParam.logFileName.c_str(),m_StFrameParam.iLogMaxSize);
         return 0;
     }
 
