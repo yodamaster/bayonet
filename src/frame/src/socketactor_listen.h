@@ -40,6 +40,8 @@ protected:
     {
         return SOCKET_FSM_WAITRECV;
     }
+    //继承方实现，返回一个socketactor
+    virtual CSocketActorBase* AllocSocketActor()=0;
     //=============================================================================
 };
 

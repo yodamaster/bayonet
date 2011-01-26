@@ -108,9 +108,6 @@ public:
 
     virtual int OnSend();
 
-public:
-    virtual int CheckTimeOut(struct timeval& now_time);
-
 protected:
     //业务需要继承实现
     // 为发送打包
