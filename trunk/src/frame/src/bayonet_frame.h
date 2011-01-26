@@ -43,6 +43,7 @@ typedef struct _StFrameParam
         pSocketActorListen = NULL;
     }
 } StFrameParam;
+
 class CBayonetFrame : public CFrameBase
 {
 public:
@@ -84,24 +85,8 @@ public:
     }
 
     //执行
-    int Process()
-    {
-        //必须要传一个socketlisten指针进来
-        if (m_StFrameParam.pSocketActorListen == NULL)
-        {
-            return -1;
-        }
-        m_epoller.Create(m_StFrameParam.epollSize);
+    int Process();
 
-        CSocketActorListen* pSocketActorListen = m_StFrameParam.pSocketActorListen;
-        pSocketActorListen->AttachFrame(this);
-
-        pSocketActorListen->ChangeState(SOCKET_FSM_INIT);
-
-        m_epoller.LoopForEvent(m_StFrameParam.epollTimeoutMs);
-
-        return 0;
-    }
 protected:
     CBayonetFrame()
     {
