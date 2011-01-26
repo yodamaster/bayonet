@@ -18,6 +18,7 @@
 #include "socketactor_base.h"
 using namespace std;
 
+#define EPOLL_DFT_MAXSIZE   102400
 #define NET_ERRMSG_SIZE     1024
 #define EPOLL_FD_MAX        10240
 
@@ -28,7 +29,7 @@ public:
     CEPoller();
     ~CEPoller();
 
-    int Create(int size);
+    int Init(int epoll_size,int waittime_ms,int check_time,int gc_maxcount);
     int AttachFrame(IFrame* pFrame);
     int AddEpollIO(int fd,unsigned flag);
     int ModEpollIO(int fd,unsigned flag);
@@ -36,12 +37,17 @@ public:
     int DelEpollIO(int fd);
     void AttachSocket(CSocketActorBase* sock);
     void DetachSocket(CSocketActorBase* sock);
-    int  LoopForEvent(int timeout);
+    int  LoopForEvent();
     char * GetErrMsg();
 protected:
     char            m_szErrMsg[NET_ERRMSG_SIZE];
     int             m_epollFd;              //epoll的句柄
     epoll_event     m_events[EPOLL_FD_MAX];  //epoll_wait的返回的事件
+
+    int             m_epollSize;
+    int             m_waittimeMs;
+    int             m_checkTimeMs;
+    int             m_gcMaxCount;
 
     IFrame* m_pFrame;
 
