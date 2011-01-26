@@ -14,11 +14,10 @@
 #include "epoller.h"
 
 //=============================================================================
-class CEPoller;
 class CSocketActorBase:public CActorBase
 {
 public:
-    CSocketActorBase ():m_SocketFd(-1),m_pEpoller(NULL) {}
+    CSocketActorBase ():m_SocketFd(-1) {}
     virtual ~CSocketActorBase () {}
 
     int Init(string ip,int port,int timeout_ms,int protoType);
@@ -27,9 +26,6 @@ public:
 
     int SetSocketFd(int socketId);
     int GetSocketFd();
-
-    int AttachEpoller(CEPoller* epoller);
-    int DetachEpoller();
 
     virtual int SetEvent(unsigned event);
 
@@ -57,7 +53,6 @@ public:
 
 protected:
     int m_SocketFd;
-    CEPoller* m_pEpoller;
 
     string m_IP;
     int m_Port;
