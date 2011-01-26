@@ -19,14 +19,15 @@ class CEPoller;
 class CSocketActorBase:public CActorBase
 {
 public:
-    CSocketActorBase ():m_SocketFd(-1) {}
+    CSocketActorBase ():m_SocketFd(-1),m_Port(0),m_TimeoutMs(-1),m_ProtoType(0) {}
     virtual ~CSocketActorBase () {}
 
     int Init(string ip,int port,int timeout_ms,int protoType);
-    int SetProtoType(int protoType);
-    int SetTimeout(int timeout_ms);
 
-    int SetSocketFd(int socketId);
+    int Init(int socketFd,int timeout_ms,int protoType);
+
+    int SetSocketFd(int socketFd);
+
     int GetSocketFd();
 
     virtual int SetEvent(unsigned event);

@@ -30,10 +30,15 @@ typedef struct _StFrameParam
     string ip;          //ip
     int port;           //端口
     int protoType;      //协议类型
-    int epollSize;      //epoll监听的队列大小
-    int epollTimeoutMs; //epoll wait time(毫秒)
 
-    LogLevel iLogLevel;      //log等级(LM_ALL,LM_TRACE,LM_DEBUG,LM_WARNING,LM_ERROR,LM_FATAL,LM_NONE)
+
+    int epollSize;      //epoll监听的队列大小
+    int epollWaitTimeMs; //epoll wait time(毫秒)
+    int epollCheckTimeMs; //epoll 检查超时的时间
+
+    int gcMaxCount;     //actorGC回收的最大值
+
+    LogLevel iLogLevel; //log等级(LM_ALL,LM_TRACE,LM_DEBUG,LM_WARNING,LM_ERROR,LM_FATAL,LM_NONE)
     string logDir;      //log目录
     string logFileName; //log文件名
     int iLogMaxSize;    //log文件最大大小
@@ -43,8 +48,13 @@ typedef struct _StFrameParam
     {
         port = 0;
         protoType = 0;
-        epollSize = 102400;
-        epollTimeoutMs = 0;//立即返回
+
+        epollSize = EPOLL_DFT_MAXSIZE;
+        epollWaitTimeMs = 0;//立即返回
+        epollCheckTimeMs = 10;
+
+        gcMaxCount = 1024;
+
         pSocketActorListen = NULL;
 
         iLogLevel = LM_TRACE;
@@ -66,6 +76,7 @@ public:
     {
         m_StFrameParam = param;
         log_init(m_StFrameParam.iLogLevel,m_StFrameParam.logDir.c_str(),m_StFrameParam.logFileName.c_str(),m_StFrameParam.iLogMaxSize);
+        m_epoller.Init(m_StFrameParam.epollSize,m_StFrameParam.epollWaitTimeMs,m_StFrameParam.epollCheckTimeMs,m_StFrameParam.gcMaxCount);
         return 0;
     }
 

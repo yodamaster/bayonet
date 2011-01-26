@@ -4,6 +4,10 @@ CEPoller::CEPoller()
 {
     m_epollFd = -1;
     m_pFrame = NULL;
+    m_epollSize = EPOLL_DFT_MAXSIZE;
+    m_waittimeMs = 10;
+    m_checkTimeMs = 500;
+    m_gcMaxCount = 1000;
 }
 
 CEPoller::~CEPoller()
@@ -14,16 +18,12 @@ int CEPoller::AttachFrame(IFrame* pFrame)
     m_pFrame = NULL;
     return 0;
 }
-
-int CEPoller::Create(int size)
+int CEPoller::Init(int epoll_size,int waittime_ms,int checktime_ms,int gc_maxcount)
 {
-    m_epollFd = epoll_create(size);
-    if ( m_epollFd <= 0 )
-    {
-        snprintf(m_szErrMsg,NET_ERRMSG_SIZE,"epoller init error,size:%d,error:%s\n",size,strerror(errno));
-        return -1;
-    }
-
+    m_epollSize = epoll_size;
+    m_waittimeMs = waittime_ms;
+    m_checkTimeMs = checktime_ms;
+    m_gcMaxCount = gc_maxcount;
     return 0;
 }
 
@@ -48,8 +48,15 @@ void CEPoller::DetachSocket(CSocketActorBase* pSocketActor)
     return ;
 }
 
-int CEPoller::LoopForEvent(int timeout)
+int CEPoller::LoopForEvent()
 {
+    m_epollFd = epoll_create(m_epollSize);
+    if ( m_epollFd <= 0 )
+    {
+        snprintf(m_szErrMsg,NET_ERRMSG_SIZE,"epoller init error,size:%d,error:%s\n",m_epollSize,strerror(errno));
+        return -1;
+    }
+
     int fd;
     int nfds;
     CSocketActorBase*  pSocketActor = NULL;
@@ -61,7 +68,7 @@ int CEPoller::LoopForEvent(int timeout)
 
     for(;;)
     {
-        nfds = epoll_wait(m_epollFd, m_events, EPOLL_FD_MAX, timeout);
+        nfds = epoll_wait(m_epollFd, m_events, EPOLL_FD_MAX, m_waittimeMs);
 
         if (nfds < 0)
         {
@@ -99,7 +106,7 @@ int CEPoller::LoopForEvent(int timeout)
         gettimeofday(&next_tm,NULL);
         use_time_usec = (next_tm.tv_sec - prev_tm.tv_sec)*1000000 +
             (next_tm.tv_usec - prev_tm.tv_usec);
-        if ( use_time_usec > (1000))
+        if ( use_time_usec > (m_checkTimeMs))
         {
             for(map<int, CSocketActorBase*>::iterator it = m_mapSocketActor.begin(); it != m_mapSocketActor.end();)
             {
@@ -109,8 +116,12 @@ int CEPoller::LoopForEvent(int timeout)
 
                 tempIt->second->CheckTimeOut(next_tm);
             }
-            m_pFrame->GCActors();
             prev_tm = next_tm;
+        }
+        //进行垃圾回收
+        if (m_pFrame->GetActorCount() > m_gcMaxCount)
+        {
+            m_pFrame->GCActors();
         }
     }
 }

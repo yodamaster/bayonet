@@ -15,15 +15,13 @@ int CBayonetFrame::Process()
     {
         return -1;
     }
-    m_epoller.Create(m_StFrameParam.epollSize);
-
     CSocketActorListen* pSocketActorListen = m_StFrameParam.pSocketActorListen;
     pSocketActorListen->Init(m_StFrameParam.ip,m_StFrameParam.port,-1,m_StFrameParam.protoType);
     pSocketActorListen->AttachFrame(this);
 
     pSocketActorListen->ChangeState(SOCKET_FSM_INIT);
 
-    m_epoller.LoopForEvent(m_StFrameParam.epollTimeoutMs);
+    m_epoller.LoopForEvent();
 
     return 0;
 }

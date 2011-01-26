@@ -18,14 +18,11 @@ int CSocketActorBase::Init(string ip,int port,int timeout_ms,int protoType)
     m_ProtoType = protoType;
     return 0;
 }
-int CSocketActorBase::SetProtoType(int protoType)
+int CSocketActorBase::Init(int socketFd,int timeout_ms,int protoType)
 {
-    m_ProtoType = protoType;
-    return 0;
-}
-int CSocketActorBase::SetTimeout(int timeout_ms)
-{
+    m_SocketFd = socketFd;
     m_TimeoutMs = timeout_ms;
+    m_ProtoType = protoType;
     return 0;
 }
 
