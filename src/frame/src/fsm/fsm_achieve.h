@@ -22,6 +22,7 @@ using namespace std;
 class CFrameBase : public IFrame
 {
 public:
+    CFrameBase () : m_needGCCount(0) {}
     virtual ~CFrameBase () {}
 
     int AddActor(IActor* pActor)
@@ -37,6 +38,24 @@ public:
     {
         m_listActors.remove(pActor);
         return 0;
+    }
+    int AddNeedGCCount()
+    {
+        m_needGCCount++;
+        return 0;
+    }
+    int SubNeedGCCount()
+    {
+        m_needGCCount--;
+        if (m_needGCCount < 0)
+        {
+            m_needGCCount = 0;
+        }
+        return 0;
+    }
+    int GetNeedGCCount()
+    {
+        return m_needGCCount;
     }
     void GCActors()
     {
@@ -55,6 +74,8 @@ public:
 
 protected:
     list<IActor*> m_listActors;
+
+    int m_needGCCount;
 };
 
 class CActorBase : public IActor
@@ -62,11 +83,20 @@ class CActorBase : public IActor
 public:
     CActorBase () : m_bGC(false),m_Fsm(NULL),m_ptrMapFsmMgr(NULL),m_pUpperActor(NULL),m_pFrame(NULL) {}
 
-    virtual ~CActorBase () {}
+    virtual ~CActorBase () {
+        if (m_pFrame)
+        {
+            m_pFrame->SubNeedGCCount();
+        }
+    }
 
-    virtual void SetGCMark(bool bGC=true)
+    virtual void SetGCMark()
     {
-        m_bGC = bGC;
+        m_bGC = true;
+        if (m_pFrame)
+        {
+            m_pFrame->AddNeedGCCount();
+        }
     }
     virtual bool GetGCMark()
     {
@@ -92,6 +122,11 @@ public:
         m_ptrMapFsmMgr = ptrMapFsmMgr;
         return 0;
     }
+    map<int, IFsm*>* GetFsmMgr()
+    {
+        return m_ptrMapFsmMgr;
+    }
+
     int AttachUpperActor(IActor* pActor)
     {
         m_pUpperActor = pActor;
