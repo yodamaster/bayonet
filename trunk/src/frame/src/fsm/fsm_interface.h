@@ -40,6 +40,13 @@ public:
     virtual int DelActor(IActor* pActor)=0;
 
     /**
+     * @brief   获取所有actor的个数,不用list的size是因为太慢了
+     *
+     * @return  actor count
+     */
+    virtual int GetActorCount()=0;
+
+    /**
      * @brief   添加待GC的个数,actor在SetGCMark时调用
      *
      * @return  0

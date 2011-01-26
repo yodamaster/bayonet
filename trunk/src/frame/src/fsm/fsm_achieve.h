@@ -22,12 +22,13 @@ using namespace std;
 class CFrameBase : public IFrame
 {
 public:
-    CFrameBase () : m_needGCCount(0) {}
+    CFrameBase () : m_needGCCount(0),m_allActorCount(0) {}
     virtual ~CFrameBase () {}
 
     int AddActor(IActor* pActor)
     {
         m_listActors.push_front(pActor);
+        m_allActorCount++;
         if (pActor->GetFrame() != this)
         {
             pActor->AttachFrame(this);
@@ -37,7 +38,12 @@ public:
     int DelActor(IActor* pActor)
     {
         m_listActors.remove(pActor);
+        m_allActorCount--;
         return 0;
+    }
+    int GetActorCount()
+    {
+        return m_allActorCount;
     }
     int AddNeedGCCount()
     {
@@ -68,6 +74,7 @@ public:
             {
                 delete (*tempIt);
                 m_listActors.erase(tempIt);
+                m_allActorCount--;
             }
         }
     }
@@ -76,6 +83,7 @@ protected:
     list<IActor*> m_listActors;
 
     int m_needGCCount;
+    int m_allActorCount;
 };
 
 class CActorBase : public IActor
