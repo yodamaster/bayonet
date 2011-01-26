@@ -1,14 +1,14 @@
 /*=============================================================================
 #  Author:          dantezhu - http://www.vimer.cn
 #  Email:           zny2008@gmail.com
-#  FileName:        syncframe.h
+#  FileName:        bayonet_frame.h
 #  Description:     异步框架
 #  Version:         1.0
-#  LastChange:      2011-01-25 00:19:28
+#  LastChange:      2011-01-26 17:12:23
 #  History:         
 =============================================================================*/
-#ifndef _SYNCFRAME_H_
-#define _SYNCFRAME_H_
+#ifndef _BAYONET_FRAME_H_
+#define _BAYONET_FRAME_H_
 #include <iostream>
 #include <memory>
 #include <string>
@@ -43,14 +43,14 @@ typedef struct _StFrameParam
         pSocketActorListen = NULL;
     }
 } StFrameParam;
-class CSyncFrame : public CFrameBase
+class CBayonetFrame : public CFrameBase
 {
 public:
-    static CSyncFrame * Ins()
+    static CBayonetFrame * Ins()
     {
-        static CSyncFrame * _ins = NULL;
+        static CBayonetFrame * _ins = NULL;
         if ( _ins == NULL)
-            _ins = new CSyncFrame();
+            _ins = new CBayonetFrame();
         return _ins;
     }
     int Init(StFrameParam param);
@@ -94,13 +94,13 @@ public:
         return 0;
     }
 protected:
-    CSyncFrame()
+    CBayonetFrame()
     {
-        static auto_ptr<CSyncFrame> _auto_ptr = auto_ptr<CSyncFrame>(this);
+        static auto_ptr<CBayonetFrame> _auto_ptr = auto_ptr<CBayonetFrame>(this);
         RegDefaultSocketFsms();
         RegDefaultAppFsms();
     }
-    CSyncFrame(const CSyncFrame&);
+    CBayonetFrame(const CBayonetFrame&);
 
     void RegDefaultAppFsms()
     {
@@ -124,8 +124,8 @@ protected:
     }
 
 protected:
-    virtual ~CSyncFrame(){}
-    friend class auto_ptr<CSyncFrame>;
+    virtual ~CBayonetFrame(){}
+    friend class auto_ptr<CBayonetFrame>;
 
     map<int, IFsm*> m_mapFsmMgr;
     map<int, IFsm*> m_mapAppFsmMgr;
@@ -133,5 +133,4 @@ protected:
     StFrameParam m_StFrameParam;
     CEPoller m_epoller;
 };
-
 #endif
