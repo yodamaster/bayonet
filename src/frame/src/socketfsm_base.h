@@ -9,6 +9,7 @@
 =============================================================================*/
 #ifndef _SOCKETFSM_BASE_H_
 #define _SOCKETFSM_BASE_H_
+#include "comm_def.h"
 #include "fsm_interface.h"
 #include "socketactor_base.h"
 
@@ -112,7 +113,7 @@ public:
     virtual int Init(IActor* pActor)
     {
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
-        pSocketActor->SetEvent(1);
+        pSocketActor->SetEvent(EPOLLIN|EPOLLHUP|EPOLLERR);
         return 0;
     }
 };
