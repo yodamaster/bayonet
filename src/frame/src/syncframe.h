@@ -43,7 +43,7 @@ typedef struct _StFrameParam
         pSocketActorListen = NULL;
     }
 } StFrameParam;
-class CSyncFrame
+class CSyncFrame : public CFrameBase
 {
 public:
     static CSyncFrame * Ins()
@@ -85,7 +85,8 @@ public:
         m_epoller.Create(m_StFrameParam.epollSize);
 
         CSocketActorListen* pSocketActorListen = m_StFrameParam.pSocketActorListen;
-        pSocketActorListen->AttachEpoller(&m_epoller);
+        pSocketActorListen->AttachFrame(this);
+
         pSocketActorListen->ChangeState(SOCKET_FSM_INIT);
 
         m_epoller.LoopForEvent(m_StFrameParam.epollTimeoutMs);

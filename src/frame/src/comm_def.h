@@ -9,6 +9,14 @@
 =============================================================================*/
 #ifndef _COMM_DEF_H_
 #define _COMM_DEF_H_
+
+//Frame的AddActor方法的actorType的值
+enum ACTORTYPE
+{
+    ACTOR_TYPE_SOCKET=0,
+    ACTOR_TYPE_APP=1,
+};
+
 enum APPFSM
 {
     APP_FSM_ALLOVER=-1,//所有流程已经走完

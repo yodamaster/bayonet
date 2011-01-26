@@ -81,13 +81,28 @@ int CSocketActorBase::OnRecv()
     return SOCKET_FSM_RECVOVER;
 }
 
+int CSocketActorBase::OnRecvOver()
+{
+    return HandleRecvOver(NULL, 0);
+}
+
 int CSocketActorBase::OnSend()
 {
     return SOCKET_FSM_SENDOVER;
 }
+
+int CSocketActorBase::OnSendOver()
+{
+    return HandleSendOver();
+}
+
 int CSocketActorBase::OnClose()
 {
     return 0;
+}
+int CSocketActorBase::OnCloseOver()
+{
+    return HandleCloseOver();
 }
 
 int CSocketActorBase::OnTimeout()
@@ -98,20 +113,6 @@ int CSocketActorBase::OnTimeout()
 int CSocketActorBase::OnError()
 {
     return HandleError(1);
-}
-int CSocketActorBase::OnRecvOver()
-{
-    return HandleRecvOver(NULL, 0);
-}
-
-int CSocketActorBase::OnSendOver()
-{
-    return HandleSendOver();
-}
-
-int CSocketActorBase::OnCloseOver()
-{
-    return HandleCloseOver();
 }
 //=============================================================================
 int CSocketActorData::OnRecv()
