@@ -58,6 +58,8 @@ typedef struct _StFrameParam
         pSocketActorListen = NULL;
 
         iLogLevel = LM_TRACE;
+        logDir = "./";
+        logFileName = "log";
         iLogMaxSize = LOG_DEFAULT_SIZE;
     }
 } StFrameParam;
@@ -65,13 +67,13 @@ typedef struct _StFrameParam
 class CBayonetFrame : public CFrameBase
 {
 public:
-    static CBayonetFrame * Ins()
+    CBayonetFrame()
     {
-        static CBayonetFrame * _ins = NULL;
-        if ( _ins == NULL)
-            _ins = new CBayonetFrame();
-        return _ins;
+        RegDefaultSocketFsms();
+        RegDefaultAppFsms();
     }
+    virtual ~CBayonetFrame(){}
+
     int Init(StFrameParam param)
     {
         m_StFrameParam = param;
@@ -108,14 +110,6 @@ public:
     int Process();
 
 protected:
-    CBayonetFrame()
-    {
-        static auto_ptr<CBayonetFrame> _auto_ptr = auto_ptr<CBayonetFrame>(this);
-        RegDefaultSocketFsms();
-        RegDefaultAppFsms();
-    }
-    CBayonetFrame(const CBayonetFrame&);
-
     void RegDefaultAppFsms()
     {
         RegAppFsm(APP_FSM_FINI,new CAppFsmFini());
@@ -138,9 +132,6 @@ protected:
     }
 
 protected:
-    virtual ~CBayonetFrame(){}
-    friend class auto_ptr<CBayonetFrame>;
-
     map<int, IFsm*> m_mapFsmMgr;
     map<int, IFsm*> m_mapAppFsmMgr;
 
