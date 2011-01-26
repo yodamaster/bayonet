@@ -8,6 +8,15 @@
 #  History:         
 =============================================================================*/
 #include "socketactor_listen.h"
+void CSocketActorListen::SetBackLog(int backlog)
+{
+    m_BackLog = backlog;
+}
+int CSocketActorListen::GetBackLog()
+{
+    return m_BackLog;
+}
+
 int CSocketActorListen::OnInit()
 {
     trace_log("%s",__func__);
@@ -36,6 +45,12 @@ int CSocketActorListen::OnInit()
         }
         m_SocketFd = listen_fd;
     }
+    if(listen(m_SocketFd, m_BackLog)<0)
+    {
+        error_log("CreateListen listen fd:%d err:%s\n",
+                m_SocketFd,strerror(errno));
+        return SOCKET_FSM_FINI;
+    }
     CEPoller* pEpoller = GetEpoller();
     if (!pEpoller)
     {
@@ -43,6 +58,7 @@ int CSocketActorListen::OnInit()
         return SOCKET_FSM_FINI;
     }
     pEpoller->AttachSocket(this);//加入到epoll中
+    trace_log("%s over",__func__);
 
     return HandleInit();
 }
@@ -58,28 +74,28 @@ int CSocketActorListen::OnRecv()
                 clientfd,strerror(errno));
         return SOCKET_FSM_FINI;
     }
-    
+
     int flag = fcntl (clientfd, F_GETFL);
     if ( fcntl (clientfd, F_SETFL, O_NONBLOCK | flag) < 0 )
     {
         error_log("HandleConnect set noblock socket:%d error:%s\n",
-                    clientfd,strerror(errno));
+                clientfd,strerror(errno));
         close(clientfd);
         return SOCKET_FSM_FINI;
     }
-    
+
     CSocketActorBase* pSocketActorAccept = AllocSocketActorAccept();
     if (pSocketActorAccept == NULL)
     {
         error_log("AllocSocketActorAccept socket:%d error:%s\n",
-                    clientfd,strerror(errno));
+                clientfd,strerror(errno));
         close(clientfd);
         return SOCKET_FSM_FINI;
     }
     pSocketActorAccept->Init(clientfd,m_TimeoutMs,m_ProtoType);
     pSocketActorAccept->AttachFrame(m_pFrame);
     pSocketActorAccept->ChangeState(SOCKET_FSM_WAITRECV);
-    
+
     return SOCKET_FSM_RECVOVER;
 }
 int CSocketActorListen::OnSend()

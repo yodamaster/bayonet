@@ -71,6 +71,13 @@ public:
      * @brief   循环删除所有标记为GC的actor
      */
     virtual void GCActors()=0;
+
+    /**
+     * @brief   获取状态机
+     *
+     * @return  
+     */
+    virtual map<int, IFsm*>* GetFsmMgr()=0;
 };
 
 class IActor

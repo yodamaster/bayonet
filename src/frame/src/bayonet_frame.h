@@ -30,6 +30,7 @@ typedef struct _StFrameParam
     string ip;          //ip
     int port;           //端口
     int protoType;      //协议类型
+    int backlog;        //backlog
 
 
     int epollSize;      //epoll监听的队列大小
@@ -48,6 +49,7 @@ typedef struct _StFrameParam
     {
         port = 0;
         protoType = 0;
+        backlog = 10240;
 
         epollSize = EPOLL_DFT_MAXSIZE;
         epollWaitTimeMs = 0;//立即返回
@@ -82,22 +84,13 @@ public:
         return 0;
     }
 
-    int RegSocketFsm(int state, IFsm* fsm)
+    int RegFsm(int state, IFsm* fsm)
     {
         if (fsm == NULL)
         {
             return -1;
         }
         m_mapFsmMgr[state] = fsm;
-        return 0;
-    }
-    int RegAppFsm(int state, IFsm* fsm)
-    {
-        if (fsm == NULL)
-        {
-            return -1;
-        }
-        m_mapAppFsmMgr[state] = fsm;
         return 0;
     }
 
@@ -112,29 +105,26 @@ public:
 protected:
     void RegDefaultAppFsms()
     {
-        RegAppFsm(APP_FSM_FINI,new CAppFsmFini());
+        RegFsm(APP_FSM_FINI,new CAppFsmFini());
     }
     void RegDefaultSocketFsms()
     {
-        RegSocketFsm(SOCKET_FSM_INIT, new CSocketFsmInit());
-        RegSocketFsm(SOCKET_FSM_FINI, new CSocketFsmFini());
-        RegSocketFsm(SOCKET_FSM_WAITSEND, new CSocketFsmWaitSend());
-        RegSocketFsm(SOCKET_FSM_SENDING, new CSocketFsmSending());
-        RegSocketFsm(SOCKET_FSM_SENDOVER, new CSocketFsmSendOver());
-        RegSocketFsm(SOCKET_FSM_WAITRECV, new CSocketFsmWaitRecv());
-        RegSocketFsm(SOCKET_FSM_RECVING, new CSocketFsmRecving());
-        RegSocketFsm(SOCKET_FSM_RECVOVER, new CSocketFsmRecvOver());
-        RegSocketFsm(SOCKET_FSM_WAITCLOSE, new CSocketFsmWaitClose());
-        RegSocketFsm(SOCKET_FSM_CLOSING, new CSocketFsmClosing());
-        RegSocketFsm(SOCKET_FSM_CLOSEOVER, new CSocketFsmCloseOver());
-        RegSocketFsm(SOCKET_FSM_ERROR, new CSocketFsmError());
-        RegSocketFsm(SOCKET_FSM_TIMEOUT, new CSocketFsmTimeout());
+        RegFsm(SOCKET_FSM_INIT, new CSocketFsmInit());
+        RegFsm(SOCKET_FSM_FINI, new CSocketFsmFini());
+        RegFsm(SOCKET_FSM_WAITSEND, new CSocketFsmWaitSend());
+        RegFsm(SOCKET_FSM_SENDING, new CSocketFsmSending());
+        RegFsm(SOCKET_FSM_SENDOVER, new CSocketFsmSendOver());
+        RegFsm(SOCKET_FSM_WAITRECV, new CSocketFsmWaitRecv());
+        RegFsm(SOCKET_FSM_RECVING, new CSocketFsmRecving());
+        RegFsm(SOCKET_FSM_RECVOVER, new CSocketFsmRecvOver());
+        RegFsm(SOCKET_FSM_WAITCLOSE, new CSocketFsmWaitClose());
+        RegFsm(SOCKET_FSM_CLOSING, new CSocketFsmClosing());
+        RegFsm(SOCKET_FSM_CLOSEOVER, new CSocketFsmCloseOver());
+        RegFsm(SOCKET_FSM_ERROR, new CSocketFsmError());
+        RegFsm(SOCKET_FSM_TIMEOUT, new CSocketFsmTimeout());
     }
 
 protected:
-    map<int, IFsm*> m_mapFsmMgr;
-    map<int, IFsm*> m_mapAppFsmMgr;
-
     StFrameParam m_StFrameParam;
     CEPoller m_epoller;
 };

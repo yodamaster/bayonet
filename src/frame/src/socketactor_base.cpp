@@ -29,10 +29,16 @@ int CSocketActorBase::Init(int socketFd,int timeout_ms,int protoType)
 int CSocketActorBase::SetEvent(unsigned event)
 {
     CEPoller * pEpoller = GetEpoller();
-    if (!pEpoller) return -1;
+    if (!pEpoller) 
+    {
+        error_log("pEpoller is NULL");
+        return -1;
+    }
 
     if ( pEpoller->ModEpollIO(m_SocketFd,event) < 0 )
+    {
         return pEpoller->AddEpollIO(m_SocketFd,event);
+    }
 
     return 0;
 }

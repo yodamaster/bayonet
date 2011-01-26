@@ -16,7 +16,12 @@
 class CSocketActorListen:public CSocketActorBase
 {
 public:
+    CSocketActorListen():m_BackLog(10240){}
     virtual ~CSocketActorListen() {}
+
+    void SetBackLog(int backlog);
+
+    int GetBackLog();
 
     virtual int OnInit();
 
@@ -43,6 +48,8 @@ protected:
     //继承方实现，返回一个socketactor
     virtual CSocketActorBase* AllocSocketActorAccept()=0;
     //=============================================================================
+protected:
+    int m_BackLog;
 };
 
 #endif
