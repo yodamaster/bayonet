@@ -29,6 +29,7 @@ public:
     ~CEPoller();
 
     int Create(int size);
+    int AttachFrame(IFrame* pFrame);
     int AddEpollIO(int fd,unsigned flag);
     int ModEpollIO(int fd,unsigned flag);
     int SetEpollIO(int fd,unsigned flag);
@@ -41,6 +42,8 @@ protected:
     char            m_szErrMsg[NET_ERRMSG_SIZE];
     int             m_epollFd;              //epoll的句柄
     epoll_event     m_events[EPOLL_FD_MAX];  //epoll_wait的返回的事件
+
+    IFrame* m_pFrame;
 
     map<int,CSocketActorBase*> m_mapSocketActor;
 };
