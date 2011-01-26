@@ -15,6 +15,7 @@
 #include "fl_log.h"
 
 //=============================================================================
+class CEPoller;
 class CSocketActorBase:public CActorBase
 {
 public:
@@ -29,8 +30,6 @@ public:
     int GetSocketFd();
 
     virtual int SetEvent(unsigned event);
-
-    virtual int CheckTimeOut(struct timeval& now_time);
 
     virtual int OnInit();
 
@@ -53,6 +52,9 @@ public:
     virtual int OnError();
 
 protected:
+    virtual CEPoller* GetEpoller();
+
+protected:
     int m_SocketFd;
 
     string m_IP;
@@ -61,6 +63,9 @@ protected:
     int m_ProtoType;
 
     //业务需要继承实现
+public:
+    virtual int CheckTimeOut(struct timeval& now_time);
+
 protected:
     //清理
     virtual int HandleFini()
@@ -102,6 +107,9 @@ public:
     virtual int OnRecv();
 
     virtual int OnSend();
+
+public:
+    virtual int CheckTimeOut(struct timeval& now_time);
 
 protected:
     //业务需要继承实现

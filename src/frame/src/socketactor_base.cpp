@@ -31,14 +31,8 @@ int CSocketActorBase::SetTimeout(int timeout_ms)
 
 int CSocketActorBase::SetEvent(unsigned event)
 {
-    IFrame* pFrame = GetFrame();
-    if (!pFrame)
-    {
-        return -1;
-    }
-    CBayonetFrame* pBayonetFrame = (CBayonetFrame*)pFrame;
-    CEPoller * pEpoller = pBayonetFrame->GetEpoller();
-    if (!pEpoller) return -2;
+    CEPoller * pEpoller = GetEpoller();
+    if (!pEpoller) return -1;
 
     if ( pEpoller->ModEpollIO(m_SocketFd,event) < 0 )
         return pEpoller->AddEpollIO(m_SocketFd,event);
@@ -56,6 +50,7 @@ int CSocketActorBase::GetSocketFd()
 }
 int CSocketActorBase::CheckTimeOut(struct timeval& now_time)
 {
+    //默认是永不超时的
     return 0;
 }
 int CSocketActorBase::OnInit()
@@ -107,6 +102,17 @@ int CSocketActorBase::OnTimeout()
 int CSocketActorBase::OnError()
 {
     return HandleError(1);
+}
+CEPoller* CSocketActorBase::GetEpoller()
+{
+    IFrame* pFrame = GetFrame();
+    if (!pFrame)
+    {
+        return NULL;
+    }
+    CBayonetFrame* pBayonetFrame = (CBayonetFrame*)pFrame;
+    CEPoller * pEpoller = pBayonetFrame->GetEpoller();
+    return pEpoller;
 }
 //=============================================================================
 int CSocketActorData::OnRecv()
