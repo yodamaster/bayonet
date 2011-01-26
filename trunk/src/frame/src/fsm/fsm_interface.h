@@ -40,6 +40,27 @@ public:
     virtual int DelActor(IActor* pActor)=0;
 
     /**
+     * @brief   添加待GC的个数,actor在SetGCMark时调用
+     *
+     * @return  0
+     */
+    virtual int AddNeedGCCount()=0;
+
+    /**
+     * @brief   减少待GC的个数,actor在析构的时候调用
+     *
+     * @return  0
+     */
+    virtual int SubNeedGCCount()=0;
+
+    /**
+     * @brief   获取待GC的个数
+     *
+     * @return  gc count
+     */
+    virtual int GetNeedGCCount()=0;
+
+    /**
      * @brief   循环删除所有标记为GC的actor
      */
     virtual void GCActors()=0;
@@ -53,9 +74,8 @@ public:
     /**
      * @brief   设置需要回收
      *
-     * @param   bGC
      */
-    virtual void SetGCMark(bool bGC=true)=0;
+    virtual void SetGCMark()=0;
 
     /**
      * @brief   获取需要回收
@@ -88,6 +108,13 @@ public:
      * @return  0
      */
     virtual int AttachFsmMgr(map<int, IFsm*> *ptrMapFsmMgr)=0;
+
+    /**
+     * @brief   获取关联状态机的管理器
+     *
+     * @return  map<int, IFsm*>*
+     */
+    virtual map<int, IFsm*>* GetFsmMgr()=0;
 
     /**
      * @brief   关联上层的actor
