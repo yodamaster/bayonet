@@ -17,6 +17,7 @@ int CBayonetFrame::Process()
     }
     CSocketActorListen* pSocketActorListen = m_StFrameParam.pSocketActorListen;
     pSocketActorListen->Init(m_StFrameParam.ip,m_StFrameParam.port,-1,m_StFrameParam.protoType);
+    pSocketActorListen->SetBackLog(m_StFrameParam.backlog);
     pSocketActorListen->AttachFrame(this);
 
     pSocketActorListen->ChangeState(SOCKET_FSM_INIT);

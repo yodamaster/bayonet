@@ -24,6 +24,14 @@ int CEPoller::Init(int epoll_size,int waittime_ms,int checktime_ms,int gc_maxcou
     m_waittimeMs = waittime_ms;
     m_checkTimeMs = checktime_ms;
     m_gcMaxCount = gc_maxcount;
+
+    m_epollFd = epoll_create(m_epollSize);
+    if ( m_epollFd <= 0 )
+    {
+        snprintf(m_szErrMsg,NET_ERRMSG_SIZE,"epoller init error,size:%d,error:%s\n",m_epollSize,strerror(errno));
+        return -1;
+    }
+
     return 0;
 }
 
@@ -50,13 +58,6 @@ void CEPoller::DetachSocket(CSocketActorBase* pSocketActor)
 
 int CEPoller::LoopForEvent()
 {
-    m_epollFd = epoll_create(m_epollSize);
-    if ( m_epollFd <= 0 )
-    {
-        snprintf(m_szErrMsg,NET_ERRMSG_SIZE,"epoller init error,size:%d,error:%s\n",m_epollSize,strerror(errno));
-        return -1;
-    }
-
     int fd;
     int nfds;
     CSocketActorBase*  pSocketActor = NULL;
@@ -92,15 +93,30 @@ int CEPoller::LoopForEvent()
             ev = m_events[i].events;
             int ret = 0;
             if ( ev&EPOLLIN )
+            {
+                printf("recv\n");
                 ret = pSocketActor->ChangeState(SOCKET_FSM_RECVING);                         
+            }
             else if ( ev&EPOLLOUT )
+            {
+                printf("send\n");
                 ret = pSocketActor->ChangeState(SOCKET_FSM_SENDING);
+            }
             else if ( ev&EPOLLHUP )
+            {
+                printf("close\n");
                 ret = pSocketActor->ChangeState(SOCKET_FSM_CLOSING);
+            }
             else if ( ev&EPOLLERR )
+            {
+                printf("error\n");
                 ret = pSocketActor->ChangeState(SOCKET_FSM_ERROR);
+            }
             else
+            {
+                printf("what\n");
                 ret = pSocketActor->ChangeState(SOCKET_FSM_ERROR);
+            }
         }
 
         gettimeofday(&next_tm,NULL);

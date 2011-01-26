@@ -78,12 +78,17 @@ public:
             }
         }
     }
+    map<int, IFsm*>* GetFsmMgr()
+    {
+        return &m_mapFsmMgr;
+    }
 
 protected:
     list<IActor*> m_listActors;
 
     int m_needGCCount;
     int m_allActorCount;
+    map<int, IFsm*> m_mapFsmMgr;
 };
 
 class CActorBase : public IActor
@@ -118,6 +123,7 @@ public:
         }
         m_pFrame = pFrame;
         m_pFrame->AddActor(this);
+        AttachFsmMgr(m_pFrame->GetFsmMgr());
         return 0;
     }
     IFrame* GetFrame()
