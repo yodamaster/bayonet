@@ -27,10 +27,10 @@
 #include <time.h>
 
 //Frame的AddActor方法的actorType的值
-enum ACTORTYPE
+enum PROTOTYPE
 {
-    ACTOR_TYPE_SOCKET=0,
-    ACTOR_TYPE_APP=1,
+    PROTO_TYPE_TCP=0,
+    PROTO_TYPE_UDP,
 };
 
 enum APPFSM
