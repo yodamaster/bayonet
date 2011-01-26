@@ -53,7 +53,11 @@ public:
             _ins = new CBayonetFrame();
         return _ins;
     }
-    int Init(StFrameParam param);
+    int Init(StFrameParam param)
+    {
+        m_StFrameParam = param;
+        return 0;
+    }
 
     int RegSocketFsm(int state, IFsm* fsm)
     {
