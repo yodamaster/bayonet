@@ -10,6 +10,7 @@
 #include "socketactor_listen.h"
 int CSocketActorListen::OnInit()
 {
+    trace_log("%s",__func__);
     if (m_SocketFd <= 0)
     {
         int optval;
@@ -35,11 +36,19 @@ int CSocketActorListen::OnInit()
         }
         m_SocketFd = listen_fd;
     }
+    CEPoller* pEpoller = GetEpoller();
+    if (!pEpoller)
+    {
+        error_log("pEpoller is NULL");
+        return SOCKET_FSM_FINI;
+    }
+    pEpoller->AttachSocket(this);//加入到epoll中
 
     return HandleInit();
 }
 int CSocketActorListen::OnRecv()
 {
+    trace_log("%s",__func__);
     struct sockaddr_in addr;
     int length = sizeof(struct sockaddr_in);
     int clientfd = accept(m_SocketFd,(struct sockaddr *)&addr,(socklen_t*)&length);
