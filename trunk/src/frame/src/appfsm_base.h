@@ -7,7 +7,6 @@
 #  LastChange:      2011-01-24 20:06:27
 #  History:         
 =============================================================================*/
-#include "actorset.h"
 #include "appactor_base.h"
 
 class CAppFsmBase : public IFsm

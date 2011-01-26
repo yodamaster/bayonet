@@ -6,6 +6,7 @@
 #include <map>
 using namespace std;
 #include "syncframe.h"
+//#include "socketactor_base.h"
 #include "socketactor_active.h"
 #include "socketactor_passive.h"
 #include "socketactor_listen.h"

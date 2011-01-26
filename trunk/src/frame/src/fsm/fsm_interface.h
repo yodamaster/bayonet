@@ -14,11 +14,71 @@
 using namespace std;
 
 class IFsm;
+class IActor;
+
+class IFrame
+{
+public:
+    virtual ~IFrame () {}
+
+    /**
+     * @brief   添加一个actor,将Actor加入到Frame的垃圾管理中去
+     *
+     * @param   pActor
+     *
+     * @return  0
+     */
+    virtual int AddActor(IActor* pActor)=0;
+
+    /**
+     * @brief   删除一个actor，一般不需要调用，Frame会统一用GC来调用析构
+     *
+     * @param   pActor
+     *
+     * @return  0
+     */
+    virtual int DelActor(IActor* pActor)=0;
+
+    /**
+     * @brief   循环删除所有标记为GC的actor
+     */
+    virtual void GCActors()=0;
+};
 
 class IActor
 {
 public:
     virtual ~IActor() {}
+
+    /**
+     * @brief   设置需要回收
+     *
+     * @param   bGC
+     */
+    virtual void SetGCMark(bool bGC=true)=0;
+
+    /**
+     * @brief   获取需要回收
+     *
+     * @return  
+     */
+    virtual bool GetGCMark()=0;
+
+    /**
+     * @brief   设置Frame
+     *
+     * @param   pFrame
+     *
+     * @return  0
+     */
+    virtual int AttachFrame(IFrame* pFrame)=0;
+
+    /**
+     * @brief   返回关联的框架
+     *
+     * @return  frame
+     */
+    virtual IFrame* GetFrame()=0;
 
     /**
      * @brief   关联状态机的管理器

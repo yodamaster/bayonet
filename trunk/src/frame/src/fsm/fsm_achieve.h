@@ -15,16 +15,68 @@
 #include <vector>
 #include <set>
 #include <map>
+#include <list>
 
 #include "fsm_interface.h"
 using namespace std;
+class CFrameBase : public IFrame
+{
+public:
+    virtual ~CFrameBase () {}
+
+    int AddActor(IActor* pActor)
+    {
+        m_listActors.push_front(pActor);
+        return 0;
+    }
+    int DelActor(IActor* pActor)
+    {
+        m_listActors.remove(pActor);
+        return 0;
+    }
+    void GCActors()
+    {
+        for(list<IActor*>::iterator it = m_listActors.begin(); it != m_listActors.end(); ++it)
+        {
+            list<IActor*>::iterator tempIt = it;
+            it++;
+
+            if ((*tempIt)->GetGCMark())
+            {
+                delete (*tempIt);
+                m_listActors.erase(tempIt);
+            }
+        }
+    }
+
+protected:
+    list<IActor*> m_listActors;
+};
 
 class CActorBase : public IActor
 {
 public:
-    CActorBase () : m_Fsm(NULL),m_ptrMapFsmMgr(NULL),m_pUpperActor(NULL) {}
+    CActorBase () : m_bGC(false),m_Fsm(NULL),m_ptrMapFsmMgr(NULL),m_pUpperActor(NULL),m_pFrame(NULL) {}
 
     virtual ~CActorBase () {}
+
+    virtual void SetGCMark(bool bGC=true)
+    {
+        m_bGC = bGC;
+    }
+    virtual bool GetGCMark()
+    {
+        return m_bGC;
+    }
+    int AttachFrame(IFrame* pFrame)
+    {
+        m_pFrame = pFrame;
+        return 0;
+    }
+    IFrame* GetFrame()
+    {
+        return m_pFrame;
+    }
 
     int AttachFsmMgr(map<int, IFsm*> * ptrMapFsmMgr)
     {
@@ -100,8 +152,10 @@ private:
 
 
 protected:
+    bool m_bGC;
     IFsm* m_Fsm;
     map<int, IFsm*> *m_ptrMapFsmMgr;
     IActor* m_pUpperActor;
+    IFrame* m_pFrame;
 };
 #endif
