@@ -17,7 +17,7 @@ int CSocketActorListen::OnInit()
         if(listen_fd < 0)
         {   
             error_log("Create socket error:%s\n",strerror(errno));
-            return -1; 
+            return SOCKET_FSM_FINI; 
         }   
         struct sockaddr_in myaddr;
         myaddr.sin_family = AF_INET;
@@ -31,18 +31,49 @@ int CSocketActorListen::OnInit()
             close(listen_fd);
             error_log("CreateListen bind ip:%s port:%d sock:%d err:%s\n",
                     m_IP.c_str(),m_Port,listen_fd,strerror(errno));
-            return -1; 
+            return SOCKET_FSM_FINI; 
         }
         m_SocketFd = listen_fd;
     }
 
-    return HandleFini();
+    return HandleInit();
 }
 int CSocketActorListen::OnRecv()
 {
+    struct sockaddr_in addr;
+    int length = sizeof(struct sockaddr_in);
+    int clientfd = accept(m_SocketFd,(struct sockaddr *)&addr,(socklen_t*)&length);
+    if ( clientfd <= 0 )
+    {
+        error_log("netlisten accept rtn:%d error:%s\n",
+                clientfd,strerror(errno));
+        return SOCKET_FSM_FINI;
+    }
+    
+    int flag = fcntl (clientfd, F_GETFL);
+    if ( fcntl (clientfd, F_SETFL, O_NONBLOCK | flag) < 0 )
+    {
+        error_log("HandleConnect set noblock socket:%d error:%s\n",
+                    clientfd,strerror(errno));
+        close(clientfd);
+        return SOCKET_FSM_FINI;
+    }
+    
+    CSocketActorBase* pSocketActorAccept = AllocSocketActorAccept();
+    if (pSocketActorAccept == NULL)
+    {
+        error_log("AllocSocketActorAccept socket:%d error:%s\n",
+                    clientfd,strerror(errno));
+        close(clientfd);
+        return SOCKET_FSM_FINI;
+    }
+    pSocketActorAccept->Init(clientfd,m_TimeoutMs,m_ProtoType);
+    pSocketActorAccept->AttachFrame(m_pFrame);
+    pSocketActorAccept->ChangeState(SOCKET_FSM_WAITRECV);
+    
     return SOCKET_FSM_RECVOVER;
 }
 int CSocketActorListen::OnSend()
 {
-    return SOCKET_FSM_WAITRECV;
+    return SOCKET_FSM_SENDOVER;
 }
