@@ -8,6 +8,7 @@
 #  History:         
 =============================================================================*/
 #include "socketactor_base.h"
+#include "bayonet_frame.h"
 
 int CSocketActorBase::Init(string ip,int port,int timeout_ms,int protoType)
 {
@@ -28,26 +29,19 @@ int CSocketActorBase::SetTimeout(int timeout_ms)
     return 0;
 }
 
-int CSocketActorBase::AttachEpoller(CEPoller* pEpoller)
-{
-    m_pEpoller = pEpoller;
-    if ( m_pEpoller ) m_pEpoller->AttachSocket(this);
-        
-    return 0;
-}
-int CSocketActorBase::DetachEpoller()
-{
-    if ( m_pEpoller ) m_pEpoller->DetachSocket(this);
-    m_pEpoller = NULL;
-
-    return 0; 
-}
 int CSocketActorBase::SetEvent(unsigned event)
 {
-    if ( !m_pEpoller ) return -1;
+    IFrame* pFrame = GetFrame();
+    if (!pFrame)
+    {
+        return -1;
+    }
+    CBayonetFrame* pBayonetFrame = (CBayonetFrame*)pFrame;
+    CEPoller * pEpoller = pBayonetFrame->GetEpoller();
+    if (!pEpoller) return -2;
 
-    if ( m_pEpoller->ModEpollIO(m_SocketFd,event) < 0 )
-        return m_pEpoller->AddEpollIO(m_SocketFd,event);
+    if ( pEpoller->ModEpollIO(m_SocketFd,event) < 0 )
+        return pEpoller->AddEpollIO(m_SocketFd,event);
 
     return 0;
 }

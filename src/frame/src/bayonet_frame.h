@@ -78,6 +78,11 @@ public:
         return 0;
     }
 
+    CEPoller* GetEpoller()
+    {
+        return &m_epoller;
+    }
+
     //执行
     int Process()
     {
