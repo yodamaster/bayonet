@@ -3,10 +3,16 @@
 CEPoller::CEPoller()
 {
     m_epollFd = -1;
+    m_pFrame = NULL;
 }
 
 CEPoller::~CEPoller()
 {
+}
+int CEPoller::AttachFrame(IFrame* pFrame)
+{
+    m_pFrame = NULL;
+    return 0;
 }
 
 int CEPoller::Create(int size)
@@ -103,6 +109,7 @@ int CEPoller::LoopForEvent(int timeout)
 
                 tempIt->second->CheckTimeOut(next_tm);
             }
+            m_pFrame->GCActors();
             prev_tm = next_tm;
         }
     }
