@@ -27,6 +27,10 @@ public:
     int AddActor(IActor* pActor)
     {
         m_listActors.push_front(pActor);
+        if (pActor->GetFrame() != this)
+        {
+            pActor->AttachFrame(this);
+        }
         return 0;
     }
     int DelActor(IActor* pActor)
@@ -70,7 +74,12 @@ public:
     }
     int AttachFrame(IFrame* pFrame)
     {
+        if (m_pFrame == pFrame)
+        {
+            return 0;
+        }
         m_pFrame = pFrame;
+        m_pFrame->AddActor(this);
         return 0;
     }
     IFrame* GetFrame()
