@@ -11,6 +11,7 @@
 #define _SOCKETACTOR_LISTEN_H_
 #include "comm_def.h"
 #include "fsm_achieve.h"
+#include "socketactor_base.h"
 
 class CSocketActorListen:public CSocketActorBase
 {

@@ -9,6 +9,22 @@
 =============================================================================*/
 #ifndef _COMM_DEF_H_
 #define _COMM_DEF_H_
+#include <error.h>
+#include <errno.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <poll.h>
+#include <sys/epoll.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <fcntl.h>
+#include <strings.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
 
 //Frame的AddActor方法的actorType的值
 enum ACTORTYPE

@@ -12,6 +12,7 @@
 #include "comm_def.h"
 #include "fsm_achieve.h"
 #include "epoller.h"
+#include "fl_log.h"
 
 //=============================================================================
 class CSocketActorBase:public CActorBase
