@@ -14,23 +14,23 @@ class CAppFsmBase : public CFsmBase
 public:
     CAppFsmBase () {}
     virtual ~CAppFsmBase () {}
-    virtual int Init(IActor* obj)
+    virtual int Entry(IActor* obj)
     {
         CAppActorBase * pAppActor = (CAppActorBase*)obj;
-        return HandleInit(pAppActor->GetSocketActorSet(), pAppActor);
+        return HandleEntry(pAppActor->GetSocketActorSet(), pAppActor);
     }
     virtual int Process(IActor* obj)
     {
         CAppActorBase * pAppActor = (CAppActorBase*)obj;
         return HandleProcess(pAppActor->GetSocketActorSet(), pAppActor);
     }
-    virtual int Fini(IActor* obj)
+    virtual int Exit(IActor* obj)
     {
         CAppActorBase * pAppActor = (CAppActorBase*)obj;
-        return HandleFini(pAppActor->GetSocketActorSet(), pAppActor);
+        return HandleExit(pAppActor->GetSocketActorSet(), pAppActor);
     }
     /**
-     * @brief   Init函数会调用，多传入几个参数
+     * @brief   Entry函数会调用，多传入几个参数
      *
      * @param   pSocketActorSet      动作集合
      * @param   pAppActor            数据
@@ -38,7 +38,7 @@ public:
      * @return  0               succ
      *          else            fail
      */
-    virtual int HandleInit(CSocketActorSet *pSocketActorSet, CAppActorBase* pAppActor)
+    virtual int HandleEntry(CSocketActorSet *pSocketActorSet, CAppActorBase* pAppActor)
     {
         return 0;
     }
@@ -59,7 +59,7 @@ public:
     }
 
     /**
-     * @brief   Fini函数会调用
+     * @brief   Exit函数会调用
      *
      * @param   pSocketActorSet
      * @param   pAppActor            数据
@@ -67,7 +67,7 @@ public:
      * @return  0               succ
      *          else            fail
      */
-    virtual int HandleFini(CSocketActorSet *pSocketActorSet, CAppActorBase* pAppActor)
+    virtual int HandleExit(CSocketActorSet *pSocketActorSet, CAppActorBase* pAppActor)
     {
         return 0;
     }
