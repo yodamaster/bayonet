@@ -102,7 +102,17 @@ protected:
 class CSocketActorData:public CSocketActorBase
 {
 public:
-    CSocketActorData () : m_pNetHandler(NULL) {}
+    CSocketActorData () {
+        m_pNetHandler = NULL;
+        m_sendBufLen = 0;
+        m_recvBufLen = 0;
+        m_sendedLen = 0;
+        m_recvedLen = 0;
+        m_sendFlag = 0;//0即未开始
+        m_recvFlag = 0;//0即未开始
+        m_strSingleRecvBuf.resize(1024);
+        m_strRecvBuf.resize(2048);
+    }
     virtual ~CSocketActorData () {
         if (m_pNetHandler)
         {
@@ -125,7 +135,7 @@ public:
 protected:
     // 为发送打包
     virtual int HandleEncode(
-            char *buf,
+            string & strSendBuf,
             int &len)=0;
 
     // 回应包完整性检查
@@ -143,7 +153,18 @@ protected:
 protected:
     CNetHandlerBase* m_pNetHandler;
 
+    int m_sendedLen;
+    int m_sendBufLen;
     string m_strSendBuf;
+
+    int m_recvedLen;
+    int m_recvBufLen;
+    string m_strRecvBuf;
+
+    string m_strSingleRecvBuf;
+
+    int m_sendFlag;
+    int m_recvFlag;
 };
 //=============================================================================
 
