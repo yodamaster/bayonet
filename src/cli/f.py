@@ -12,7 +12,6 @@
 #=============================================================================
 '''
 import os
-import sys
 
 for i in range(0,100):
-    print os.popen("./main").read()
+    print os.popen("./cli").read()
