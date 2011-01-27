@@ -23,7 +23,18 @@ int CSocketActorListen::OnInit()
     if (m_SocketFd <= 0)
     {
         int optval;
-        int listen_fd = socket(AF_INET,SOCK_STREAM,0);
+        int listen_fd;
+        switch(m_ProtoType)
+        {
+            case PROTO_TYPE_TCP:
+                listen_fd = socket(AF_INET,SOCK_STREAM,0);
+                break;
+            case PROTO_TYPE_UDP:
+                listen_fd = socket(AF_INET,SOCK_DGRAM,0);
+                break;
+            default:
+                return SOCKET_FSM_FINI;
+        }
         if(listen_fd < 0)
         {   
             error_log("Create socket error:%s\n",strerror(errno));
@@ -49,13 +60,13 @@ int CSocketActorListen::OnInit()
     {
         error_log("CreateListen listen fd:%d err:%s\n",
                 m_SocketFd,strerror(errno));
-        return SOCKET_FSM_FINI;
+        return SOCKET_FSM_CLOSING;
     }
     CEPoller* pEpoller = GetEpoller();
     if (!pEpoller)
     {
         error_log("pEpoller is NULL");
-        return SOCKET_FSM_FINI;
+        return SOCKET_FSM_CLOSING;
     }
     pEpoller->AttachSocket(this);//加入到epoll中
     trace_log("%s over",__func__);
