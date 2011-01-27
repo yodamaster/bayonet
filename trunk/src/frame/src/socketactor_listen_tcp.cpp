@@ -29,16 +29,7 @@ int CSocketActorListenTcp::OnInit()
     {
         int optval;
         int listen_fd;
-        switch(m_ProtoType)
-        {
-            case PROTO_TYPE_TCP:
-                listen_fd = socket(AF_INET,SOCK_STREAM,0);
-                break;
-            case PROTO_TYPE_UDP:
-                //不支持udp
-            default:
-                return SOCKET_FSM_FINI;
-        }
+        listen_fd = socket(AF_INET,SOCK_STREAM,0);
         if(listen_fd < 0)
         {   
             error_log("Create socket error:%s\n",strerror(errno));
