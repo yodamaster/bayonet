@@ -2,7 +2,7 @@
 #  Author:          dantezhu - http://www.vimer.cn
 #  Email:           zny2008@gmail.com
 #  FileName:        socketactor_listen_tcp.h
-#  Description:     socketactor的基础类
+#  Description:     tcp listen
 #  Version:         1.0
 #  LastChange:      2011-01-27 23:51:50
 #  History:         
@@ -16,14 +16,12 @@
 class CSocketActorListenTcp:public CSocketActorBase
 {
 public:
-    CSocketActorListenTcp():m_BackLog(10240),m_bKeepcnt(true){}
+    CSocketActorListenTcp():m_BackLog(10240){}
     virtual ~CSocketActorListenTcp() {}
 
     void SetBackLog(int backlog);
 
     int GetBackLog();
-
-    void SetKeepcnt(bool bKeepcnt);
 
     virtual int OnInit();
 
@@ -38,6 +36,5 @@ public:
     virtual CSocketActorBase* AllocSocketActorAccept();
 protected:
     int m_BackLog;
-    bool m_bKeepcnt;
 };
 #endif

@@ -19,7 +19,7 @@ class CEPoller;
 class CSocketActorBase:public CActorBase
 {
 public:
-    CSocketActorBase ():m_SocketFd(-1),m_Port(0),m_TimeoutMs(-1),m_ProtoType(0),m_pAction(NULL) {}
+    CSocketActorBase ():m_SocketFd(-1),m_Port(0),m_TimeoutMs(-1),m_ProtoType(0),m_pAction(NULL),m_bKeepcnt(false) {}
     virtual ~CSocketActorBase () {}
 
     virtual int Init(string ip,int port,int timeout_ms,int protoType);
@@ -29,6 +29,8 @@ public:
     virtual int SetIActionPtr(IAction *pAction);
 
     virtual int GetSocketFd();
+
+    virtual void SetKeepcnt(bool bKeepcnt);
 
     virtual int CheckTimeOut(struct timeval& now_time);
 
@@ -61,5 +63,6 @@ protected:
     int m_ProtoType;
 
     IAction* m_pAction;
+    bool m_bKeepcnt;
 };
 #endif

@@ -22,9 +22,14 @@ protected:
     virtual int OnSendOver()
     {
         Clear();
-        //TODO
-        //这里应该有参数要标识是长连接还是短连接
-        return SOCKET_FSM_CLOSING;
+        if (m_bKeepcnt && m_ProtoType == PROTO_TYPE_TCP)
+        {
+            return SOCKET_FSM_WAITRECV;
+        }
+        else
+        {
+            return SOCKET_FSM_CLOSING;
+        }
     }
     virtual int OnRecvOver()
     {

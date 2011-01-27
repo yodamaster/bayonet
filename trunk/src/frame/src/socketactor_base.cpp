@@ -55,6 +55,10 @@ int CSocketActorBase::GetSocketFd()
 {
     return m_SocketFd;
 }
+void CSocketActorBase::SetKeepcnt(bool bKeepcnt)
+{
+    m_bKeepcnt = bKeepcnt;
+}
 int CSocketActorBase::CheckTimeOut(struct timeval& now_time)
 {
     //默认是永不超时的
