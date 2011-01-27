@@ -51,6 +51,7 @@ int main(int argc, const char *argv[])
     StFrameParam param;
     param.ip="127.0.0.1";
     param.port = 10001;
+    param.protoType = PROTO_TYPE_UDP;
     param.pSocketActorListen = new CSocketActorListenImpl();
     
     srv.Init(param);

@@ -29,7 +29,7 @@
 //Frame的AddActor方法的actorType的值
 enum PROTOTYPE
 {
-    PROTO_TYPE_TCP=0,
+    PROTO_TYPE_TCP=1,
     PROTO_TYPE_UDP,
 };
 
