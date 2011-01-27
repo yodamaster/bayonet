@@ -33,7 +33,6 @@ public:
 
     virtual int OnClose();
 
-    virtual CSocketActorBase* AllocSocketActorAccept();
 protected:
     int m_BackLog;
 };

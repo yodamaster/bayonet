@@ -44,11 +44,11 @@ public:
 
 protected:
     virtual int OnFiniOver();
+    virtual int OnCloseOver();
 
     virtual int OnInitOver()=0;
     virtual int OnSendOver()=0;
     virtual int OnRecvOver()=0;
-    virtual int OnCloseOver()=0;
 
     virtual int Clear();
 

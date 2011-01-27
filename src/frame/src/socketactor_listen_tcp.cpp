@@ -90,14 +90,7 @@ int CSocketActorListenTcp::OnRecv()
         return SOCKET_FSM_FINI;
     }
 
-    CSocketActorBase* pSocketActorAccept = AllocSocketActorAccept();
-    if (pSocketActorAccept == NULL)
-    {
-        error_log("AllocSocketActorAccept socket:%d error:%s\n",
-                clientfd,strerror(errno));
-        close(clientfd);
-        return SOCKET_FSM_FINI;
-    }
+    CSocketActorBase* pSocketActorAccept = new CSocketActorPassive();
     pSocketActorAccept->Init(clientfd,m_TimeoutMs,m_ProtoType);
     pSocketActorAccept->SetIActionPtr(m_pAction);
     pSocketActorAccept->SetKeepcnt(m_bKeepcnt);
@@ -119,8 +112,4 @@ int CSocketActorListenTcp::OnClose()
         m_SocketFd = -1;
     }
     return SOCKET_FSM_FINI;
-}
-CSocketActorBase* CSocketActorListenTcp::AllocSocketActorAccept()
-{
-    return new CSocketActorPassive();
 }
