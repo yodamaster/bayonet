@@ -147,14 +147,14 @@ public:
      *
      * @return  0
      */
-    virtual int AttachUpperActor(IActor* pActor)=0;
+    virtual int AttachSuperActor(IActor* pActor)=0;
 
     /**
      * @brief   获取上层actor
      *
      * @return  actor
      */
-    virtual IActor* GetUpperActor()=0;
+    virtual IActor* GetSuperActor()=0;
 
     /**
      * @brief   执行当前状态
