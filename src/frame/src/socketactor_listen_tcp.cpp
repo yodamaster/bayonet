@@ -17,10 +17,6 @@ int CSocketActorListenTcp::GetBackLog()
 {
     return m_BackLog;
 }
-void CSocketActorListenTcp::SetKeepcnt(bool bKeepcnt)
-{
-    m_bKeepcnt = bKeepcnt;
-}
 
 int CSocketActorListenTcp::OnInit()
 {
@@ -104,6 +100,7 @@ int CSocketActorListenTcp::OnRecv()
     }
     pSocketActorAccept->Init(clientfd,m_TimeoutMs,m_ProtoType);
     pSocketActorAccept->SetIActionPtr(m_pAction);
+    pSocketActorAccept->SetKeepcnt(m_bKeepcnt);
     pSocketActorAccept->AttachFrame(m_pFrame);
     pSocketActorAccept->ChangeState(SOCKET_FSM_INIT);
     trace_log("%s over",__func__);
@@ -112,14 +109,7 @@ int CSocketActorListenTcp::OnRecv()
 }
 int CSocketActorListenTcp::OnSend()
 {
-    if (m_bKeepcnt)
-    {
-        return SOCKET_FSM_WAITRECV;
-    }
-    else
-    {
-        return SOCKET_FSM_CLOSING;
-    }
+    return SOCKET_FSM_WAITRECV;
 }
 int CSocketActorListenTcp::OnClose()
 {
