@@ -82,6 +82,16 @@ public:
     {
         return &m_mapFsmMgr;
     }
+    int RegFsm(int state, IFsm* fsm)
+    {
+        if (state <=0 || fsm == NULL)
+        {
+            return -1;
+        }
+        fsm->AttachFrame(this);
+        m_mapFsmMgr[state] = fsm;
+        return 0;
+    }
 
 protected:
     list<IActor*> m_listActors;
@@ -214,6 +224,20 @@ protected:
     IFsm* m_Fsm;
     map<int, IFsm*> *m_ptrMapFsmMgr;
     IActor* m_pUpperActor;
+    IFrame* m_pFrame;
+};
+class CFsmBase : public IFsm
+{
+public:
+    CFsmBase ():m_pFrame(NULL) {}
+    virtual ~CFsmBase () {}
+    virtual int AttachFrame(IFrame* pFrame)
+    {
+        m_pFrame = pFrame;
+        return 0;
+    }
+
+private:
     IFrame* m_pFrame;
 };
 #endif

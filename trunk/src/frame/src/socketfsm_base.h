@@ -11,9 +11,10 @@
 #define _SOCKETFSM_BASE_H_
 #include "comm_def.h"
 #include "fsm_interface.h"
+#include "fsm_achieve.h"
 #include "socketactor_base.h"
 
-class CSocketFsmBase:public IFsm
+class CSocketFsmBase:public CFsmBase
 {
 public:
     CSocketFsmBase () {}
