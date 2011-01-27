@@ -13,6 +13,7 @@
 #include "fsm_achieve.h"
 #include "epoller.h"
 #include "fl_log.h"
+#include "net_handler.h"
 
 //=============================================================================
 class CEPoller;
@@ -22,11 +23,9 @@ public:
     CSocketActorBase ():m_SocketFd(-1),m_Port(0),m_TimeoutMs(-1),m_ProtoType(0) {}
     virtual ~CSocketActorBase () {}
 
-    int Init(string ip,int port,int timeout_ms,int protoType);
+    virtual int Init(string ip,int port,int timeout_ms,int protoType);
 
-    int Init(int socketFd,int timeout_ms,int protoType);
-
-    int SetSocketFd(int socketFd);
+    virtual int Init(int socketFd,int timeout_ms,int protoType);
 
     int GetSocketFd();
 
@@ -103,14 +102,27 @@ protected:
 class CSocketActorData:public CSocketActorBase
 {
 public:
-    virtual ~CSocketActorData () {}
+    CSocketActorData () : m_pNetHandler(NULL) {}
+    virtual ~CSocketActorData () {
+        if (m_pNetHandler)
+        {
+            delete m_pNetHandler;
+            m_pNetHandler = NULL;
+        }
+    }
 
     virtual int OnRecv();
 
     virtual int OnSend();
 
-protected:
     //业务需要继承实现
+public:
+    virtual int Init(string ip,int port,int timeout_ms,int protoType);
+    virtual int Init(int socketFd,int timeout_ms,int protoType);
+    virtual int OnInit();
+    virtual int OnClose();
+
+protected:
     // 为发送打包
     virtual int HandleEncode(
             char *buf,
@@ -127,6 +139,9 @@ protected:
     virtual int HandleSendOver()=0;
     // 回应包接受完毕
     virtual int HandleRecvOver(const char *buf, int len)=0;
+
+protected:
+    CNetHandlerBase* m_pNetHandler;
 };
 //=============================================================================
 

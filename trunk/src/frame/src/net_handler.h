@@ -28,16 +28,16 @@ public:
     }
     virtual ~CNetHandlerBase ();
 
-    virtual int Init(string ip,int port);
-    virtual int Init(int socketFd);
+    int Init(string ip,int port);
+    int Init(int socketFd);
 
-    int SetSocketFd(int socketFd);
     int GetSocketFd();
 
     int SetNoBlock(int socketFd);
     
     int Close();
 
+    virtual int Create()=0;
     virtual int Send(char* pBuf,int bufLen)=0;
     virtual int Recv(char* pBuf,int bufSize)=0;
 
@@ -53,8 +53,7 @@ class CNetHandlerTcp : public CNetHandlerBase
 public:
     CNetHandlerTcp () {}
     virtual ~CNetHandlerTcp () {}
-    virtual int Init(string ip,int port);
-
+    virtual int Create();
     virtual int Send(char* pBuf,int bufLen);
     virtual int Recv(char* pBuf,int bufSize);
 
@@ -66,7 +65,7 @@ class CNetHandlerUdp : public CNetHandlerBase
 public:
     CNetHandlerUdp () {}
     virtual ~CNetHandlerUdp () {}
-    virtual int Init(string ip,int port);
+    virtual int Create();
     virtual int Send(char* pBuf,int bufLen);
     virtual int Recv(char* pBuf,int bufSize);
 };

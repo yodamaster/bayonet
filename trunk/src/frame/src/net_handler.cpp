@@ -29,11 +29,6 @@ int CNetHandlerBase::Init(int socketFd)
     }
     return 0;
 }
-int CNetHandlerBase::SetSocketFd(int socketFd)
-{
-    m_SocketFd = socketFd;
-    return 0;
-}
 int CNetHandlerBase::GetSocketFd()
 {
     return m_SocketFd;
@@ -63,12 +58,11 @@ int CNetHandlerBase::Close()
     return 0;
 }
 //=============================================================================
-int CNetHandlerTcp::Init(string ip,int port)
+int CNetHandlerTcp::Create()
 {
-    int ret = CNetHandlerBase::Init(ip,port);
-    if (ret)
+    if (m_SocketFd>0)
     {
-        return ret;
+        return 0;
     }
     int _fd = socket(AF_INET, SOCK_STREAM, 0);
     if ( _fd <= 0 )
@@ -77,13 +71,18 @@ int CNetHandlerTcp::Init(string ip,int port)
         return -1;
     }
     m_SocketFd = _fd;
-    SetNoBlock(m_SocketFd);
+    int ret = SetNoBlock(m_SocketFd);
+    if (ret)
+    {
+        close(m_SocketFd);
+        return -2;
+    }
 
     ret = netConnect();
     if (ret)
     {
         error_log("socket connect error:%d",_fd);
-        return -2;
+        return -3;
     }
     return 0;
 }
@@ -146,12 +145,11 @@ int CNetHandlerTcp::netConnect()
     return 0;
 }
 //=============================================================================
-int CNetHandlerUdp::Init(string ip,int port)
+int CNetHandlerUdp::Create()
 {
-    int ret = CNetHandlerBase::Init(ip,port);
-    if (ret)
+    if (m_SocketFd>0)
     {
-        return ret;
+        return 0;
     }
     int _fd = socket(AF_INET, SOCK_DGRAM, 0);
     if ( _fd <= 0 )
