@@ -1,17 +1,16 @@
 /*=============================================================================
 #  Author:          dantezhu - http://www.vimer.cn
 #  Email:           zny2008@gmail.com
-#  FileName:        socketactor_base.h
+#  FileName:        socketactor_listen_tcp.h
 #  Description:     socketactor的基础类
 #  Version:         1.0
-#  LastChange:      2011-01-24 20:23:53
+#  LastChange:      2011-01-27 23:51:50
 #  History:         
 =============================================================================*/
-#ifndef _SOCKETACTOR_LISTEN_H_
-#define _SOCKETACTOR_LISTEN_H_
+#ifndef _SOCKETACTOR_LISTEN_TCP_H_
+#define _SOCKETACTOR_LISTEN_TCP_H_
 #include "comm_def.h"
 #include "fsm_achieve.h"
-#include "socketactor_base.h"
 #include "socketactor_data.h"
 
 class CSocketActorListenTcp:public CSocketActorBase
@@ -41,5 +40,4 @@ protected:
     int m_BackLog;
     bool m_bKeepcnt;
 };
-
 #endif

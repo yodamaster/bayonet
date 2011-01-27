@@ -9,29 +9,32 @@
 =============================================================================*/
 #ifndef _SOCKETACTOR_ACTIVE_H_
 #define _SOCKETACTOR_ACTIVE_H_
-#include "socketactor_base.h"
+#include "socketactor_data.h"
 class CSocketActorActive : public CSocketActorData
 {
 public:
     virtual ~CSocketActorActive () {}
 
 protected:
-    virtual int HandleInit()
+    virtual int OnInitOver()
     {
         return SOCKET_FSM_WAITSEND;
     }
-    virtual int HandleSendOver()
+    virtual int OnSendOver()
     {
+        Clear();
         //TODO
-        //清除数据
+        //这里应该有参数要标识是长连接还是短连接
         return SOCKET_FSM_WAITRECV;
     }
-    virtual int HandleEncode(
-            string & strSendBuf,
-            int &len)=0;
-    virtual int HandleInput(
-            const char *buf,
-            int len)=0;
-    virtual int HandleRecvOver(const char *buf, int len)=0;
+    virtual int OnRecvOver()
+    {
+        //这个时候,应该是要等数据处理的阶段
+        return SOCKET_FSM_CLOSING;
+    }
+    virtual int OnCloseOver()
+    {
+        return SOCKET_FSM_FINI;
+    }
 };
 #endif

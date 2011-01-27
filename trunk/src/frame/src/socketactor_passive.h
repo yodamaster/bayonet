@@ -9,39 +9,32 @@
 =============================================================================*/
 #ifndef _SOCKETACTOR_PASSIVE_H_
 #define _SOCKETACTOR_PASSIVE_H_
-#include "socketactor_base.h"
+#include "socketactor_data.h"
 class CSocketActorPassive : public CSocketActorData
 {
 public:
     virtual ~CSocketActorPassive () {}
+protected:
+    virtual int OnInitOver()
+    {
+        return SOCKET_FSM_WAITRECV;
+    }
     virtual int OnSendOver()
     {
-        int ret = HandleSendOver();
-        Clear();//这里的数据都已经被清除掉了
-        return ret;
-    }
-
-protected:
-    virtual int HandleInit()
-    {
-        trace_log("");
-        return SOCKET_FSM_WAITRECV;
-    }
-    virtual int HandleSendOver()
-    {
-        return SOCKET_FSM_WAITRECV;
-    }
-    virtual int HandleEncode(
-            string & strSendBuf,
-            int &len)=0;
-    virtual int HandleInput(
-            const char *buf,
-            int len)=0;
-    virtual int HandleRecvOver(const char *buf, int len)
-    {
+        Clear();
         //TODO
-        //清除数据
+        //这里应该有参数要标识是长连接还是短连接
+        return SOCKET_FSM_CLOSING;
+    }
+    virtual int OnRecvOver()
+    {
+        //这个时候,应该是要等数据处理的阶段
+        //return SOCKET_FSM_WAITCLOSE;
         return SOCKET_FSM_WAITSEND;
+    }
+    virtual int OnCloseOver()
+    {
+        return SOCKET_FSM_FINI;
     }
 };
 #endif
