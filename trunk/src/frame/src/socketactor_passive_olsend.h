@@ -15,7 +15,7 @@ class CSocketActorPassiveOLSend : public CSocketActorPassive
 public:
     virtual ~CSocketActorPassiveOLSend () {}
 
-    virtual int HandleInit()
+    virtual int OnInitOver()
     {
         //按理说应该是返回close，等待上层唤醒
         return SOCKET_FSM_WAITSEND;

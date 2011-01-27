@@ -65,6 +65,7 @@ int udp_process(
         return -3;
     }
     recvLen = ret;
+    cout<<recvLen<<endl;
     close(socketFd);
     return 0;
 }
