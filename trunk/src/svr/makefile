@@ -1,6 +1,6 @@
 CXX = g++
 
-TARGET = test
+TARGET = svr
 
 C_FLAGS += -g -Wall -pthread
 INC+=-I../frame/src -I../frame/src/fsm
@@ -8,7 +8,7 @@ LIB+=-L../frame/lib -lbayonet
 
 all: $(TARGET)
 
-test:  main.o
+svr:  main.o
 	$(CXX) -o $@ $^  $(LIB) $(C_FLAGS)
 
 .cpp.o:
