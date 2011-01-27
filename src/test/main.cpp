@@ -20,9 +20,9 @@ protected:
             string& strSendBuf,
             int &len)
     {
-        strSendBuf = "what";
+        strSendBuf = "what111222333";
         trace_log("send:%s",strSendBuf.c_str());
-        len = 4;
+        len = strSendBuf.size();
         return 0;
     }
     virtual int HandleInput(

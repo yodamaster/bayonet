@@ -72,6 +72,8 @@ int udp_process(
 //data = cmd(11) + ret(11) + body(len-33)
 int tcp_handleinput(char* pBuf, int bufLen)
 {
+    return bufLen;
+    printf("%d\n",bufLen);
     if (bufLen < 11)
     {
         return -1;
@@ -295,7 +297,7 @@ int main(int argc, const char *argv[])
     int len;
     int ret =tcp_process_poll(
     //int ret =udp_procesS(
-            "10.6.207.119",10001,100,
+            "10.6.207.119",10001,10000,
             strSend.c_str(),strSend.size(),
             (char*)strRecv.c_str(),strRecv.size(),len
             );
