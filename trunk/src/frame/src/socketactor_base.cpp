@@ -125,12 +125,12 @@ int CSocketActorData::Init(string ip,int port,int timeout_ms,int protoType)
             m_pNetHandler = new CNetHandlerUdp();
             break;
         default:
-            return -1;
+            return -2;
     }
     ret = m_pNetHandler->Init(m_IP,m_Port);
     if (ret)
     {
-        return -2;
+        return -3;
     }
     return 0;
 }
@@ -142,10 +142,21 @@ int CSocketActorData::Init(int socketFd,int timeout_ms,int protoType)
     {
         return -1;
     }
+    switch(m_ProtoType)
+    {
+        case PROTO_TYPE_TCP:
+            m_pNetHandler = new CNetHandlerTcp();
+            break;
+        case PROTO_TYPE_UDP:
+            m_pNetHandler = new CNetHandlerUdp();
+            break;
+        default:
+            return -2;
+    }
     ret = m_pNetHandler->Init(m_SocketFd);
     if (ret)
     {
-        return -2;
+        return -3;
     }
     return 0;
 }

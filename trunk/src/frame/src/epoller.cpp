@@ -15,7 +15,7 @@ CEPoller::~CEPoller()
 }
 int CEPoller::AttachFrame(IFrame* pFrame)
 {
-    m_pFrame = NULL;
+    m_pFrame = pFrame;
     return 0;
 }
 int CEPoller::Init(int epoll_size,int waittime_ms,int checktime_ms,int gc_maxcount)
@@ -122,7 +122,6 @@ int CEPoller::LoopForEvent()
         gettimeofday(&next_tm,NULL);
         use_time_usec = (next_tm.tv_sec - prev_tm.tv_sec)*1000000 +
             (next_tm.tv_usec - prev_tm.tv_usec);
-        continue;
         if ( use_time_usec > (m_checkTimeMs*1000))
         {
             for(map<int, CSocketActorBase*>::iterator it = m_mapSocketActor.begin(); it != m_mapSocketActor.end();)
@@ -131,7 +130,8 @@ int CEPoller::LoopForEvent()
                 map<int, CSocketActorBase*>::iterator tempIt = it;
                 it++;
 
-                tempIt->second->CheckTimeOut(next_tm);
+                CSocketActorBase* pActor = tempIt->second;
+                pActor->CheckTimeOut(next_tm);
             }
             prev_tm = next_tm;
         }
