@@ -30,8 +30,7 @@ int CSocketActorListen::OnInit()
                 listen_fd = socket(AF_INET,SOCK_STREAM,0);
                 break;
             case PROTO_TYPE_UDP:
-                listen_fd = socket(AF_INET,SOCK_DGRAM,0);
-                break;
+                //不支持udp
             default:
                 return SOCKET_FSM_FINI;
         }
