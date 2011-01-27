@@ -15,6 +15,7 @@ OBJECTS = $(OBJ_DIR)socketactor_set$(OBJ_EXT)\
 		  $(OBJ_DIR)epoller$(OBJ_EXT)\
 		  $(OBJ_DIR)bayonet_frame$(OBJ_EXT)\
 		  $(OBJ_DIR)fl_log$(OBJ_EXT)\
+		  $(OBJ_DIR)net_handler$(OBJ_EXT)\
 
 
 LIB_TARGET = $(LIB_DIR)libbayonet$(LIB_EXT)
