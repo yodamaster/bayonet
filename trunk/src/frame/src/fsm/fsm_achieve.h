@@ -188,7 +188,7 @@ public:
             //需要关闭整个请求
             if (m_Fsm)
             {
-                m_Fsm->Fini(this);
+                m_Fsm->Exit(this);
                 m_Fsm = NULL;
             }
             return destState;
@@ -210,10 +210,10 @@ private:
         {
             if (m_Fsm != NULL)
             {
-                m_Fsm->Fini(this);
+                m_Fsm->Exit(this);
             }
             m_Fsm = destFsm;
-            m_Fsm->Init(this);
+            m_Fsm->Entry(this);
         }
         return m_Fsm->Process(this);
     }

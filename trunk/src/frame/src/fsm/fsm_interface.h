@@ -213,7 +213,7 @@ public:
      * @return  0           succ
      *          else        fail
      */
-    virtual int Init(IActor* pActor)=0;
+    virtual int Entry(IActor* pActor)=0;
 
     /**
      * @brief   执行这个状态该做的事情
@@ -236,7 +236,7 @@ public:
      * @return  0           succ
      *          else        fail
      */
-    virtual int Fini(IActor* pActor)=0;
+    virtual int Exit(IActor* pActor)=0;
 };
 
 #endif

@@ -20,7 +20,7 @@ public:
     CSocketFsmBase () {}
     virtual ~CSocketFsmBase () {}
 
-    virtual int Init(IActor* pActor)
+    virtual int Entry(IActor* pActor)
     {
         return 0;
     }
@@ -28,7 +28,7 @@ public:
     {
         return 0;
     }
-    virtual int Fini(IActor* pActor)
+    virtual int Exit(IActor* pActor)
     {
         return 0;
     }
@@ -66,7 +66,7 @@ public:
     CSocketFsmWaitSend () {}
     virtual ~CSocketFsmWaitSend () {}
 
-    virtual int Init(IActor* pActor)
+    virtual int Entry(IActor* pActor)
     {
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
         pSocketActor->SetEvent(EPOLLOUT|EPOLLHUP|EPOLLERR);
@@ -93,7 +93,7 @@ public:
     CSocketFsmWaitRecv () {}
     virtual ~CSocketFsmWaitRecv () {}
 
-    virtual int Init(IActor* pActor)
+    virtual int Entry(IActor* pActor)
     {
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
         pSocketActor->SetEvent(EPOLLIN|EPOLLHUP|EPOLLERR);
@@ -120,7 +120,7 @@ public:
     CSocketFsmWaitClose () {}
     virtual ~CSocketFsmWaitClose () {}
 
-    virtual int Init(IActor* pActor)
+    virtual int Entry(IActor* pActor)
     {
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
         pSocketActor->SetEvent(EPOLLHUP|EPOLLERR);
