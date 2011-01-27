@@ -2,7 +2,7 @@
 #  Author:          dantezhu - http://www.vimer.cn
 #  Email:           zny2008@gmail.com
 #  FileName:        bayonet_frame.h
-#  Description:     异步框架
+#  Description:     异步框架,务必打开快速回收-echo 1 > /proc/sys/net/ipv4/tcp_tw_recycle 
 #  Version:         1.0
 #  LastChange:      2011-01-26 17:12:23
 #  History:         
