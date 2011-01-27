@@ -112,6 +112,7 @@ int CSocketActorListenTcp::OnRecv()
         return SOCKET_FSM_FINI;
     }
     pSocketActorAccept->Init(clientfd,m_TimeoutMs,m_ProtoType);
+    pSocketActorAccept->SetIActionPtr(m_pAction);
     pSocketActorAccept->AttachFrame(m_pFrame);
     pSocketActorAccept->ChangeState(SOCKET_FSM_INIT);
     trace_log("%s over",__func__);
