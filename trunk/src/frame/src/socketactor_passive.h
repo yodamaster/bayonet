@@ -14,6 +14,12 @@ class CSocketActorPassive : public CSocketActorData
 {
 public:
     virtual ~CSocketActorPassive () {}
+    virtual int OnSendOver()
+    {
+        int ret = HandleSendOver();
+        Clear();//这里的数据都已经被清除掉了
+        return ret;
+    }
 
 protected:
     virtual int HandleInit()

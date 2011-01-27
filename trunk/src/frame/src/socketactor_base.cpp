@@ -201,7 +201,6 @@ int CSocketActorData::OnClose()
 }
 int CSocketActorData::OnRecv()
 {
-    trace_log("");
     int ret = 0;
     if (m_recvFlag == 0)
     {
@@ -231,9 +230,7 @@ int CSocketActorData::OnRecv()
             memcpy((char*)(m_strRecvBuf.c_str()+m_recvedLen),m_strSingleRecvBuf.c_str(),ret);
             m_recvedLen += ret;
         }
-        trace_log("");
         ret = HandleInput(m_strRecvBuf.c_str(), m_recvedLen);
-        trace_log("");
         if (ret == 0)
         {
             continue;
@@ -293,5 +290,15 @@ int CSocketActorData::OnSend()
     }
     trace_log("");
     return SOCKET_FSM_SENDOVER;
+}
+int CSocketActorData::Clear()
+{
+    m_sendedLen = 0;
+    m_sendBufLen = 0;
+
+    m_recvedLen = 0;
+
+    m_sendFlag = 0;
+    m_recvFlag = 0;
 }
 //=============================================================================

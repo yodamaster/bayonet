@@ -104,13 +104,9 @@ class CSocketActorData:public CSocketActorBase
 public:
     CSocketActorData () {
         m_pNetHandler = NULL;
-        m_sendBufLen = 0;
-        m_sendedLen = 0;
-        m_recvedLen = 0;
-        m_sendFlag = 0;//0即未开始
-        m_recvFlag = 0;//0即未开始
         m_strSingleRecvBuf.resize(1024);
         m_strRecvBuf.resize(2048);
+        Clear();
     }
     virtual ~CSocketActorData () {
         if (m_pNetHandler)
@@ -124,14 +120,16 @@ public:
 
     virtual int OnSend();
 
-    //业务需要继承实现
-public:
     virtual int Init(string ip,int port,int timeout_ms,int protoType);
     virtual int Init(int socketFd,int timeout_ms,int protoType);
+
     virtual int OnInit();
     virtual int OnRecvOver();
     virtual int OnClose();
 
+    virtual int Clear();
+
+//业务需要继承实现
 protected:
     // 为发送打包
     virtual int HandleEncode(
