@@ -32,9 +32,5 @@ protected:
         //这个时候,应该是要等数据处理的阶段
         return SOCKET_FSM_CLOSING;
     }
-    virtual int OnCloseOver()
-    {
-        return SOCKET_FSM_FINI;
-    }
 };
 #endif

@@ -25,6 +25,7 @@ public:
     CNetHandlerBase () {
         m_Port = 0;
         m_SocketFd = -1;
+        m_ClientPort = 0;
     }
     virtual ~CNetHandlerBase ();
 
@@ -32,6 +33,10 @@ public:
     int Init(int socketFd);
 
     int GetSocketFd();
+
+    string GetClientIp();
+
+    int GetClientPort();
 
     int SetNoBlock(int socketFd);
     
@@ -46,6 +51,9 @@ protected:
     int m_Port;
 
     int m_SocketFd;
+
+    string m_ClientIp;
+    int m_ClientPort;
 };
 //=============================================================================
 class CNetHandlerTcp : public CNetHandlerBase

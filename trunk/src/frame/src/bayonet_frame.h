@@ -21,7 +21,6 @@
 #include "socketfsm_base.h"
 #include "appfsm_base.h"
 #include "epoller.h"
-#include "socketactor_listen_tcp.h"
 
 using namespace std;
 

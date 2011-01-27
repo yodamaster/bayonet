@@ -33,13 +33,10 @@ protected:
     }
     virtual int OnRecvOver()
     {
-        //这个时候,应该是要等数据处理的阶段
+        //TODO
+        //这个时候,应该是要等数据处理的阶段，现在是测试，直接回报
         //return SOCKET_FSM_WAITCLOSE;
         return SOCKET_FSM_WAITSEND;
-    }
-    virtual int OnCloseOver()
-    {
-        return SOCKET_FSM_FINI;
     }
 };
 #endif

@@ -1,13 +1,13 @@
 /*=============================================================================
 #  Author:          dantezhu - http://www.vimer.cn
 #  Email:           zny2008@gmail.com
-#  FileName:        socketactor_base.cpp
+#  FileName:        socketactor_data.cpp
 #  Description:     
 #  Version:         1.0
-#  LastChange:      2011-01-24 20:34:16
+#  LastChange:      2011-01-28 01:15:18
 #  History:         
 =============================================================================*/
-#include "socketactor_base.h"
+#include "socketactor_data.h"
 #include "bayonet_frame.h"
 
 int CSocketActorData::Init(string ip,int port,int timeout_ms,int protoType)
@@ -206,6 +206,10 @@ int CSocketActorData::OnClose()
 int CSocketActorData::OnFiniOver()
 {
     return SOCKET_FSM_ALLOVER;
+}
+int CSocketActorData::OnCloseOver()
+{
+    return SOCKET_FSM_FINI;
 }
 int CSocketActorData::Clear()
 {

@@ -13,6 +13,7 @@ OBJECTS = $(OBJ_DIR)socketactor_set$(OBJ_EXT)\
 		  $(OBJ_DIR)socketactor_base$(OBJ_EXT)\
 		  $(OBJ_DIR)socketactor_data$(OBJ_EXT)\
 		  $(OBJ_DIR)socketactor_listen_tcp$(OBJ_EXT)\
+		  $(OBJ_DIR)socketactor_listen_udp$(OBJ_EXT)\
 		  $(OBJ_DIR)epoller$(OBJ_EXT)\
 		  $(OBJ_DIR)bayonet_frame$(OBJ_EXT)\
 		  $(OBJ_DIR)fl_log$(OBJ_EXT)\

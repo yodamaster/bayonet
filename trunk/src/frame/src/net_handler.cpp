@@ -33,6 +33,15 @@ int CNetHandlerBase::GetSocketFd()
 {
     return m_SocketFd;
 }
+string CNetHandlerBase::GetClientIp()
+{
+    return m_ClientIp;
+}
+
+int CNetHandlerBase::GetClientPort()
+{
+    return m_ClientPort;
+}
 int CNetHandlerBase::SetNoBlock(int socketFd)
 {
     int val = fcntl(socketFd, F_GETFL, 0);
@@ -153,5 +162,7 @@ int CNetHandlerUdp::Recv(char* pBuf,int bufSize)
     int _tolen = sizeof(struct sockaddr_in);
 
     int ret = recvfrom (m_SocketFd, pBuf, bufSize, MSG_DONTWAIT, (struct sockaddr*)&_servaddr,(socklen_t *) &_tolen);
+    m_ClientIp = inet_ntoa(_servaddr.sin_addr);
+    m_ClientPort = ntohs(_servaddr.sin_port);
     return ret;
 }
