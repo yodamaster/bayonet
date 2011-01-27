@@ -86,6 +86,10 @@ int CNetHandlerTcp::Create()
         close(m_SocketFd);
         return -2;
     }
+    linger   m_sLinger;
+    m_sLinger.l_onoff   =   1;
+    m_sLinger.l_linger   =   0;
+    setsockopt(m_SocketFd, SOL_SOCKET, SO_LINGER,(const char*)&m_sLinger,sizeof(linger));
 
     ret = netConnect();
     if (ret)
