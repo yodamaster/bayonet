@@ -105,7 +105,6 @@ public:
     CSocketActorData () {
         m_pNetHandler = NULL;
         m_sendBufLen = 0;
-        m_recvBufLen = 0;
         m_sendedLen = 0;
         m_recvedLen = 0;
         m_sendFlag = 0;//0即未开始
@@ -130,6 +129,7 @@ public:
     virtual int Init(string ip,int port,int timeout_ms,int protoType);
     virtual int Init(int socketFd,int timeout_ms,int protoType);
     virtual int OnInit();
+    virtual int OnRecvOver();
     virtual int OnClose();
 
 protected:
@@ -158,7 +158,6 @@ protected:
     string m_strSendBuf;
 
     int m_recvedLen;
-    int m_recvBufLen;
     string m_strRecvBuf;
 
     string m_strSingleRecvBuf;
