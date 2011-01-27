@@ -9,7 +9,7 @@
 =============================================================================*/
 #include "appactor_base.h"
 
-class CAppFsmBase : public IFsm
+class CAppFsmBase : public CFsmBase
 {
 public:
     CAppFsmBase () {}

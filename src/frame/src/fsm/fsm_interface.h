@@ -78,6 +78,16 @@ public:
      * @return  
      */
     virtual map<int, IFsm*>* GetFsmMgr()=0;
+
+    /**
+     * @brief   设置Fsm映射
+     *
+     * @param   state
+     * @param   fsm
+     *
+     * @return  0
+     */
+    virtual int RegFsm(int state, IFsm* fsm)=0;
 };
 
 class IActor
@@ -168,6 +178,14 @@ class IFsm
 {
 public:
     virtual ~IFsm() {}
+    /**
+     * @brief   设置Frame
+     *
+     * @param   pFrame
+     *
+     * @return  0
+     */
+    virtual int AttachFrame(IFrame* pFrame)=0;
     /**
      * @brief   在进入这个状态的时候，pActor需要做的事情
      *

@@ -84,16 +84,6 @@ public:
         return 0;
     }
 
-    int RegFsm(int state, IFsm* fsm)
-    {
-        if (fsm == NULL)
-        {
-            return -1;
-        }
-        m_mapFsmMgr[state] = fsm;
-        return 0;
-    }
-
     CEPoller* GetEpoller()
     {
         return &m_epoller;
