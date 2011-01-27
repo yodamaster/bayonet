@@ -104,7 +104,7 @@ protected:
 class CActorBase : public IActor
 {
 public:
-    CActorBase () : m_bGC(false),m_Fsm(NULL),m_ptrMapFsmMgr(NULL),m_pUpperActor(NULL),m_pFrame(NULL) {}
+    CActorBase () : m_bGC(false),m_Fsm(NULL),m_ptrMapFsmMgr(NULL),m_pSuperActor(NULL),m_pFrame(NULL) {}
 
     virtual ~CActorBase () {
         if (m_pFrame)
@@ -151,14 +151,14 @@ public:
         return m_ptrMapFsmMgr;
     }
 
-    int AttachUpperActor(IActor* pActor)
+    int AttachSuperActor(IActor* pActor)
     {
-        m_pUpperActor = pActor;
+        m_pSuperActor = pActor;
         return 0;
     }
-    IActor* GetUpperActor()
+    IActor* GetSuperActor()
     {
-        return m_pUpperActor;
+        return m_pSuperActor;
     }
 
     int ProcessState()
@@ -223,7 +223,7 @@ protected:
     bool m_bGC;
     IFsm* m_Fsm;
     map<int, IFsm*> *m_ptrMapFsmMgr;
-    IActor* m_pUpperActor;
+    IActor* m_pSuperActor;
     IFrame* m_pFrame;
 };
 class CFsmBase : public IFsm
