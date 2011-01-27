@@ -18,7 +18,7 @@ public:
 protected:
     virtual int HandleInit()
     {
-        return SOCKET_FSM_WAITRECV;
+        return SOCKET_FSM_WAITSEND;
     }
     virtual int HandleSendOver()
     {

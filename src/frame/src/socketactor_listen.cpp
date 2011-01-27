@@ -105,7 +105,8 @@ int CSocketActorListen::OnRecv()
     }
     pSocketActorAccept->Init(clientfd,m_TimeoutMs,m_ProtoType);
     pSocketActorAccept->AttachFrame(m_pFrame);
-    pSocketActorAccept->ChangeState(SOCKET_FSM_WAITRECV);
+    pSocketActorAccept->ChangeState(SOCKET_FSM_INIT);
+    trace_log("%s over",__func__);
 
     return SOCKET_FSM_RECVOVER;
 }

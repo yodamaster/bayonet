@@ -94,27 +94,22 @@ int CEPoller::LoopForEvent()
             int ret = 0;
             if ( ev&EPOLLIN )
             {
-                printf("recv\n");
                 ret = pSocketActor->ChangeState(SOCKET_FSM_RECVING);                         
             }
             else if ( ev&EPOLLOUT )
             {
-                printf("send\n");
                 ret = pSocketActor->ChangeState(SOCKET_FSM_SENDING);
             }
             else if ( ev&EPOLLHUP )
             {
-                printf("close\n");
                 ret = pSocketActor->ChangeState(SOCKET_FSM_CLOSING);
             }
             else if ( ev&EPOLLERR )
             {
-                printf("error\n");
                 ret = pSocketActor->ChangeState(SOCKET_FSM_ERROR);
             }
             else
             {
-                printf("what\n");
                 ret = pSocketActor->ChangeState(SOCKET_FSM_ERROR);
             }
         }

@@ -17,20 +17,22 @@ public:
     virtual ~CSocketActorAccept () {}
 protected:
     virtual int HandleEncode(
-            char *buf,
+            string& strSendBuf,
             int &len)
     {
+        strSendBuf = "what";
+        trace_log("send:%s",strSendBuf.c_str());
+        len = 4;
         return 0;
     }
     virtual int HandleInput(
             const char *buf,
             int len)
     {
-        return 0;
-    }
-    virtual int HandleRecvOver(const char *buf, int len)
-    {
-        return 0;
+        char tmp[256];
+        snprintf(tmp,sizeof(tmp),buf,len);
+        trace_log("recv:%s",tmp);
+        return len;
     }
 };
 class CSocketActorListenImpl : public CSocketActorListen
@@ -49,9 +51,10 @@ int main(int argc, const char *argv[])
 {
     CBayonetFrame srv;
     StFrameParam param;
-    param.ip="127.0.0.1";
+    param.ip="0.0.0.0";
     param.port = 10001;
-    param.protoType = PROTO_TYPE_UDP;
+    //param.protoType = PROTO_TYPE_UDP;
+    param.protoType = PROTO_TYPE_TCP;
     param.pSocketActorListen = new CSocketActorListenImpl();
     
     srv.Init(param);

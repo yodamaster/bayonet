@@ -69,7 +69,7 @@ public:
     virtual int Init(IActor* pActor)
     {
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
-        pSocketActor->SetEvent(1);
+        pSocketActor->SetEvent(EPOLLOUT|EPOLLHUP|EPOLLERR);
         return 0;
     }
 };
@@ -91,12 +91,6 @@ public:
     CSocketFsmSendOver () {}
     virtual ~CSocketFsmSendOver () {}
 
-    virtual int Init(IActor* pActor)
-    {
-        CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
-        pSocketActor->SetEvent(1);
-        return 0;
-    }
     virtual int Process(IActor* pActor)
     {
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
@@ -136,17 +130,10 @@ public:
     CSocketFsmRecvOver () {}
     virtual ~CSocketFsmRecvOver () {}
 
-    virtual int Init(IActor* pActor)
-    {
-        CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
-        pSocketActor->SetEvent(1);
-        return 0;
-    }
     virtual int Process(IActor* pActor)
     {
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
-        pSocketActor->OnRecvOver();
-        return 0;
+        return pSocketActor->OnRecvOver();
     }
 };
 //=============================================================================
@@ -160,7 +147,7 @@ public:
     virtual int Init(IActor* pActor)
     {
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
-        pSocketActor->SetEvent(1);
+        pSocketActor->SetEvent(EPOLLHUP|EPOLLERR);
         return 0;
     }
 };

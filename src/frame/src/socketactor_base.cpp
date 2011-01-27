@@ -137,6 +137,7 @@ int CSocketActorData::Init(string ip,int port,int timeout_ms,int protoType)
 
 int CSocketActorData::Init(int socketFd,int timeout_ms,int protoType)
 {
+    trace_log("");
     int ret = CSocketActorBase::Init(socketFd,timeout_ms,protoType);
     if (ret)
     {
@@ -158,20 +159,36 @@ int CSocketActorData::Init(int socketFd,int timeout_ms,int protoType)
     {
         return -3;
     }
+    trace_log("");
     return 0;
 }
 int CSocketActorData::OnInit()
 {
+    trace_log("");
     int ret = m_pNetHandler->Create();
     if (ret)
     {
+        trace_log("");
         return SOCKET_FSM_CLOSING;
     }
     else
     {
+        trace_log("");
         m_SocketFd = m_pNetHandler->GetSocketFd();
     }
+    CEPoller* pEpoller = GetEpoller();
+    if (!pEpoller)
+    {
+        error_log("pEpoller is NULL");
+        return SOCKET_FSM_CLOSING;
+    }
+    pEpoller->AttachSocket(this);//加入到epoll中
+    trace_log("");
     return HandleInit();
+}
+int CSocketActorData::OnRecvOver()
+{
+    return HandleRecvOver(m_strRecvBuf.c_str(), m_recvedLen);
 }
 int CSocketActorData::OnClose()
 {
@@ -184,6 +201,7 @@ int CSocketActorData::OnClose()
 }
 int CSocketActorData::OnRecv()
 {
+    trace_log("");
     int ret = 0;
     if (m_recvFlag == 0)
     {
@@ -202,17 +220,20 @@ int CSocketActorData::OnRecv()
             {
                 return SOCKET_FSM_WAITRECV;
             }
+            return SOCKET_FSM_CLOSING;
         }
         else
         {
             while ((ret + m_recvedLen) > m_strRecvBuf.size())
             {
-                m_strRecvBuf.resize(m_strRecvBuf.size()*2 + ret);
+                m_strRecvBuf.resize(m_recvedLen*2 + ret);
             }
             memcpy((char*)(m_strRecvBuf.c_str()+m_recvedLen),m_strSingleRecvBuf.c_str(),ret);
             m_recvedLen += ret;
         }
+        trace_log("");
         ret = HandleInput(m_strRecvBuf.c_str(), m_recvedLen);
+        trace_log("");
         if (ret == 0)
         {
             continue;
@@ -233,6 +254,7 @@ int CSocketActorData::OnRecv()
 }
 int CSocketActorData::OnSend()
 {
+    trace_log("");
     int ret = 0;
     if (m_sendFlag == 0)
     {
@@ -244,25 +266,32 @@ int CSocketActorData::OnSend()
             return SOCKET_FSM_CLOSING;
         }
     }
+    trace_log("");
     while (m_sendedLen != m_sendBufLen)
     {
+        trace_log("");
         ret = m_pNetHandler->Send((char*)m_strSendBuf.c_str()+m_sendedLen,m_sendBufLen-m_sendedLen);
         if ( ret == 0 )
         {
+            trace_log("");
             return SOCKET_FSM_WAITSEND;
         }
         else if ( ret < 0 )
         {
+            trace_log("");
             if ( errno == EINTR || errno == EAGAIN )
             {
                 return SOCKET_FSM_WAITSEND;
             }
+            return SOCKET_FSM_CLOSING;
         }
         else
         {
+            trace_log("");
             m_sendedLen += ret;
         }
     }
+    trace_log("");
     return SOCKET_FSM_SENDOVER;
 }
 //=============================================================================

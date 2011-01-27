@@ -294,7 +294,7 @@ int main(int argc, const char *argv[])
     strRecv.resize(1024);
     int len;
     int ret =tcp_process_poll(
-            "127.0.0.1",10001,100,
+            "0.0.0.0",10001,100,
             strSend.c_str(),strSend.size(),
             (char*)strRecv.c_str(),strRecv.size(),len
             );

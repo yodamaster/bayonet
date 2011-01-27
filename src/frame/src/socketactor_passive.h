@@ -18,12 +18,11 @@ public:
 protected:
     virtual int HandleInit()
     {
-        return SOCKET_FSM_WAITSEND;
+        trace_log("");
+        return SOCKET_FSM_WAITRECV;
     }
     virtual int HandleSendOver()
     {
-        //TODO
-        //清除数据
         return SOCKET_FSM_WAITRECV;
     }
     virtual int HandleEncode(
@@ -32,6 +31,11 @@ protected:
     virtual int HandleInput(
             const char *buf,
             int len)=0;
-    virtual int HandleRecvOver(const char *buf, int len)=0;
+    virtual int HandleRecvOver(const char *buf, int len)
+    {
+        //TODO
+        //清除数据
+        return SOCKET_FSM_WAITSEND;
+    }
 };
 #endif
