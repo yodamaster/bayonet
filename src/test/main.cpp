@@ -51,7 +51,7 @@ int main(int argc, const char *argv[])
 {
     CBayonetFrame srv;
     StFrameParam param;
-    param.ip="0.0.0.0";
+    param.ip="10.6.207.119";
     param.port = 10001;
     //param.protoType = PROTO_TYPE_UDP;
     param.protoType = PROTO_TYPE_TCP;

@@ -262,12 +262,18 @@ int CSocketActorData::OnSend()
             error_log("HandleEncode error :%d",ret);
             return SOCKET_FSM_CLOSING;
         }
+        if (m_strSendBuf.size() < m_sendBufLen)
+        {
+            error_log("HandleEncode len error:%d/%d",m_strSendBuf.size(),m_sendBufLen);
+            return SOCKET_FSM_CLOSING;
+        }
     }
     trace_log("");
     while (m_sendedLen != m_sendBufLen)
     {
         trace_log("");
-        ret = m_pNetHandler->Send((char*)m_strSendBuf.c_str()+m_sendedLen,m_sendBufLen-m_sendedLen);
+        ret = m_pNetHandler->Send((char*)(m_strSendBuf.c_str()+m_sendedLen),m_sendBufLen-m_sendedLen);
+        trace_log("%s",m_strSendBuf.c_str());
         if ( ret == 0 )
         {
             trace_log("");
