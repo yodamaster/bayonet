@@ -51,7 +51,7 @@ typedef struct _StFrameParam
         port = 0;
         protoType = 0;
         backlog = 10240;
-        bKeepcnt = true;
+        bKeepcnt = false;
 
         pAction = NULL;
 
