@@ -42,11 +42,6 @@ int CSocketActorBase::SetEvent(unsigned event)
 
     return 0;
 }
-int CSocketActorBase::SetSocketFd(int socketFd)
-{
-    m_SocketFd = socketFd;
-    return 0;
-}
 int CSocketActorBase::GetSocketFd()
 {
     return m_SocketFd;
@@ -58,10 +53,6 @@ int CSocketActorBase::CheckTimeOut(struct timeval& now_time)
 }
 int CSocketActorBase::OnInit()
 {
-    if (m_SocketFd < 0)
-    {
-        
-    }
     return HandleInit();
 }
 int CSocketActorBase::OnFini()
@@ -118,6 +109,68 @@ CEPoller* CSocketActorBase::GetEpoller()
     return pEpoller;
 }
 //=============================================================================
+int CSocketActorData::Init(string ip,int port,int timeout_ms,int protoType)
+{
+    int ret = CSocketActorBase::Init(ip,port,timeout_ms,protoType);
+    if (ret)
+    {
+        return -1;
+    }
+    switch(m_ProtoType)
+    {
+        case PROTO_TYPE_TCP:
+            m_pNetHandler = new CNetHandlerTcp();
+            break;
+        case PROTO_TYPE_UDP:
+            m_pNetHandler = new CNetHandlerUdp();
+            break;
+        default:
+            return -1;
+    }
+    ret = m_pNetHandler->Init(m_IP,m_Port);
+    if (ret)
+    {
+        return -2;
+    }
+    return 0;
+}
+
+int CSocketActorData::Init(int socketFd,int timeout_ms,int protoType)
+{
+    int ret = CSocketActorBase::Init(socketFd,timeout_ms,protoType);
+    if (ret)
+    {
+        return -1;
+    }
+    ret = m_pNetHandler->Init(m_SocketFd);
+    if (ret)
+    {
+        return -2;
+    }
+    return 0;
+}
+int CSocketActorData::OnInit()
+{
+    int ret = m_pNetHandler->Create();
+    if (ret)
+    {
+        return SOCKET_FSM_CLOSING;
+    }
+    else
+    {
+        m_SocketFd = m_pNetHandler->GetSocketFd();
+    }
+    return HandleInit();
+}
+int CSocketActorData::OnClose()
+{
+    if (m_pNetHandler)
+    {
+        m_pNetHandler->Close();
+        m_SocketFd = m_pNetHandler->GetSocketFd();
+    }
+    return SOCKET_FSM_CLOSEOVER;
+}
 int CSocketActorData::OnRecv()
 {
     return SOCKET_FSM_RECVOVER;
