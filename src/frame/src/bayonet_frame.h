@@ -52,7 +52,7 @@ typedef struct _StFrameParam
         backlog = 10240;
 
         epollSize = EPOLL_DFT_MAXSIZE;
-        epollWaitTimeMs = 0;//立即返回
+        epollWaitTimeMs = 10;
         epollCheckTimeMs = 10;
 
         gcMaxCount = 1024;
