@@ -81,6 +81,7 @@ public:
         m_StFrameParam = param;
         log_init(m_StFrameParam.iLogLevel,m_StFrameParam.logDir.c_str(),m_StFrameParam.logFileName.c_str(),m_StFrameParam.iLogMaxSize);
         m_epoller.Init(m_StFrameParam.epollSize,m_StFrameParam.epollWaitTimeMs,m_StFrameParam.epollCheckTimeMs,m_StFrameParam.gcMaxCount);
+        m_epoller.AttachFrame(this);
         return 0;
     }
 
