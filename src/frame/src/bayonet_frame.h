@@ -21,7 +21,7 @@
 #include "socketfsm_base.h"
 #include "appfsm_base.h"
 #include "epoller.h"
-#include "socketactor_listen.h"
+#include "socketactor_listen_tcp.h"
 
 using namespace std;
 
@@ -31,6 +31,9 @@ typedef struct _StFrameParam
     int port;           //端口
     int protoType;      //协议类型
     int backlog;        //backlog
+    bool bKeepcnt;      //是否长链接(仅TCP协议有效)
+
+    IAction* pAction;   //最开始的Action
 
 
     int epollSize;      //epoll监听的队列大小
@@ -44,20 +47,20 @@ typedef struct _StFrameParam
     string logFileName; //log文件名
     int iLogMaxSize;    //log文件最大大小
 
-    CSocketActorListen* pSocketActorListen;
     _StFrameParam()
     {
         port = 0;
         protoType = 0;
         backlog = 10240;
+        bKeepcnt = true;
+
+        pAction = NULL;
 
         epollSize = EPOLL_DFT_MAXSIZE;
         epollWaitTimeMs = 10;
         epollCheckTimeMs = 10;
 
         gcMaxCount = 1024;
-
-        pSocketActorListen = NULL;
 
         iLogLevel = LM_TRACE;
         logDir = "./";
@@ -104,13 +107,10 @@ protected:
         RegFsm(SOCKET_FSM_FINI, new CSocketFsmFini());
         RegFsm(SOCKET_FSM_WAITSEND, new CSocketFsmWaitSend());
         RegFsm(SOCKET_FSM_SENDING, new CSocketFsmSending());
-        RegFsm(SOCKET_FSM_SENDOVER, new CSocketFsmSendOver());
         RegFsm(SOCKET_FSM_WAITRECV, new CSocketFsmWaitRecv());
         RegFsm(SOCKET_FSM_RECVING, new CSocketFsmRecving());
-        RegFsm(SOCKET_FSM_RECVOVER, new CSocketFsmRecvOver());
         RegFsm(SOCKET_FSM_WAITCLOSE, new CSocketFsmWaitClose());
         RegFsm(SOCKET_FSM_CLOSING, new CSocketFsmClosing());
-        RegFsm(SOCKET_FSM_CLOSEOVER, new CSocketFsmCloseOver());
         RegFsm(SOCKET_FSM_ERROR, new CSocketFsmError());
         RegFsm(SOCKET_FSM_TIMEOUT, new CSocketFsmTimeout());
     }

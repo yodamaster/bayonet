@@ -10,12 +10,7 @@
 #include "bayonet_frame.h"
 int CBayonetFrame::Process()
 {
-    //必须要传一个socketlisten指针进来
-    if (m_StFrameParam.pSocketActorListen == NULL)
-    {
-        return -1;
-    }
-    CSocketActorListen* pSocketActorListen = m_StFrameParam.pSocketActorListen;
+    CSocketActorListenTcp* pSocketActorListen = new CSocketActorListenTcp();
     pSocketActorListen->Init(m_StFrameParam.ip,m_StFrameParam.port,-1,m_StFrameParam.protoType);
     pSocketActorListen->SetBackLog(m_StFrameParam.backlog);
     pSocketActorListen->AttachFrame(this);

@@ -1,13 +1,13 @@
 /*=============================================================================
 #  Author:          dantezhu - http://www.vimer.cn
 #  Email:           zny2008@gmail.com
-#  FileName:        socketactor_listen.cpp
+#  FileName:        socketactor_listen_tcp.cpp
 #  Description:     
 #  Version:         1.0
-#  LastChange:      2011-01-25 17:04:07
+#  LastChange:      2011-01-27 23:52:01
 #  History:         
 =============================================================================*/
-#include "socketactor_listen.h"
+#include "socketactor_listen_tcp.h"
 #include "socketactor_passive.h"
 void CSocketActorListenTcp::SetBackLog(int backlog)
 {

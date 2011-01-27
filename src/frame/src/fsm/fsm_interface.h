@@ -11,10 +11,29 @@
 #define _INTERFACES_H_
 #include <iostream>
 #include <map>
+#include <string>
 using namespace std;
 
 class IFsm;
 class IActor;
+
+class IAction
+{
+public:
+    virtual ~IAction () {}
+    // 为发送打包
+    virtual int HandleEncodeSendBuf(
+            string & strSendBuf,
+            int &len)=0;
+
+    // 回应包完整性检查
+    virtual int HandleInput(
+            const char *buf,
+            int len)=0;
+
+    // 回应包解析
+    virtual int HandleDecodeRecvBuf(const char *buf, int len)=0;
+};
 
 class IFrame
 {
