@@ -142,6 +142,8 @@ protected:
 
 protected:
     CNetHandlerBase* m_pNetHandler;
+
+    string m_strSendBuf;
 };
 //=============================================================================
 
