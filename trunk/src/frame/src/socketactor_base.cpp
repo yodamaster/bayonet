@@ -173,10 +173,85 @@ int CSocketActorData::OnClose()
 }
 int CSocketActorData::OnRecv()
 {
+    int ret = 0;
+    if (m_recvFlag == 0)
+    {
+        m_recvFlag = 1;
+    }
+    for(;;)
+    {
+        ret = m_pNetHandler->Recv((char*)m_strSingleRecvBuf.c_str(),m_strSingleRecvBuf.size());
+        if (ret == 0)
+        {
+            return SOCKET_FSM_CLOSING;
+        }
+        else if (ret < 0)
+        {
+            if ( errno == EINTR || errno == EAGAIN )
+            {
+                return SOCKET_FSM_WAITRECV;
+            }
+        }
+        else
+        {
+            while ((ret + m_recvedLen) > m_strRecvBuf.size())
+            {
+                m_strRecvBuf.resize(m_strRecvBuf.size()*2 + ret);
+            }
+            memcpy((char*)(m_strRecvBuf.c_str()+m_recvedLen),m_strSingleRecvBuf.c_str(),ret);
+            m_recvedLen += ret;
+        }
+        ret = HandleInput(m_strRecvBuf.c_str(), m_recvedLen);
+        if (ret == 0)
+        {
+            continue;
+        }
+        else if (ret < 0)
+        {
+            return SOCKET_FSM_CLOSING;
+        }
+        else
+        {
+            //数据完整了
+            m_strRecvBuf.resize(ret);
+            m_recvedLen = ret;
+            break;
+        }
+    }
     return SOCKET_FSM_RECVOVER;
 }
 int CSocketActorData::OnSend()
 {
+    int ret = 0;
+    if (m_sendFlag == 0)
+    {
+        m_sendFlag = 1;
+        ret = HandleEncode(m_strSendBuf,m_sendBufLen);
+        if (ret)
+        {
+            error_log("HandleEncode error :%d",ret);
+            return SOCKET_FSM_CLOSING;
+        }
+    }
+    while (m_sendedLen != m_sendBufLen)
+    {
+        ret = m_pNetHandler->Send((char*)m_strSendBuf.c_str()+m_sendedLen,m_sendBufLen-m_sendedLen);
+        if ( ret == 0 )
+        {
+            return SOCKET_FSM_WAITSEND;
+        }
+        else if ( ret < 0 )
+        {
+            if ( errno == EINTR || errno == EAGAIN )
+            {
+                return SOCKET_FSM_WAITSEND;
+            }
+        }
+        else
+        {
+            m_sendedLen += ret;
+        }
+    }
     return SOCKET_FSM_SENDOVER;
 }
 //=============================================================================

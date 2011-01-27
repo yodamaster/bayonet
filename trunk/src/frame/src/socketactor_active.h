@@ -27,7 +27,7 @@ protected:
         return SOCKET_FSM_WAITRECV;
     }
     virtual int HandleEncode(
-            char *buf,
+            string & strSendBuf,
             int &len)=0;
     virtual int HandleInput(
             const char *buf,
