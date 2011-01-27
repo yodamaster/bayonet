@@ -89,38 +89,11 @@ int CNetHandlerTcp::Create()
 int CNetHandlerTcp::Send(char* pBuf,int bufLen)
 {
     int ret = send(m_SocketFd,pBuf,bufLen,0);
-    if ( ret == 0 ) return 0;
-    if ( ret < 0 )
-    {
-        if ( errno == EINTR || errno == EAGAIN )
-        {
-            error_log("Send ret:%d error:%s errno:%d", ret, strerror(errno), errno);
-            return 0;
-        }
-
-        error_log("Send ret:%d error:%s",
-                ret,strerror(errno));
-        return -1;
-    }
     return ret;
 }
 int CNetHandlerTcp::Recv(char* pBuf,int bufSize)
 {
     int ret = recv(m_SocketFd, pBuf, bufSize- 1, 0);
-    if ( ret == 0 )    return -1;
-    if ( ret < 0 )
-    {
-        if ( errno == EINTR || errno == EAGAIN )
-        {
-            error_log("Recv ret:%d error:%s errno:%d", ret, strerror(errno), errno);
-            return 0;
-        }
-
-        error_log("Send ret:%d error:%s errno:%d",
-                ret,strerror(errno),errno);
-
-        return -1;
-    }
     return ret;
 }
 int CNetHandlerTcp::netConnect()
@@ -171,14 +144,6 @@ int CNetHandlerUdp::Send(char* pBuf,int bufLen)
     _servaddr.sin_port = htons(m_Port);
     inet_pton(AF_INET, m_IP.c_str() , &_servaddr.sin_addr);
     int ret = sendto(m_SocketFd,pBuf,bufLen,MSG_DONTWAIT,(const struct sockaddr*)&_servaddr,_tolen);
-    if (ret < 0)
-    {
-        if ( errno == EINTR || errno == EAGAIN )
-        {
-            error_log("Send ret:%d error:%s errno:%d", ret, strerror(errno), errno);
-            return 0;
-        }
-    }
     return ret;
 }
 
@@ -188,13 +153,5 @@ int CNetHandlerUdp::Recv(char* pBuf,int bufSize)
     int _tolen = sizeof(struct sockaddr_in);
 
     int ret = recvfrom (m_SocketFd, pBuf, bufSize, MSG_DONTWAIT, (struct sockaddr*)&_servaddr,(socklen_t *) &_tolen);
-    if (ret < 0)
-    {
-        if ( errno == EINTR || errno == EAGAIN )
-        {
-            error_log("Send ret:%d error:%s errno:%d", ret, strerror(errno), errno);
-            return 0;
-        }
-    }
     return ret;
 }
