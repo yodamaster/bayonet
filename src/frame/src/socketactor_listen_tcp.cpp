@@ -9,6 +9,7 @@
 =============================================================================*/
 #include "socketactor_listen_tcp.h"
 #include "socketactor_passive_tcp.h"
+#include "appactor_base.h"
 void CSocketActorListenTcp::SetBackLog(int backlog)
 {
     m_BackLog = backlog;
@@ -93,8 +94,13 @@ int CSocketActorListenTcp::OnRecv()
 
     CSocketActorBase* pSocketActorAccept = new CSocketActorPassiveTcp();
     pSocketActorAccept->SetIActionPtr(m_pAction);
-    pSocketActorAccept->SetAppActor(m_pAppActor);
     pSocketActorAccept->AttachFrame(m_pFrame);
+    if (m_pAppActor)
+    {
+        CAppActorBase* pAppActor = (CAppActorBase*)m_pAppActor;
+        pAppActor->AttachCommu(pSocketActorAccept);
+        m_pAppActor = NULL;
+    }
 
     pSocketActorAccept->Init(clientfd,m_TimeoutMs,m_ProtoType);
     pSocketActorAccept->SetKeepcnt(m_bKeepcnt);

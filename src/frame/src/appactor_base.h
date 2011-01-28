@@ -25,8 +25,8 @@ class CAppActorBase : public CActorBase
 public:
     CAppActorBase()
     {
-        m_pPassiveSocketActor = NULL;
         m_ActionInfoSet.AttachActor(this);
+        m_pCommuSocketActor = NULL;
     }
     virtual ~CAppActorBase () {}
 
@@ -40,14 +40,28 @@ public:
         return APP_FSM_ALLOVER;
     }
 
-    int SetPassiveSocketActor(IActor* pActor)
+    int AttachCommu(IActor* pActor)
     {
-        m_pPassiveSocketActor = pActor;
+        m_pCommuSocketActor = pActor;
+        if (m_pCommuSocketActor)
+        {
+            CSocketActorBase* pCommuSocketActor = (CSocketActorBase*)m_pCommuSocketActor;
+            pCommuSocketActor->SetAppActor(this);
+        }
         return 0;
+    }
+    int DetachCommu()
+    {
+        if (m_pCommuSocketActor)
+        {
+            CSocketActorBase* pCommuSocketActor = (CSocketActorBase*)m_pCommuSocketActor;
+            pCommuSocketActor->SetAppActor(NULL);
+        }
+        m_pCommuSocketActor = NULL;
     }
 
 private:
     CActionInfoSet m_ActionInfoSet;
-    IActor* m_pPassiveSocketActor;
+    IActor* m_pCommuSocketActor;
 };
 #endif

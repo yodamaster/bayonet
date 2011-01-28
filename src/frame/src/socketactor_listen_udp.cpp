@@ -8,6 +8,7 @@
 #  History:         
 =============================================================================*/
 #include "socketactor_listen_udp.h"
+#include "appactor_base.h"
 
 int CSocketActorListenUdp::OnInit()
 {
@@ -61,8 +62,13 @@ int CSocketActorListenUdp::OnRecvOver()
     {
         CSocketActorPassiveUdp * pSocketActorAccept = new CSocketActorPassiveUdp();
         pSocketActorAccept->SetIActionPtr(m_pAction);
-        pSocketActorAccept->SetAppActor(m_pAppActor);
         pSocketActorAccept->AttachFrame(m_pFrame);
+        if (m_pAppActor)
+        {
+            CAppActorBase* pAppActor = (CAppActorBase*)m_pAppActor;
+            pAppActor->AttachCommu(pSocketActorAccept);
+            m_pAppActor = NULL;
+        }
 
         trace_log("%s,%d",m_pNetHandler->GetClientIp().c_str(),m_pNetHandler->GetClientPort());
         pSocketActorAccept->Init(m_pNetHandler->GetClientIp(),m_pNetHandler->GetClientPort(),m_TimeoutMs,m_ProtoType);
