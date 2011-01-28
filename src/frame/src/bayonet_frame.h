@@ -98,6 +98,7 @@ public:
 protected:
     void RegDefaultAppFsms()
     {
+        RegFsm(APP_FSM_RSP,new CAppFsmRsp());
         RegFsm(APP_FSM_FINI,new CAppFsmFini());
     }
     void RegDefaultSocketFsms()
