@@ -16,7 +16,7 @@
 #include <map>
 
 #include "fsm_achieve.h"
-#include "socketactor_set.h"
+#include "action_info_set.h"
 
 using namespace std;
 
@@ -25,16 +25,16 @@ class CAppActorBase : public CActorBase
 public:
     CAppActorBase()
     {
-        m_SocketActorSet.AttachActor(this);
+        m_ActionInfoSet.AttachActor(this);
     }
     virtual ~CAppActorBase () {}
 
-    CSocketActorSet* GetSocketActorSet()
+    CActionInfoSet* GetActionInfoSet()
     {
-        return &m_SocketActorSet;
+        return &m_ActionInfoSet;
     }
 
 private:
-    CSocketActorSet m_SocketActorSet;
+    CActionInfoSet m_ActionInfoSet;
 };
 #endif
