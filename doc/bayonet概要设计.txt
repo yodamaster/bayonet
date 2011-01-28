@@ -7,6 +7,11 @@ socketactor和appactor的交互
 二.appactor角度
     1.如果正常结束，要求业务最后一个状态是进入RSP状态，等待passive的sendover或者close或者error（反正会进入fini）
     2.如果不正常结束，即不打算回报，那么就直接进入FINI状态，就会直接结束了
+
+三.active角度
+    1.在appfsm的process中，在actioninfoset来设置上appactor的指针
+    2.在出错，关闭，recv完成，timeout等等情况下，都要通知appactor
+    3.appfsm退出的时候，对每个actioninfo使其（1）appactor指针为空，（2）调用changestate 到 closeing，（3）erase掉
 =============================================================================
 1.之前想过的，表是满足不了状态转化的需求的，所以，用树即可。真是天才。
 <!--=============================================================================-->
