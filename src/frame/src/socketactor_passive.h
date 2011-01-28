@@ -1,26 +1,30 @@
 /*=============================================================================
 #  Author:          dantezhu - http://www.vimer.cn
 #  Email:           zny2008@gmail.com
-#  FileName:        socketactor_passive_tcp.h
+#  FileName:        socketactor_passive.h
 #  Description:     被动TCP
 #  Version:         1.0
-#  LastChange:      2011-01-28 10:52:33
+#  LastChange:      2011-01-28 17:00:16
 #  History:         
 =============================================================================*/
-#ifndef _SOCKETACTOR_PASSIVE_TCP_H_
-#define _SOCKETACTOR_PASSIVE_TCP_H_
-#include "socketactor_passive.h"
-class CSocketActorPassiveTcp : public CSocketActorPassive
+#ifndef _SOCKETACTOR_PASSIVE_H_
+#define _SOCKETACTOR_PASSIVE_H_
+#include "socketactor_data.h"
+class CSocketActorPassive : public CSocketActorData
 {
 public:
-    virtual ~CSocketActorPassiveTcp () {}
+    virtual ~CSocketActorPassive () {}
 protected:
-    virtual int OnInitOver()
-    {
-        return SOCKET_FSM_WAITRECV;
-    }
+    virtual int OnInitOver()=0;
+    virtual int OnRecvOver()=0;
+
+    virtual int OnFiniOver();
     virtual int OnSendOver()
     {
+        if (m_pAppActor)
+        {
+            m_pAppActor->ChangeState(APP_FSM_FINI);
+        }
         Clear();
         if (m_bKeepcnt && m_ProtoType == PROTO_TYPE_TCP)
         {
@@ -30,13 +34,6 @@ protected:
         {
             return SOCKET_FSM_CLOSING;
         }
-    }
-    virtual int OnRecvOver()
-    {
-        //TODO
-        //这个时候,应该是要等数据处理的阶段，现在是测试，直接回报
-        //return SOCKET_FSM_WAITCLOSE;
-        return SOCKET_FSM_WAITSEND;
     }
 };
 #endif

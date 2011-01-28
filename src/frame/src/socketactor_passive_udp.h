@@ -9,8 +9,8 @@
 =============================================================================*/
 #ifndef _SOCKETACTOR_PASSIVE_UDP_H_
 #define _SOCKETACTOR_PASSIVE_UDP_H_
-#include "socketactor_data.h"
-class CSocketActorPassiveUdp : public CSocketActorData
+#include "socketactor_passive.h"
+class CSocketActorPassiveUdp : public CSocketActorPassive
 {
 public:
     virtual ~CSocketActorPassiveUdp () {}
@@ -19,10 +19,6 @@ public:
     {
         //按理说应该是返回close，等待上层唤醒
         return SOCKET_FSM_WAITSEND;
-    }
-    virtual int OnSendOver()
-    {
-        return SOCKET_FSM_CLOSING;
     }
     virtual int OnRecvOver()
     {
