@@ -1,3 +1,5 @@
+IAction的几个参数啊，需要传入appactor和socketactor，没办法要用啊
+=============================================================================
 socketactor和appactor的交互
 一.passive角度
     1.handeDecodeRecv,这里要求生成一个actor对象，并路由到需要的状态
