@@ -32,10 +32,6 @@ public:
     {
         m_listActors.push_front(pActor);
         m_allActorCount++;
-        if (pActor->GetFrame() != this)
-        {
-            pActor->AttachFrame(this);
-        }
         return 0;
     }
     int DelActor(IActor* pActor)
@@ -135,9 +131,9 @@ public:
     }
     int AttachFrame(IFrame* pFrame)
     {
-        if (m_pFrame == pFrame)
+        if (pFrame == NULL)
         {
-            return 0;
+            return -1;
         }
         m_pFrame = pFrame;
         m_pFrame->AddActor(this);

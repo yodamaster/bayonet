@@ -58,6 +58,7 @@ public:
             pCommuSocketActor->SetAppActor(NULL);
         }
         m_pCommuSocketActor = NULL;
+        return 0;
     }
 
 private:
