@@ -16,8 +16,7 @@ int CSocketActorPassive::OnFiniOver()
     {
         CAppActorBase* pAppActor = (CAppActorBase*)m_pAppActor;
         pAppActor->ChangeState(APP_FSM_FINI);
-        pAppActor->SetPassiveSocketActor(NULL);
-        m_pAppActor = NULL;
+        pAppActor->DetachCommu();
     }
 
     return SOCKET_FSM_ALLOVER;
@@ -28,8 +27,7 @@ int CSocketActorPassive::OnSendOver()
     {
         CAppActorBase* pAppActor = (CAppActorBase*)m_pAppActor;
         pAppActor->ChangeState(APP_FSM_FINI);
-        pAppActor->SetPassiveSocketActor(NULL);
-        m_pAppActor = NULL;
+        pAppActor->DetachCommu();
     }
     Clear();
     if (m_bKeepcnt && m_ProtoType == PROTO_TYPE_TCP)
