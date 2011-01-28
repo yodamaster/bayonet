@@ -29,16 +29,24 @@ public:
     virtual ~IAction () {}
     // 为发送打包
     virtual int HandleEncodeSendBuf(
+            IActor* pSocketActor,
+            IActor* pAppActor,
             string & strSendBuf,
             int &len)=0;
 
     // 回应包完整性检查
     virtual int HandleInput(
+            IActor* pSocketActor,
+            IActor* pAppActor,
             const char *buf,
             int len)=0;
 
     // 回应包解析
-    virtual int HandleDecodeRecvBuf(const char *buf, int len)=0;
+    virtual int HandleDecodeRecvBuf(
+            IActor* pSocketActor,
+            IActor* pAppActor,
+            const char *buf, 
+            int len)=0;
 };
 
 class IFrame
