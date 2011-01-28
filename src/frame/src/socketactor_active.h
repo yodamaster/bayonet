@@ -4,7 +4,7 @@
 #  FileName:        socketactor_active.h
 #  Description:     主动版
 #  Version:         1.0
-#  LastChange:      2011-01-25 11:53:08
+#  LastChange:      2011-01-28 11:34:59
 #  History:         
 =============================================================================*/
 #ifndef _SOCKETACTOR_ACTIVE_H_
@@ -22,9 +22,6 @@ protected:
     }
     virtual int OnSendOver()
     {
-        Clear();
-        //TODO
-        //这里应该有参数要标识是长连接还是短连接
         return SOCKET_FSM_WAITRECV;
     }
     virtual int OnRecvOver()
