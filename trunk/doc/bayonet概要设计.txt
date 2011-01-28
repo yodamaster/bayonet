@@ -5,6 +5,8 @@
 初始化的状态，就是要把那个accept的socket呀，注册上.
 然后socket转化成onrecive状态.
 
+socketactor中的fini不要delete this，让外层循环去做，里面只是把数据都释放掉。包括socket的close
+
 <!--=============================================================================-->
 accept()
 actor=new SocketActor()
