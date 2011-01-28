@@ -17,6 +17,12 @@ using namespace std;
 class IFsm;
 class IActor;
 
+class IEvent
+{
+public:
+    virtual ~IEvent () {}
+};
+
 class IAction
 {
 public:
@@ -190,6 +196,15 @@ public:
      * @return  下一个状态
      */
     virtual int ChangeState(int destState)=0;
+
+    /**
+     * @brief   处理事件
+     *
+     * @param   pEvent
+     *
+     * @return  0
+     */
+    virtual int HandleEvent(IEvent* pEvent)=0;
 };
 
 

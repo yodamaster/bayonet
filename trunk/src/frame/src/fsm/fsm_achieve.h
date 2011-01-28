@@ -198,6 +198,11 @@ public:
         int state = doChangeFsm(destFsm);
         return ChangeState(state);
     }
+    int HandleEvent(IEvent* pEvent)
+    {
+        //默认是什么也不做的，继承的类如果需要用到，就要重写
+        return 0;
+    }
 private:
     int doChangeFsm(IFsm* destFsm)
     {

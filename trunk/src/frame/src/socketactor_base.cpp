@@ -10,6 +10,34 @@
 #include "socketactor_base.h"
 #include "bayonet_frame.h"
 
+int CSocketActorBase::HandleEvent(IEvent* pEvent)
+{
+    CEpollEvent* pEpollEvent = (CEpollEvent*)pEvent;
+    unsigned evt = pEpollEvent->evt;
+    int ret = 0;
+    if ( evt&EPOLLIN )
+    {
+        ret = ChangeState(SOCKET_FSM_RECVING);                         
+    }
+    else if ( evt&EPOLLOUT )
+    {
+        ret = ChangeState(SOCKET_FSM_SENDING);
+    }
+    else if ( evt&EPOLLHUP )
+    {
+        ret = ChangeState(SOCKET_FSM_CLOSING);
+    }
+    else if ( evt&EPOLLERR )
+    {
+        ret = ChangeState(SOCKET_FSM_ERROR);
+    }
+    else
+    {
+        ret = ChangeState(SOCKET_FSM_ERROR);
+    }
+    return ret;
+}
+
 int CSocketActorBase::Init(string ip,int port,int timeout_ms,int protoType)
 {
     m_IP = ip;

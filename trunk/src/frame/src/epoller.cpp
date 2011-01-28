@@ -61,6 +61,7 @@ int CEPoller::LoopForEvent()
     int fd;
     int nfds;
     CSocketActorBase*  pSocketActor = NULL;
+    CEpollEvent t_event;
     unsigned ev;
     struct timeval prev_tm;
     struct timeval next_tm;
@@ -89,29 +90,8 @@ int CEPoller::LoopForEvent()
                 DelEpollIO(fd); close(fd);
                 continue;
             }
-
-            ev = m_events[i].events;
-            int ret = 0;
-            if ( ev&EPOLLIN )
-            {
-                ret = pSocketActor->ChangeState(SOCKET_FSM_RECVING);                         
-            }
-            else if ( ev&EPOLLOUT )
-            {
-                ret = pSocketActor->ChangeState(SOCKET_FSM_SENDING);
-            }
-            else if ( ev&EPOLLHUP )
-            {
-                ret = pSocketActor->ChangeState(SOCKET_FSM_CLOSING);
-            }
-            else if ( ev&EPOLLERR )
-            {
-                ret = pSocketActor->ChangeState(SOCKET_FSM_ERROR);
-            }
-            else
-            {
-                ret = pSocketActor->ChangeState(SOCKET_FSM_ERROR);
-            }
+            t_event.evt = m_events[i].events;
+            int ret = pSocketActor->HandleEvent(&t_event);
         }
 
         gettimeofday(&next_tm,NULL);
