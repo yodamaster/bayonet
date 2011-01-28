@@ -19,21 +19,6 @@ protected:
     virtual int OnRecvOver()=0;
 
     virtual int OnFiniOver();
-    virtual int OnSendOver()
-    {
-        if (m_pAppActor)
-        {
-            m_pAppActor->ChangeState(APP_FSM_FINI);
-        }
-        Clear();
-        if (m_bKeepcnt && m_ProtoType == PROTO_TYPE_TCP)
-        {
-            return SOCKET_FSM_WAITRECV;
-        }
-        else
-        {
-            return SOCKET_FSM_CLOSING;
-        }
-    }
+    virtual int OnSendOver();
 };
 #endif
