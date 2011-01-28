@@ -9,11 +9,15 @@
 =============================================================================*/
 #ifndef _ACTION_INFO_H_
 #define _ACTION_INFO_H_
-#include "appactor_base.h"
-#include "socketactor_active.h"
+#include "comm_def.h"
+#include "fsm_achieve.h"
 class CActionInfo
 {
 public:
+    CActionInfo () {
+        m_pAction = NULL;
+        m_pAppActor = NULL;
+    }
     virtual ~CActionInfo () {}
 
     /**
@@ -23,7 +27,7 @@ public:
      *
      * @return  0
      */
-    //int SetIActionPtr(IAction *pAction);
+    int SetIActionPtr(IAction *pAction);
 
     /**
      * @brief   设置AppActor指针
@@ -32,6 +36,9 @@ public:
      *
      * @return  0
      */
-    //int SetAppActor(CAppActorBase* pActor);
+    virtual int SetAppActor(IActor* pActor);
+protected:
+    IAction* m_pAction;
+    IActor* m_pAppActor;
 };
 #endif
