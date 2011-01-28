@@ -13,6 +13,8 @@ public:
     virtual ~CActionFirst () {}
     // 为发送打包
     virtual int HandleEncodeSendBuf(
+            IActor* pSocketActor,
+            IActor* pAppActor,
             string & strSendBuf,
             int &len)
     {
@@ -23,6 +25,8 @@ public:
 
     // 回应包完整性检查
     virtual int HandleInput(
+            IActor* pSocketActor,
+            IActor* pAppActor,
             const char *buf,
             int len)
     {
@@ -30,7 +34,11 @@ public:
     }
 
     // 回应包解析
-    virtual int HandleDecodeRecvBuf(const char *buf, int len)
+    virtual int HandleDecodeRecvBuf(
+            IActor* pSocketActor,
+            IActor* pAppActor,
+            const char *buf, 
+            int len)
     {
         return 0;
     }
