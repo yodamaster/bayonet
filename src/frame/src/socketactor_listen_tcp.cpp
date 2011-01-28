@@ -92,10 +92,12 @@ int CSocketActorListenTcp::OnRecv()
     }
 
     CSocketActorBase* pSocketActorAccept = new CSocketActorPassiveTcp();
-    pSocketActorAccept->Init(clientfd,m_TimeoutMs,m_ProtoType);
     pSocketActorAccept->SetIActionPtr(m_pAction);
-    pSocketActorAccept->SetKeepcnt(m_bKeepcnt);
+    pSocketActorAccept->SetAppActor(m_pAppActor);
     pSocketActorAccept->AttachFrame(m_pFrame);
+
+    pSocketActorAccept->Init(clientfd,m_TimeoutMs,m_ProtoType);
+    pSocketActorAccept->SetKeepcnt(m_bKeepcnt);
     pSocketActorAccept->ChangeState(SOCKET_FSM_INIT);
     trace_log("%s over",__func__);
 

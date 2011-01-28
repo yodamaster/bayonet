@@ -25,19 +25,6 @@ protected:
     {
         return SOCKET_FSM_WAITRECV;
     }
-    virtual int OnRecvOver()
-    {
-        //要保证这个recv事件是有效的，貌似启动的时候也会出发recv事件
-        if (m_pNetHandler->GetClientIp().size()>0 && m_pNetHandler->GetClientPort()>0)
-        {
-            CSocketActorPassiveUdp * pSocketActorAccept = new CSocketActorPassiveUdp();
-            trace_log("%s,%d",m_pNetHandler->GetClientIp().c_str(),m_pNetHandler->GetClientPort());
-            pSocketActorAccept->Init(m_pNetHandler->GetClientIp(),m_pNetHandler->GetClientPort(),m_TimeoutMs,m_ProtoType);
-            pSocketActorAccept->SetIActionPtr(m_pAction);
-            pSocketActorAccept->AttachFrame(m_pFrame);
-            pSocketActorAccept->ChangeState(SOCKET_FSM_INIT);
-        }
-        return SOCKET_FSM_WAITRECV;
-    }
+    virtual int OnRecvOver();
 };
 #endif
