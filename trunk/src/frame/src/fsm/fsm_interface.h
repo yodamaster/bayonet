@@ -166,22 +166,6 @@ public:
     virtual map<int, IFsm*>* GetFsmMgr()=0;
 
     /**
-     * @brief   关联上层的actor
-     *
-     * @param   pActor
-     *
-     * @return  0
-     */
-    virtual int AttachSuperActor(IActor* pActor)=0;
-
-    /**
-     * @brief   获取上层actor
-     *
-     * @return  actor
-     */
-    virtual IActor* GetSuperActor()=0;
-
-    /**
      * @brief   执行当前状态
      *
      * @return  0

@@ -41,7 +41,6 @@ public:
      */
     virtual int Add(CSocketActorBase* pSocketActor)
     {
-        pSocketActor->AttachSuperActor(m_pActor);
         m_setSocketActors.insert(pSocketActor);
         return 0;
     }
