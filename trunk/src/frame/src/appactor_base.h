@@ -33,6 +33,11 @@ public:
     {
         return &m_ActionInfoSet;
     }
+    int OnFini()
+    {
+        SetGCMark();
+        return APP_FSM_ALLOVER;
+    }
 
 private:
     CActionInfoSet m_ActionInfoSet;
