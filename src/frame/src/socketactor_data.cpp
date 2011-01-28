@@ -89,6 +89,7 @@ int CSocketActorData::OnInit()
 }
 int CSocketActorData::OnFini()
 {
+    SetGCMark();//标记位可以回收
     return OnFiniOver();
 }
 int CSocketActorData::OnRecv()

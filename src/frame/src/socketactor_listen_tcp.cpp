@@ -66,7 +66,8 @@ int CSocketActorListenTcp::OnInit()
 }
 int CSocketActorListenTcp::OnFini()
 {
-    return SOCKET_FSM_FINI;
+    SetGCMark();
+    return SOCKET_FSM_ALLOVER;
 }
 int CSocketActorListenTcp::OnRecv()
 {
