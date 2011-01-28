@@ -10,7 +10,7 @@
 #ifndef _SOCKETACTOR_LISTEN_UDP_H_
 #define _SOCKETACTOR_LISTEN_UDP_H_
 #include "socketactor_data.h"
-#include "socketactor_passive_olsend.h"
+#include "socketactor_passive_udp.h"
 class CSocketActorListenUdp : public CSocketActorData
 {
 public:
@@ -30,7 +30,7 @@ protected:
         //要保证这个recv事件是有效的，貌似启动的时候也会出发recv事件
         if (m_pNetHandler->GetClientIp().size()>0 && m_pNetHandler->GetClientPort()>0)
         {
-            CSocketActorPassiveOLSend * pSocketActorAccept = new CSocketActorPassiveOLSend();
+            CSocketActorPassiveUdp * pSocketActorAccept = new CSocketActorPassiveUdp();
             trace_log("%s,%d",m_pNetHandler->GetClientIp().c_str(),m_pNetHandler->GetClientPort());
             pSocketActorAccept->Init(m_pNetHandler->GetClientIp(),m_pNetHandler->GetClientPort(),m_TimeoutMs,m_ProtoType);
             pSocketActorAccept->SetIActionPtr(m_pAction);
