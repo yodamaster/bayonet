@@ -25,6 +25,7 @@ class CAppActorBase : public CActorBase
 public:
     CAppActorBase()
     {
+        m_pPassiveSocketActor = NULL;
         m_ActionInfoSet.AttachActor(this);
     }
     virtual ~CAppActorBase () {}
@@ -39,7 +40,14 @@ public:
         return APP_FSM_ALLOVER;
     }
 
+    int SetPassiveSocketActor(IActor* pActor)
+    {
+        m_pPassiveSocketActor = pActor;
+        return 0;
+    }
+
 private:
     CActionInfoSet m_ActionInfoSet;
+    IActor* m_pPassiveSocketActor;
 };
 #endif

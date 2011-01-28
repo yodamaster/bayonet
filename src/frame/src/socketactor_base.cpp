@@ -39,10 +39,6 @@ int CSocketActorBase::HandleEvent(IEvent* pEvent)
 }
 int CSocketActorBase::SetAppActor(IActor* pActor)
 {
-    if (pActor == NULL)
-    {
-        return -1;
-    }
     m_pAppActor = pActor;
     return 0;
 }
@@ -64,10 +60,6 @@ int CSocketActorBase::Init(int socketFd,int timeout_ms,int protoType)
 }
 int CSocketActorBase::SetIActionPtr(IAction *pAction)
 {
-    if (pAction == NULL)
-    {
-        return -1;
-    }
     m_pAction = pAction;
     return 0;
 }
