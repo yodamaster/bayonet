@@ -1,15 +1,14 @@
 /*=============================================================================
 #  Author:          dantezhu - http://www.vimer.cn
 #  Email:           zny2008@gmail.com
-#  FileName:        socketactor_set.h
+#  FileName:        action_info_set.h
 #  Description:    
 #  Version:         1.0
-#  LastChange:      2011-01-25 20:16:46
+#  LastChange:      2011-01-28 16:02:28
 #  History:         
 =============================================================================*/
-#ifndef _SOCKETACTOR_SET_H_
-#define _SOCKETACTOR_SET_H_
-
+#ifndef _ACTION_INFO_SET_H_
+#define _ACTION_INFO_SET_H_
 #include <iostream>
 #include <string>
 #include <vector>
@@ -19,20 +18,20 @@
 #include "fsm_achieve.h"
 #include "action_info.h"
 
-class CSocketActorSet
+class CActionInfoSet
 {
 public:
-    CSocketActorSet() {
-        m_pActor = NULL;
+    CActionInfoSet() {
+        m_pAppActor = NULL;
     }
-    virtual ~CSocketActorSet() {}
+    virtual ~CActionInfoSet() {}
     virtual void AttachActor(IActor* pActor)
     {
-        m_pActor = pActor;
+        m_pAppActor = pActor;
     }
     virtual IActor* GetActor()
     {
-        return m_pActor;
+        return m_pAppActor;
     }
     /**
      * @brief   添加一个pActionInfo
@@ -61,6 +60,6 @@ public:
     }
 private:
     set<CActionInfo*> m_setActionInfos;
-    IActor * m_pActor;
+    IActor * m_pAppActor;
 };
 #endif

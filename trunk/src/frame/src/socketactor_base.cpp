@@ -37,7 +37,7 @@ int CSocketActorBase::HandleEvent(IEvent* pEvent)
     }
     return ret;
 }
-/*int CSocketActorBase::SetAppActor(CAppActorBase* pActor)
+int CSocketActorBase::SetAppActor(IActor* pActor)
 {
     if (pActor == NULL)
     {
@@ -46,7 +46,7 @@ int CSocketActorBase::HandleEvent(IEvent* pEvent)
     m_pAppActor = pActor;
     return 0;
 }
-*/
+
 int CSocketActorBase::Init(string ip,int port,int timeout_ms,int protoType)
 {
     m_IP = ip;
