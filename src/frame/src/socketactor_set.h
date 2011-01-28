@@ -22,7 +22,9 @@
 class CSocketActorSet
 {
 public:
-    CSocketActorSet() : m_pActor(NULL) {}
+    CSocketActorSet() {
+        m_pActor = NULL;
+    }
     virtual ~CSocketActorSet() {}
     virtual void AttachActor(IActor* pActor)
     {

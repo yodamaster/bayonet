@@ -22,7 +22,10 @@ using namespace std;
 class CFrameBase : public IFrame
 {
 public:
-    CFrameBase () : m_needGCCount(0),m_allActorCount(0) {}
+    CFrameBase () {
+        m_needGCCount = 0;
+        m_allActorCount = 0;
+    }
     virtual ~CFrameBase () {}
 
     int AddActor(IActor* pActor)
@@ -104,7 +107,12 @@ protected:
 class CActorBase : public IActor
 {
 public:
-    CActorBase () : m_bGC(false),m_Fsm(NULL),m_ptrMapFsmMgr(NULL),m_pFrame(NULL) {}
+    CActorBase () {
+        m_bGC = false;
+        m_Fsm = NULL;
+        m_ptrMapFsmMgr = NULL;
+        m_pFrame = NULL;
+    }
 
     virtual ~CActorBase () {
         if (m_pFrame)
@@ -223,7 +231,9 @@ protected:
 class CFsmBase : public IFsm
 {
 public:
-    CFsmBase ():m_pFrame(NULL) {}
+    CFsmBase () {
+        m_pFrame = NULL;
+    }
     virtual ~CFsmBase () {}
     virtual int AttachFrame(IFrame* pFrame)
     {

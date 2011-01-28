@@ -14,11 +14,14 @@
 #include "epoller.h"
 #include "fl_log.h"
 #include "net_handler.h"
+//#include "appactor_base.h"
 
 class CEpollEvent : public IEvent
 {
 public:
-    CEpollEvent () : evt(0) {}
+    CEpollEvent () {
+        evt = 0;
+    }
     virtual ~CEpollEvent () {}
 
     unsigned evt;
@@ -28,10 +31,20 @@ class CEPoller;
 class CSocketActorBase:public CActorBase
 {
 public:
-    CSocketActorBase ():m_SocketFd(-1),m_Port(0),m_TimeoutMs(-1),m_ProtoType(0),m_pAction(NULL),m_bKeepcnt(false) {}
+    CSocketActorBase () {
+        m_SocketFd = -1;
+        m_Port = 0;
+        m_TimeoutMs = -1;
+        m_ProtoType = 0;
+        m_pAction = NULL;
+        m_bKeepcnt = false;
+        //m_pAppActor = NULL;
+    }
     virtual ~CSocketActorBase () {}
 
     virtual int HandleEvent(IEvent* pEvent);
+
+    //virtual int SetAppActor(CAppActorBase* pActor);
 
     virtual int Init(string ip,int port,int timeout_ms,int protoType);
 
@@ -75,5 +88,7 @@ protected:
 
     IAction* m_pAction;
     bool m_bKeepcnt;
+
+    //CAppActorBase* m_pAppActor;
 };
 #endif

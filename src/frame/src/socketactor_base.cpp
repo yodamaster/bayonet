@@ -37,7 +37,16 @@ int CSocketActorBase::HandleEvent(IEvent* pEvent)
     }
     return ret;
 }
-
+/*int CSocketActorBase::SetAppActor(CAppActorBase* pActor)
+{
+    if (pActor == NULL)
+    {
+        return -1;
+    }
+    m_pAppActor = pActor;
+    return 0;
+}
+*/
 int CSocketActorBase::Init(string ip,int port,int timeout_ms,int protoType)
 {
     m_IP = ip;
