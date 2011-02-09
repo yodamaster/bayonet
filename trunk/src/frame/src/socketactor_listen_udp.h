@@ -16,7 +16,7 @@ class CSocketActorListenUdp : public CSocketActorData
 public:
     virtual ~CSocketActorListenUdp () {}
     virtual int OnInit();
-protected:
+
     virtual int OnInitOver()
     {
         return SOCKET_FSM_WAITRECV;

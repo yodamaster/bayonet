@@ -298,7 +298,7 @@ int main(int argc, const char *argv[])
     int len;
     int ret =tcp_process_poll(
     //int ret =udp_process(
-            "0.0.0.0",10001,10000,
+            "0.0.0.0",10001,1000,
             strSend.c_str(),strSend.size(),
             (char*)strRecv.c_str(),strRecv.size(),len
             );

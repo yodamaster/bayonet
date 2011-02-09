@@ -63,11 +63,19 @@ int CSocketActorListenTcp::OnInit()
     pEpoller->AttachSocket(this);//加入到epoll中
     trace_log("%s over",__func__);
 
+    return SOCKET_FSM_INITOVER;
+}
+int CSocketActorListenTcp::OnInitOver()
+{
     return SOCKET_FSM_WAITRECV;
 }
 int CSocketActorListenTcp::OnFini()
 {
     SetGCMark();
+    return SOCKET_FSM_FINIOVER;
+}
+int CSocketActorListenTcp::OnFiniOver()
+{
     return SOCKET_FSM_ALLOVER;
 }
 int CSocketActorListenTcp::OnRecv()
@@ -95,21 +103,32 @@ int CSocketActorListenTcp::OnRecv()
     CSocketActorBase* pSocketActorAccept = new CSocketActorPassiveTcp();
     pSocketActorAccept->SetIActionPtr(m_pAction);
     pSocketActorAccept->AttachFrame(m_pFrame);
-    if (m_pAppActor)
+    //Del-Begin by dantezhu in 2011-02-02 19:07:23
+    //这里udp会发生，tcp不会发生
+    /*if (m_pAppActor)
     {
         CAppActorBase* pAppActor = (CAppActorBase*)m_pAppActor;
         pAppActor->AttachCommu(pSocketActorAccept);
         m_pAppActor = NULL;
-    }
+    }*/
+    //Del-End
 
     pSocketActorAccept->Init(clientfd,m_TimeoutMs,m_ProtoType);
     pSocketActorAccept->SetKeepcnt(m_bKeepcnt);
     pSocketActorAccept->ChangeState(SOCKET_FSM_INIT);
     trace_log("%s over",__func__);
 
+    return SOCKET_FSM_RECVOVER;
+}
+int CSocketActorListenTcp::OnRecvOver()
+{
     return SOCKET_FSM_WAITRECV;
 }
 int CSocketActorListenTcp::OnSend()
+{
+    return SOCKET_FSM_SENDOVER;
+}
+int CSocketActorListenTcp::OnSendOver()
 {
     return SOCKET_FSM_WAITRECV;
 }
@@ -120,5 +139,9 @@ int CSocketActorListenTcp::OnClose()
         close(m_SocketFd);
         m_SocketFd = -1;
     }
+    return SOCKET_FSM_CLOSEOVER;
+}
+int CSocketActorListenTcp::OnCloseOver()
+{
     return SOCKET_FSM_FINI;
 }

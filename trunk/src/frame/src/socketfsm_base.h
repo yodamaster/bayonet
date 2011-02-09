@@ -47,6 +47,18 @@ public:
         return pSocketActor->OnInit();
     }
 };
+class CSocketFsmInitOver: public CSocketFsmBase
+{
+public:
+    CSocketFsmInitOver () {}
+    virtual ~CSocketFsmInitOver () {}
+
+    virtual int Process(IActor* pActor)
+    {
+        CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
+        return pSocketActor->OnInitOver();
+    }
+};
 class CSocketFsmFini: public CSocketFsmBase
 {
 public:
@@ -57,6 +69,18 @@ public:
     {
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
         return pSocketActor->OnFini();
+    }
+};
+class CSocketFsmFiniOver: public CSocketFsmBase
+{
+public:
+    CSocketFsmFiniOver () {}
+    virtual ~CSocketFsmFiniOver () {}
+
+    virtual int Process(IActor* pActor)
+    {
+        CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
+        return pSocketActor->OnFiniOver();
     }
 };
 //=============================================================================
@@ -83,6 +107,18 @@ public:
     {
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
         return pSocketActor->OnSend();
+    }
+};
+class CSocketFsmSendOver : public CSocketFsmBase
+{
+public:
+    CSocketFsmSendOver () {}
+    virtual ~CSocketFsmSendOver () {}
+
+    virtual int Process(IActor* pActor)
+    {
+        CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
+        return pSocketActor->OnSendOver();
     }
 };
 //=============================================================================
@@ -112,6 +148,18 @@ public:
         return pSocketActor->OnRecv();
     }
 };
+class CSocketFsmRecvOver : public CSocketFsmBase
+{
+public:
+    CSocketFsmRecvOver () {}
+    virtual ~CSocketFsmRecvOver () {}
+
+    virtual int Process(IActor* pActor)
+    {
+        CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
+        return pSocketActor->OnRecvOver();
+    }
+};
 //=============================================================================
 
 class CSocketFsmWaitClose : public CSocketFsmBase
@@ -137,6 +185,18 @@ public:
     {
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
         return pSocketActor->OnClose();
+    }
+};
+class CSocketFsmCloseOver : public CSocketFsmBase
+{
+public:
+    CSocketFsmCloseOver () {}
+    virtual ~CSocketFsmCloseOver () {}
+
+    virtual int Process(IActor* pActor)
+    {
+        CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
+        return pSocketActor->OnCloseOver();
     }
 };
 //=============================================================================

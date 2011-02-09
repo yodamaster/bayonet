@@ -18,17 +18,34 @@ public:
     virtual int Entry(IActor* obj)
     {
         CAppActorBase * pAppActor = (CAppActorBase*)obj;
-        return HandleEntry(pAppActor->GetActionInfoSet(), pAppActor);
+        int ret = HandleEntry(pAppActor->GetActionInfoSet(), pAppActor);
+        if (ret)
+        {
+            return -1;
+        }
+        ret = pAppActor->GetActionInfoSet()->Start();
+        if (ret)
+        {
+            return -2;
+        }
+        return 0;
     }
     virtual int Process(IActor* obj)
     {
         CAppActorBase * pAppActor = (CAppActorBase*)obj;
+        if (!pAppActor->GetActionInfoSet()->IsDealOver())
+        {
+            //还没有做完，所以还是先返回0就行
+            return 0;
+        }
         return HandleProcess(pAppActor->GetActionInfoSet(), pAppActor);
     }
     virtual int Exit(IActor* obj)
     {
         CAppActorBase * pAppActor = (CAppActorBase*)obj;
-        return HandleExit(pAppActor->GetActionInfoSet(), pAppActor);
+        int ret = HandleExit(pAppActor->GetActionInfoSet(), pAppActor);
+        pAppActor->GetActionInfoSet()->Clear();
+        return ret;
     }
     /**
      * @brief   Entry函数会调用，多传入几个参数
@@ -75,6 +92,11 @@ public:
 };
 class CAppFsmRsp : public CAppFsmBase
 {
+    int HandleProcess(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
+    {
+        pAppActor->Send2Client();
+        return 0;
+    }
 };
 class CAppFsmFini : public CAppFsmBase
 {

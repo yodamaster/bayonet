@@ -37,10 +37,9 @@ int CSocketActorBase::HandleEvent(IEvent* pEvent)
     }
     return ret;
 }
-int CSocketActorBase::SetAppActor(IActor* pActor)
+void CSocketActorBase::SetAppActor(IActor* pActor)
 {
     m_pAppActor = pActor;
-    return 0;
 }
 
 int CSocketActorBase::Init(string ip,int port,int timeout_ms,int protoType)
@@ -58,10 +57,9 @@ int CSocketActorBase::Init(int socketFd,int timeout_ms,int protoType)
     m_ProtoType = protoType;
     return 0;
 }
-int CSocketActorBase::SetIActionPtr(IAction *pAction)
+void CSocketActorBase::SetIActionPtr(IAction *pAction)
 {
     m_pAction = pAction;
-    return 0;
 }
 
 int CSocketActorBase::SetEvent(unsigned event)

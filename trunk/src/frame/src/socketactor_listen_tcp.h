@@ -27,13 +27,23 @@ public:
 
     virtual int OnInit();
 
+    virtual int OnInitOver();
+
     virtual int OnFini();
+
+    virtual int OnFiniOver();
 
     virtual int OnRecv();
 
+    virtual int OnRecvOver();
+
     virtual int OnSend();
 
+    virtual int OnSendOver();
+
     virtual int OnClose();
+
+    virtual int OnCloseOver();
 
 protected:
     int m_BackLog;

@@ -167,6 +167,7 @@ public:
 
     int ChangeState(int destState)
     {
+        m_vecStates.push_back(destState);
         if (m_ptrMapFsmMgr == NULL)
         {
             return -1;
@@ -223,6 +224,7 @@ protected:
     IFsm* m_Fsm;
     map<int, IFsm*> *m_ptrMapFsmMgr;
     IFrame* m_pFrame;
+    vector<int> m_vecStates;//历史的states
 };
 class CFsmBase : public IFsm
 {

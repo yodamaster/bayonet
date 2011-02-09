@@ -18,7 +18,8 @@ public:
     virtual int OnInitOver()
     {
         //按理说应该是返回close，等待上层唤醒
-        return SOCKET_FSM_WAITSEND;
+        //return SOCKET_FSM_WAITSEND;
+        return SOCKET_FSM_WAITCLOSE;
     }
     virtual int OnRecvOver()
     {

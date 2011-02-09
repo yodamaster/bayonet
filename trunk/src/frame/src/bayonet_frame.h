@@ -104,13 +104,18 @@ protected:
     void RegDefaultSocketFsms()
     {
         RegFsm(SOCKET_FSM_INIT, new CSocketFsmInit());
+        RegFsm(SOCKET_FSM_INITOVER, new CSocketFsmInitOver());
         RegFsm(SOCKET_FSM_FINI, new CSocketFsmFini());
+        RegFsm(SOCKET_FSM_FINIOVER, new CSocketFsmFiniOver());
         RegFsm(SOCKET_FSM_WAITSEND, new CSocketFsmWaitSend());
         RegFsm(SOCKET_FSM_SENDING, new CSocketFsmSending());
+        RegFsm(SOCKET_FSM_SENDOVER, new CSocketFsmSendOver());
         RegFsm(SOCKET_FSM_WAITRECV, new CSocketFsmWaitRecv());
         RegFsm(SOCKET_FSM_RECVING, new CSocketFsmRecving());
+        RegFsm(SOCKET_FSM_RECVOVER, new CSocketFsmRecvOver());
         RegFsm(SOCKET_FSM_WAITCLOSE, new CSocketFsmWaitClose());
         RegFsm(SOCKET_FSM_CLOSING, new CSocketFsmClosing());
+        RegFsm(SOCKET_FSM_CLOSEOVER, new CSocketFsmCloseOver());
         RegFsm(SOCKET_FSM_ERROR, new CSocketFsmError());
         RegFsm(SOCKET_FSM_TIMEOUT, new CSocketFsmTimeout());
     }
