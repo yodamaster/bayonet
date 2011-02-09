@@ -37,19 +37,17 @@ public:
     virtual int Init(int socketFd,int timeout_ms,int protoType);
 
     virtual int OnInit();
+    virtual int OnInitOver()=0;
     virtual int OnFini();
-    virtual int OnSend();
-    virtual int OnRecv();
-    virtual int OnClose();
-
-protected:
     virtual int OnFiniOver();
+    virtual int OnSend();
+    virtual int OnSendOver()=0;
+    virtual int OnRecv();
+    virtual int OnRecvOver()=0;
+    virtual int OnClose();
     virtual int OnCloseOver();
 
-    virtual int OnInitOver()=0;
-    virtual int OnSendOver()=0;
-    virtual int OnRecvOver()=0;
-
+protected:
     virtual int Clear();
 
     // 为发送打包

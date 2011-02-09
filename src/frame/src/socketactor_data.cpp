@@ -85,12 +85,16 @@ int CSocketActorData::OnInit()
     }
     pEpoller->AttachSocket(this);//加入到epoll中
     trace_log("");
-    return OnInitOver();
+    return SOCKET_FSM_INITOVER;
 }
 int CSocketActorData::OnFini()
 {
     SetGCMark();//标记位可以回收
-    return OnFiniOver();
+    return SOCKET_FSM_FINIOVER;
+}
+int CSocketActorData::OnFiniOver()
+{
+    return SOCKET_FSM_ALLOVER;
 }
 int CSocketActorData::OnRecv()
 {
@@ -145,7 +149,7 @@ int CSocketActorData::OnRecv()
     {
         return SOCKET_FSM_CLOSING;
     }
-    return OnRecvOver();
+    return SOCKET_FSM_RECVOVER;
 }
 int CSocketActorData::OnSend()
 {
@@ -193,7 +197,7 @@ int CSocketActorData::OnSend()
         }
     }
     trace_log("");
-    return OnSendOver();
+    return SOCKET_FSM_SENDOVER;
 }
 int CSocketActorData::OnClose()
 {
@@ -202,11 +206,7 @@ int CSocketActorData::OnClose()
         m_pNetHandler->Close();
         m_SocketFd = m_pNetHandler->GetSocketFd();
     }
-    return OnCloseOver();
-}
-int CSocketActorData::OnFiniOver()
-{
-    return SOCKET_FSM_ALLOVER;
+    return SOCKET_FSM_CLOSEOVER;
 }
 int CSocketActorData::OnCloseOver()
 {

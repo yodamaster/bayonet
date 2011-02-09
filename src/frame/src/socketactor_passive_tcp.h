@@ -14,29 +14,18 @@ class CSocketActorPassiveTcp : public CSocketActorPassive
 {
 public:
     virtual ~CSocketActorPassiveTcp () {}
-protected:
     virtual int OnInitOver()
     {
         return SOCKET_FSM_WAITRECV;
     }
-    virtual int OnSendOver()
-    {
-        Clear();
-        if (m_bKeepcnt && m_ProtoType == PROTO_TYPE_TCP)
-        {
-            return SOCKET_FSM_WAITRECV;
-        }
-        else
-        {
-            return SOCKET_FSM_CLOSING;
-        }
-    }
     virtual int OnRecvOver()
     {
+        trace_log("");
         //TODO
         //这个时候,应该是要等数据处理的阶段，现在是测试，直接回报
-        //return SOCKET_FSM_WAITCLOSE;
-        return SOCKET_FSM_WAITSEND;
+        return SOCKET_FSM_WAITCLOSE;
+        //return 0;
+        //return SOCKET_FSM_WAITSEND;
     }
 };
 #endif

@@ -23,12 +23,7 @@ int CSocketActorPassive::OnFiniOver()
 }
 int CSocketActorPassive::OnSendOver()
 {
-    if (m_pAppActor)
-    {
-        CAppActorBase* pAppActor = (CAppActorBase*)m_pAppActor;
-        pAppActor->ChangeState(APP_FSM_FINI);
-        pAppActor->DetachCommu();
-    }
+    NotifyAppActor();//通知上层状态机可以FINI了
     Clear();
     if (m_bKeepcnt && m_ProtoType == PROTO_TYPE_TCP)
     {
@@ -37,5 +32,12 @@ int CSocketActorPassive::OnSendOver()
     else
     {
         return SOCKET_FSM_CLOSING;
+    }
+}
+void CSocketActorPassive::NotifyAppActor()
+{
+    if (m_pAppActor)
+    {
+        m_pAppActor->ChangeState(APP_FSM_FINI);
     }
 }

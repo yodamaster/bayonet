@@ -53,11 +53,10 @@ int CSocketActorListenUdp::OnInit()
     pEpoller->AttachSocket(this);//加入到epoll中
     trace_log("%s over",__func__);
 
-    return OnRecvOver();
+    return SOCKET_FSM_INITOVER;
 }
 int CSocketActorListenUdp::OnRecvOver()
 {
-    //要保证这个recv事件是有效的，貌似启动的时候也会出发recv事件
     if (m_pNetHandler->GetClientIp().size()>0 && m_pNetHandler->GetClientPort()>0)
     {
         CSocketActorPassiveUdp * pSocketActorAccept = new CSocketActorPassiveUdp();

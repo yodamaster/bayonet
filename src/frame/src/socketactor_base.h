@@ -44,13 +44,13 @@ public:
 
     virtual int HandleEvent(IEvent* pEvent);
 
-    virtual int SetAppActor(IActor* pActor);
+    virtual void SetAppActor(IActor* pActor);
 
     virtual int Init(string ip,int port,int timeout_ms,int protoType);
 
     virtual int Init(int socketFd,int timeout_ms,int protoType);
     
-    virtual int SetIActionPtr(IAction *pAction);
+    virtual void SetIActionPtr(IAction *pAction);
 
     virtual int GetSocketFd();
 
@@ -64,16 +64,25 @@ public:
 
     virtual int OnError();
 
-
     virtual int OnInit()=0;
+
+    virtual int OnInitOver()=0;
 
     virtual int OnFini()=0;
 
+    virtual int OnFiniOver()=0;
+
     virtual int OnRecv()=0;
+
+    virtual int OnRecvOver()=0;
 
     virtual int OnSend()=0;
 
+    virtual int OnSendOver()=0;
+
     virtual int OnClose()=0;
+
+    virtual int OnCloseOver()=0;
 
 protected:
     virtual CEPoller* GetEpoller();

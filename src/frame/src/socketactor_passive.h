@@ -14,11 +14,13 @@ class CSocketActorPassive : public CSocketActorData
 {
 public:
     virtual ~CSocketActorPassive () {}
-protected:
     virtual int OnInitOver()=0;
     virtual int OnRecvOver()=0;
 
     virtual int OnFiniOver();
     virtual int OnSendOver();
+
+protected:
+    void NotifyAppActor();
 };
 #endif

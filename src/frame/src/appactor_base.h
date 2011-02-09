@@ -40,26 +40,11 @@ public:
         return APP_FSM_ALLOVER;
     }
 
-    int AttachCommu(IActor* pActor)
-    {
-        m_pCommuSocketActor = pActor;
-        if (m_pCommuSocketActor)
-        {
-            CSocketActorBase* pCommuSocketActor = (CSocketActorBase*)m_pCommuSocketActor;
-            pCommuSocketActor->SetAppActor(this);
-        }
-        return 0;
-    }
-    int DetachCommu()
-    {
-        if (m_pCommuSocketActor)
-        {
-            CSocketActorBase* pCommuSocketActor = (CSocketActorBase*)m_pCommuSocketActor;
-            pCommuSocketActor->SetAppActor(NULL);
-        }
-        m_pCommuSocketActor = NULL;
-        return 0;
-    }
+    int AttachCommu(IActor* pActor);
+
+    int DetachCommu();
+
+    int Send2Client();
 
 private:
     CActionInfoSet m_ActionInfoSet;

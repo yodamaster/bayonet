@@ -58,6 +58,49 @@ public:
         m_setActionInfos.erase(pActionInfo);
         return 0;
     }
+    bool IsDealOver()
+    {
+        for(set<CActionInfo*>::iterator it = m_setActionInfos.begin(); it != m_setActionInfos.end(); ++it)
+        {
+            if (!(*it)->IsDealOver())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    int Start()
+    {
+        int ret = 0;
+        for(set<CActionInfo*>::iterator it = m_setActionInfos.begin(); it != m_setActionInfos.end(); ++it)
+        {
+            ret = (*it)->HandleStart();
+            if (ret)
+            {
+                error_log("CActionInfo HandleStart error:%d", ret);
+                return -1;
+            }
+        }
+        return 0;
+    }
+    int Clear()
+    {
+        for(set<CActionInfo*>::iterator it = m_setActionInfos.begin(); it != m_setActionInfos.end();)
+        {
+            set<CActionInfo*>::iterator tempIt = it;
+            ++it;
+            if (*tempIt)
+            {
+                delete (*tempIt);
+                m_setActionInfos.erase(tempIt);
+            }
+        }
+        return 0;
+    }
+    set<CActionInfo*>& GetActionSet()
+    {
+        return m_setActionInfos;
+    }
 private:
     set<CActionInfo*> m_setActionInfos;
     IActor * m_pAppActor;

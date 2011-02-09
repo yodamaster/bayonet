@@ -19,6 +19,7 @@ OBJECTS = $(OBJ_DIR)socketactor_base$(OBJ_EXT)\
 		  $(OBJ_DIR)net_handler$(OBJ_EXT)\
 		  $(OBJ_DIR)socketactor_passive$(OBJ_EXT)\
 		  $(OBJ_DIR)action_info$(OBJ_EXT)\
+		  $(OBJ_DIR)appactor_base$(OBJ_EXT)\
 
 
 LIB_TARGET = $(LIB_DIR)libbayonet$(LIB_EXT)
