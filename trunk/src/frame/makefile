@@ -24,9 +24,9 @@ OBJS = \
 
 DEPENDS = $(patsubst %.o, %.d, $(OBJS))
 
-.PHONY: all clean prepare CHECK
+.PHONY: all clean init CHECK
 
-all: prepare $(TARGET)
+all: init $(TARGET)
 	@echo -e "\033[1;32m\nSuccess!\033[0m"
 
 $(TARGET): $(OBJS)
@@ -44,7 +44,7 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
 clean:
 	rm -f $(OBJS) $(TARGET) $(DEPENDS)
 
-prepare:
+init:
 	mkdir -p $(TAR_DIR) $(SRC_DIR) $(OBJ_DIR)
 
 -include $(DEPENDS)
