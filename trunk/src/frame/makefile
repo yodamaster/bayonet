@@ -1,45 +1,50 @@
-SRC_DIR= src/
-OBJ_DIR= obj/
-LIB_DIR= lib/
+MYFLAGS = -MMD -g -Wall -pthread
 
-OBJ_EXT= .o
-CXXSRC_EXT= .cpp
-CSRC_EXT= .c
-LIB_EXT= .a
-H_EXT= .h
 INC+=-I./src/fsm
 
-OBJECTS = $(OBJ_DIR)socketactor_base$(OBJ_EXT)\
-		  $(OBJ_DIR)socketactor_data$(OBJ_EXT)\
-		  $(OBJ_DIR)socketactor_listen_tcp$(OBJ_EXT)\
-		  $(OBJ_DIR)socketactor_listen_udp$(OBJ_EXT)\
-		  $(OBJ_DIR)epoller$(OBJ_EXT)\
-		  $(OBJ_DIR)bayonet_frame$(OBJ_EXT)\
-		  $(OBJ_DIR)fl_log$(OBJ_EXT)\
-		  $(OBJ_DIR)net_handler$(OBJ_EXT)\
-		  $(OBJ_DIR)socketactor_passive$(OBJ_EXT)\
-		  $(OBJ_DIR)action_info$(OBJ_EXT)\
-		  $(OBJ_DIR)appactor_base$(OBJ_EXT)\
+TAR_DIR= lib/
+SRC_DIR= src/
+OBJ_DIR= obj/
+
+TARGET = $(TAR_DIR)libbayonet.a
+
+OBJS = \
+	   $(OBJ_DIR)socketactor_base.o\
+	   $(OBJ_DIR)socketactor_data.o\
+	   $(OBJ_DIR)socketactor_listen_tcp.o\
+	   $(OBJ_DIR)socketactor_listen_udp.o\
+	   $(OBJ_DIR)epoller.o\
+	   $(OBJ_DIR)bayonet_frame.o\
+	   $(OBJ_DIR)fl_log.o\
+	   $(OBJ_DIR)net_handler.o\
+	   $(OBJ_DIR)socketactor_passive.o\
+	   $(OBJ_DIR)action_info.o\
+	   $(OBJ_DIR)appactor_base.o\
 
 
-LIB_TARGET = $(LIB_DIR)libbayonet$(LIB_EXT)
+DEPENDS = $(patsubst %.o, %.d, $(OBJS))
 
-$(OBJ_DIR)%$(OBJ_EXT): $(SRC_DIR)%$(CXXSRC_EXT)
-	@echo
-	@echo "Compiling $< ==> $@..."
-	$(CXX) $(INC) $(C_FLAGS) -c $< -o $@
+.PHONY: all clean prepare CHECK
 
-$(OBJ_DIR)%$(OBJ_EXT): $(SRC_DIR)%$(CSRC_EXT)
-	@echo
-	@echo "Compiling $< ==> $@..."
-	$(CC)  $(INC) $(C_FLAGS) -c $< -o $@
+all: prepare $(TARGET)
+	@echo -e "\033[1;32m\nSuccess!\033[0m"
 
-all:$(LIB_TARGET)
+$(TARGET): $(OBJS)
+	@echo -e "\033[1;33m\nLinking $< ==> $@\033[0m"
+	$(AR) rc $(TARGET) $(OBJS)
 
-$(LIB_TARGET): $(OBJECTS)
-	@echo
-	$(AR) rc $(LIB_TARGET) $(OBJECTS)
-	@echo "ok"
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+	@echo -e "\033[1;33m\nCompiling $< ==> $@\033[0m"
+	$(CC) $(MYFLAGS) -c -o $@ $(INC) $<
+
+$(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
+	@echo -e "\033[1;33m\nCompiling $< ==> $@\033[0m"
+	$(CXX) $(MYFLAGS) -c -o $@ $(INC) $<
 
 clean:
-	rm -f $(LIB_TARGET) $(OBJECTS)
+	rm -f $(OBJS) $(TARGET) $(DEPENDS)
+
+prepare:
+	mkdir -p $(TAR_DIR) $(SRC_DIR) $(OBJ_DIR)
+
+-include $(DEPENDS)
