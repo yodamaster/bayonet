@@ -8,13 +8,15 @@ LIB+=-L../frame/lib -lbayonet
 
 TAR_DIR= ./
 SRC_DIR= ./
-OBJ_DIR= obj/
+OBJ_DIR= ./
 
 TARGET = $(TAR_DIR)svr
 
 OBJS = \
 	   $(OBJ_DIR)main.o \
 
+
+OBJ_SUB_DIRS=$(sort $(dir $(OBJS)))
 
 DEPENDS = $(patsubst %.o, %.d, $(OBJS))
 
@@ -39,6 +41,6 @@ clean:
 	rm -f $(OBJS) $(TARGET) $(DEPENDS)
 
 init:
-	mkdir -p $(TAR_DIR) $(SRC_DIR) $(OBJ_DIR)
+	mkdir -p $(sort ./ $(TAR_DIR) $(SRC_DIR) $(OBJ_DIR) $(OBJ_SUB_DIRS))
 
 -include $(DEPENDS)
