@@ -26,7 +26,7 @@ OBJ_SUB_DIRS = $(sort $(dir $(OBJS)))
 
 DEPENDS = $(patsubst %.o, %.d, $(OBJS))
 
-.PHONY: all clean init CHECK
+.PHONY: all clean init
 
 all: init $(TARGET)
 	@echo -e "\033[1;32m\nSuccess!\033[0m"
