@@ -22,6 +22,8 @@ OBJS = \
 	   $(OBJ_DIR)appactor_base.o\
 
 
+OBJ_SUB_DIRS=$(sort $(dir $(OBJS)))
+
 DEPENDS = $(patsubst %.o, %.d, $(OBJS))
 
 .PHONY: all clean init CHECK
@@ -45,6 +47,6 @@ clean:
 	rm -f $(OBJS) $(TARGET) $(DEPENDS)
 
 init:
-	mkdir -p $(TAR_DIR) $(SRC_DIR) $(OBJ_DIR)
+	mkdir -p $(sort ./ $(TAR_DIR) $(SRC_DIR) $(OBJ_DIR) $(OBJ_SUB_DIRS))
 
 -include $(DEPENDS)
