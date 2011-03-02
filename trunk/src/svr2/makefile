@@ -3,12 +3,12 @@ CXX = g++
 
 MYFLAGS = -MMD -g -Wall -pthread
 
-INC+=-I../frame/src -I../frame/src/fsm
-LIB+=-L../frame/lib -lbayonet
+INC += -I../frame/src -I../frame/src/fsm
+LIB += -L../frame/lib -lbayonet
 
-TAR_DIR= ./
-SRC_DIR= ./
-OBJ_DIR= ./
+TAR_DIR = ./
+SRC_DIR = ./
+OBJ_DIR = ./
 
 TARGET = $(TAR_DIR)svr2
 
@@ -16,7 +16,7 @@ OBJS = \
 	   $(OBJ_DIR)main.o \
 
 
-OBJ_SUB_DIRS=$(sort $(dir $(OBJS)))
+OBJ_SUB_DIRS = $(sort $(dir $(OBJS)))
 
 DEPENDS = $(patsubst %.o, %.d, $(OBJS))
 

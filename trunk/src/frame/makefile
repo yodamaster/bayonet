@@ -1,10 +1,10 @@
 MYFLAGS = -MMD -g -Wall -pthread
 
-INC+=-I./src/fsm
+INC += -I./src/fsm
 
-TAR_DIR= lib/
-SRC_DIR= src/
-OBJ_DIR= obj/
+TAR_DIR = lib/
+SRC_DIR = src/
+OBJ_DIR = obj/
 
 TARGET = $(TAR_DIR)libbayonet.a
 
@@ -22,7 +22,7 @@ OBJS = \
 	   $(OBJ_DIR)appactor_base.o\
 
 
-OBJ_SUB_DIRS=$(sort $(dir $(OBJS)))
+OBJ_SUB_DIRS = $(sort $(dir $(OBJS)))
 
 DEPENDS = $(patsubst %.o, %.d, $(OBJS))
 
