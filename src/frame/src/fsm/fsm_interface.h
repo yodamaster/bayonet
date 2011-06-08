@@ -12,6 +12,7 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include "object_interface.h"
 using namespace std;
 
 enum EnumFsmOpType
@@ -24,13 +25,13 @@ enum EnumFsmOpType
 class IFsm;
 class IActor;
 
-class IEvent
+class IEvent : public IObject
 {
 public:
     virtual ~IEvent () {}
 };
 
-class IAction
+class IAction : public IObject
 {
 public:
     virtual ~IAction () {}
@@ -54,24 +55,9 @@ public:
             IActor* pAppActor,
             const char *buf, 
             int len)=0;
-    /**
-     * @brief   获取这个Fsm的名字，可以用来做统计使用
-     *
-     * @return  名字
-     */
-    virtual const string Name()
-    {
-        const char * name = typeid(*this).name();
-
-        char szTmp[strlen(name)+1];
-
-        sscanf(name, "%*d%s", szTmp);
-
-        return szTmp;
-    }
 };
 
-class IFrame
+class IFrame : public IObject
 {
 public:
     virtual ~IFrame () {}
@@ -153,7 +139,7 @@ public:
     virtual void ChangeFsmStat(const string& fsmName, EnumFsmOpType fsmOpType)=0;
 };
 
-class IActor
+class IActor : public IObject
 {
 public:
     virtual ~IActor() {}
@@ -227,26 +213,10 @@ public:
      * @return  0
      */
     virtual int HandleEvent(IEvent* pEvent)=0;
-
-    /**
-     * @brief   获取这个Fsm的名字，可以用来做统计使用
-     *
-     * @return  名字
-     */
-    virtual const string Name()
-    {
-        const char * name = typeid(*this).name();
-
-        char szTmp[strlen(name)+1];
-
-        sscanf(name, "%*d%s", szTmp);
-
-        return szTmp;
-    }
 };
 
 
-class IFsm
+class IFsm : public IObject
 {
 public:
     virtual ~IFsm() {}
@@ -290,22 +260,6 @@ public:
      *          else        fail
      */
     virtual int Exit(IActor* pActor)=0;
-
-    /**
-     * @brief   获取这个Fsm的名字，可以用来做统计使用
-     *
-     * @return  名字
-     */
-    virtual const string Name()
-    {
-        const char * name = typeid(*this).name();
-
-        char szTmp[strlen(name)+1];
-
-        sscanf(name, "%*d%s", szTmp);
-
-        return szTmp;
-    }
 };
 
 #endif
