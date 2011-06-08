@@ -26,11 +26,11 @@ using namespace std;
     for(typeof((container).begin()) it = (container).begin();it!=(container).end();++it)
 #endif
 
-#ifndef islast
-#define islast(container,it) \
+#ifndef isnotlast
+#define isnotlast(container,it) \
     typeof(it) tmp = it; \
     tmp++; \
-    if (tmp == container.end())
+    if (tmp != container.end())
 #endif
 
 class CFrameBase : public IFrame
@@ -137,7 +137,7 @@ public:
                 foreach(it_b->second, it_c)
                 {
                     ss << "\t\t\t\"" << it_c->first << "\":" << it_c->second;
-                    islast(it_b->second, it_c)
+                    isnotlast(it_b->second, it_c)
                     {
                         ss << ",";
                     }
@@ -145,7 +145,7 @@ public:
                 }
                 ss << "\t\t}";
 
-                islast(it_a->second, it_b)
+                isnotlast(it_a->second, it_b)
                 {
                     ss << ",";
                 }
@@ -153,7 +153,7 @@ public:
             }
             ss << "\t}";
 
-            islast(m_mapStat, it_a)
+            isnotlast(m_mapStat, it_a)
             {
                 ss << ",";
             }
