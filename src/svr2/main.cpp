@@ -88,6 +88,10 @@ public:
     {
         return 0;
     }
+    virtual const string FsmName()
+    {
+        return "CAppFsmLogic1";
+    }
 };
 int main(int argc, const char *argv[])
 {

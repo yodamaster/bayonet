@@ -233,11 +233,71 @@ public:
         m_pFrame = NULL;
     }
     virtual ~CFsmBase () {}
-    virtual int AttachFrame(IFrame* pFrame)
+    int AttachFrame(IFrame* pFrame)
     {
         m_pFrame = pFrame;
         return 0;
     }
+
+    int Entry(IActor* pActor)
+    {
+        if (m_pFrame)
+        {
+            m_pFrame->ChangeFsmStat(FsmName(), EnumFsmOpTypeEntry);
+        }
+        return HandleEntry(pActor);
+    }
+
+    int Process(IActor* pActor)
+    {
+        if (m_pFrame)
+        {
+            m_pFrame->ChangeFsmStat(FsmName(), EnumFsmOpTypeProcess);
+        }
+        return HandleProcess(pActor);
+    }
+
+    int Exit(IActor* pActor)
+    {
+        if (m_pFrame)
+        {
+            m_pFrame->ChangeFsmStat(FsmName(), EnumFsmOpTypeExit);
+        }
+        return HandleExit(pActor);
+    }
+
+    /**
+     * @brief   在进入这个状态的时候，pActor需要做的事情
+     *
+     * @param   pActor
+     *
+     * @return  0           succ
+     *          else        fail
+     */
+    virtual int HandleEntry(IActor* pActor)=0;
+
+    /**
+     * @brief   执行这个状态该做的事情
+     *
+     * @param   pActor
+     *
+     * @return  应该进入的另一个状态
+     *          0           结束本次Process执行，不进入其他状态
+     *          <0          结束整个请求（pActor需要被后续删除）
+     *          else        其他状态（可以返回自己，但是会造成循环，有点危险）
+     *          
+     */
+    virtual int HandleProcess(IActor* pActor)=0;
+
+    /**
+     * @brief   退出这个状态时需要做的事情
+     *
+     * @param   pActor
+     *
+     * @return  0           succ
+     *          else        fail
+     */
+    virtual int HandleExit(IActor* pActor)=0;
 
 private:
     IFrame* m_pFrame;

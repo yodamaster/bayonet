@@ -15,7 +15,7 @@ class CAppFsmBase : public CFsmBase
 public:
     CAppFsmBase () {}
     virtual ~CAppFsmBase () {}
-    virtual int Entry(IActor* obj)
+    virtual int HandleEntry(IActor* obj)
     {
         CAppActorBase * pAppActor = (CAppActorBase*)obj;
         int ret = HandleEntry(pAppActor->GetActionInfoSet(), pAppActor);
@@ -30,7 +30,7 @@ public:
         }
         return 0;
     }
-    virtual int Process(IActor* obj)
+    virtual int HandleProcess(IActor* obj)
     {
         CAppActorBase * pAppActor = (CAppActorBase*)obj;
         if (!pAppActor->GetActionInfoSet()->IsDealOver())
@@ -40,7 +40,7 @@ public:
         }
         return HandleProcess(pAppActor->GetActionInfoSet(), pAppActor);
     }
-    virtual int Exit(IActor* obj)
+    virtual int HandleExit(IActor* obj)
     {
         CAppActorBase * pAppActor = (CAppActorBase*)obj;
         int ret = HandleExit(pAppActor->GetActionInfoSet(), pAppActor);
@@ -97,11 +97,19 @@ class CAppFsmRsp : public CAppFsmBase
         pAppActor->Send2Client();
         return 0;
     }
+    virtual const string FsmName()
+    {
+        return "CAppFsmRsp";
+    }
 };
 class CAppFsmFini : public CAppFsmBase
 {
     virtual int HandleProcess(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
     {
         return pAppActor->OnFini();
+    }
+    virtual const string FsmName()
+    {
+        return "CAppFsmFini";
     }
 };

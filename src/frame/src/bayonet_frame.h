@@ -78,6 +78,11 @@ public:
     }
     virtual ~CBayonetFrame(){}
 
+    virtual void ChangeFsmStat(const string& fsmName, EnumFsmOpType fsmOpType)
+    {
+        printf("%s,%d\n", fsmName.c_str(),fsmOpType);
+    }
+
     int Init(StFrameParam param)
     {
         m_StFrameParam = param;
