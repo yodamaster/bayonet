@@ -26,6 +26,13 @@ using namespace std;
     for(typeof((container).begin()) it = (container).begin();it!=(container).end();++it)
 #endif
 
+#ifndef islast
+#define islast(container,it) \
+    typeof(it) tmp = it; \
+    tmp++; \
+    if (tmp == container.end())
+#endif
+
 class CFrameBase : public IFrame
 {
 public:
@@ -120,18 +127,39 @@ public:
     virtual string GetStat()
     {
         stringstream ss;
+        ss << "{" << endl;
         foreach(m_mapStat, it_a)
         {
-            ss << it_a->first << " :" << endl;
+            ss << "\t\"" << it_a->first << "\":{" << endl;
             foreach(it_a->second, it_b)
             {
-                ss << "\t" << it_b->first << " :" << endl;
+                ss << "\t\t\"" << it_b->first << "\":{" << endl;
                 foreach(it_b->second, it_c)
                 {
-                    ss << "\t\t" << it_c->first << " : " << it_c->second << endl;
+                    ss << "\t\t\t\"" << it_c->first << "\":" << it_c->second;
+                    islast(it_b->second, it_c)
+                    {
+                        ss << ",";
+                    }
+                    ss << endl;
                 }
+                ss << "\t\t}";
+
+                islast(it_a->second, it_b)
+                {
+                    ss << ",";
+                }
+                ss << endl;
             }
+            ss << "\t}";
+
+            islast(m_mapStat, it_a)
+            {
+                ss << ",";
+            }
+            ss << endl;
         }
+        ss << "}" << endl;
         return ss.str();
     }
 
@@ -162,57 +190,57 @@ protected:
 
     //统计
     /*
-    {
-        'ALL':{
-            'SELF':{
-                'ALIVE':count,
-                'TOTAL':count,
-            },
-            'fsmname1':{
-                'ALIVE':count,
-                'TOTAL':count,
-            },
-            'fsmname2':{
-                'ALIVE':count,
-                'TOTAL':count,
-            }
-        },
-        'GC':{
-            'SELF':{
-                'ALIVE':count,
-                'TOTAL':count,
-            },
-        },
-        'actorname':{
-            'SELF':{
-                'ALIVE':count,
-                'TOTAL':count,
-            },
-            'fsmname1':{
-                'ALIVE':count,
-                'TOTAL':count,
-            },
-            'fsmname2':{
-                'ALIVE':count,
-                'TOTAL':count,
-            }
-        },
-        'actorname2':{
-            'SELF':{
-                'ALIVE':count,
-                'TOTAL':count,
-            },
-            'fsmname1':{
-                'ALIVE':count,
-                'TOTAL':count,
-            },
-            'fsmname2':{
-                'ALIVE':count,
-                'TOTAL':count,
-            }
-        },
-    }
-    */
+       {
+       'ALL':{
+       'SELF':{
+       'ALIVE':count,
+       'TOTAL':count,
+       },
+       'fsmname1':{
+       'ALIVE':count,
+       'TOTAL':count,
+       },
+       'fsmname2':{
+       'ALIVE':count,
+       'TOTAL':count,
+       }
+       },
+       'GC':{
+       'SELF':{
+       'ALIVE':count,
+       'TOTAL':count,
+       },
+       },
+       'actorname':{
+       'SELF':{
+       'ALIVE':count,
+       'TOTAL':count,
+       },
+       'fsmname1':{
+       'ALIVE':count,
+       'TOTAL':count,
+       },
+       'fsmname2':{
+       'ALIVE':count,
+       'TOTAL':count,
+       }
+       },
+       'actorname2':{
+       'SELF':{
+       'ALIVE':count,
+       'TOTAL':count,
+       },
+       'fsmname1':{
+       'ALIVE':count,
+       'TOTAL':count,
+       },
+       'fsmname2':{
+       'ALIVE':count,
+       'TOTAL':count,
+       }
+       },
+       }
+       */
     map<string, map<string, map<string, uint32_t> > > m_mapStat;
 };
 
