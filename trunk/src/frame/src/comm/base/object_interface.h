@@ -15,6 +15,7 @@
 =============================================================================*/
 #ifndef __OBJECT_INTERFACE_H__
 #define __OBJECT_INTERFACE_H__
+#include <typeinfo>
 #include <iostream>
 #include <string>
 using namespace std;
