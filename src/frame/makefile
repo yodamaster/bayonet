@@ -1,26 +1,22 @@
-MYFLAGS = -MMD -g -Wall -pthread
+#include makefile.inc
 
-INC += -I./src/fsm
+MYFLAGS = -MMD -g -Wall -pthread
 
 TAR_DIR = lib/
 SRC_DIR = src/
 OBJ_DIR = obj/
+RELEASE_INC_DIR = ../../release/include/
+RELEASE_LIB_DIR = ../../release/lib/
 
 TARGET = $(TAR_DIR)libbayonet.a
 
-OBJS = \
-	   $(OBJ_DIR)socketactor_base.o\
-	   $(OBJ_DIR)socketactor_data.o\
-	   $(OBJ_DIR)socketactor_listen_tcp.o\
-	   $(OBJ_DIR)socketactor_listen_udp.o\
-	   $(OBJ_DIR)epoller.o\
-	   $(OBJ_DIR)bayonet_frame.o\
-	   $(OBJ_DIR)fl_log.o\
-	   $(OBJ_DIR)net_handler.o\
-	   $(OBJ_DIR)socketactor_passive.o\
-	   $(OBJ_DIR)action_info.o\
-	   $(OBJ_DIR)appactor_base.o\
+INC_DIRS = $(shell find ./src/ -type d)
 
+INC = $(patsubst %, -I%, $(INC_DIRS))
+
+SOURCES = $(shell find ./src/ -name *.cpp)
+
+OBJS = $(patsubst ./src/%.cpp, $(OBJ_DIR)%.o, $(SOURCES))
 
 OBJ_SUB_DIRS = $(sort $(dir $(OBJS)))
 
@@ -29,6 +25,8 @@ DEPENDS = $(patsubst %.o, %.d, $(OBJS))
 .PHONY: all clean init
 
 all: init $(TARGET)
+	find . -name "*.h" | xargs -If cp f $(RELEASE_INC_DIR)
+	cp lib/libbayonet.a $(RELEASE_LIB_DIR)
 	@echo -e "\033[1;32m\nSuccess!\033[0m"
 
 $(TARGET): $(OBJS)
@@ -47,6 +45,6 @@ clean:
 	rm -f $(OBJS) $(TARGET) $(DEPENDS)
 
 init:
-	mkdir -p $(sort ./ $(TAR_DIR) $(SRC_DIR) $(OBJ_DIR) $(OBJ_SUB_DIRS))
+	mkdir -p $(sort ./ $(TAR_DIR) $(SRC_DIR) $(OBJ_DIR) $(OBJ_SUB_DIRS) $(RELEASE_INC_DIR) $(RELEASE_LIB_DIR))
 
 -include $(DEPENDS)
