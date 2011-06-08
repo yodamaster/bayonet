@@ -14,6 +14,13 @@
 #include <string>
 using namespace std;
 
+enum EnumFsmOpType
+{
+    EnumFsmOpTypeEntry = 0,
+    EnumFsmOpTypeProcess = 1,
+    EnumFsmOpTypeExit = 2,
+};
+
 class IFsm;
 class IActor;
 
@@ -121,6 +128,14 @@ public:
      * @return  0
      */
     virtual int RegFsm(int state, IFsm* fsm)=0;
+
+    /**
+     * @brief   改变某个fsm的统计
+     *
+     * @param   fsmName         fsm的名字
+     * @param   fsmOpType       类型
+     */
+    virtual void ChangeFsmStat(const string& fsmName, EnumFsmOpType fsmOpType)=0;
 };
 
 class IActor
@@ -244,6 +259,13 @@ public:
      *          else        fail
      */
     virtual int Exit(IActor* pActor)=0;
+
+    /**
+     * @brief   获取这个Fsm的名字，可以用来做统计使用
+     *
+     * @return  名字
+     */
+    virtual const string FsmName()=0;
 };
 
 #endif
