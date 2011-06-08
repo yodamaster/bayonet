@@ -1,5 +1,3 @@
-#include makefile.inc
-
 MYFLAGS = -MMD -g -Wall -pthread
 
 TAR_DIR = lib/
@@ -10,7 +8,7 @@ RELEASE_LIB_DIR = ../../release/lib/
 
 TARGET = $(TAR_DIR)libbayonet.a
 
-INC_DIRS = $(shell find ./src/ -type d)
+INC_DIRS = $(shell find ./src/ -type d | grep -v ".svn")
 
 INC = $(patsubst %, -I%, $(INC_DIRS))
 
