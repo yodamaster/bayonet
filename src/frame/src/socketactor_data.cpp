@@ -120,7 +120,7 @@ int CSocketActorData::OnRecv()
         }
         else
         {
-            while ((ret + m_recvedLen) > m_strRecvBuf.size())
+            while ((ret + m_recvedLen) > (int)m_strRecvBuf.size())
             {
                 m_strRecvBuf.resize(m_recvedLen*2 + ret);
             }
@@ -164,7 +164,7 @@ int CSocketActorData::OnSend()
             error_log("HandleEncodeSendBuf error :%d",ret);
             return SOCKET_FSM_CLOSING;
         }
-        if (m_strSendBuf.size() < m_sendBufLen)
+        if ((int)m_strSendBuf.size() < m_sendBufLen)
         {
             error_log("HandleEncodeSendBuf len error:%d/%d",m_strSendBuf.size(),m_sendBufLen);
             return SOCKET_FSM_CLOSING;
@@ -221,6 +221,8 @@ int CSocketActorData::Clear()
 
     m_sendFlag = 0;
     m_recvFlag = 0;
+
+    return 0;
 }
 int CSocketActorData::HandleEncodeSendBuf(
         string & strSendBuf,

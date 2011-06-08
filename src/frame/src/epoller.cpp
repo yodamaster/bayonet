@@ -62,7 +62,6 @@ int CEPoller::LoopForEvent()
     int nfds;
     CSocketActorBase*  pSocketActor = NULL;
     CEpollEvent t_event;
-    unsigned ev;
     struct timeval prev_tm;
     struct timeval next_tm;
     long    use_time_usec;
@@ -91,7 +90,7 @@ int CEPoller::LoopForEvent()
                 continue;
             }
             t_event.evt = m_events[i].events;
-            int ret = pSocketActor->HandleEvent(&t_event);
+            pSocketActor->HandleEvent(&t_event);
         }
 
         gettimeofday(&next_tm,NULL);
