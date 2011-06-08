@@ -16,6 +16,7 @@
 #include <set>
 #include <map>
 #include <list>
+#include <sstream>
 
 #include "fsm_interface.h"
 using namespace std;
@@ -116,20 +117,22 @@ public:
             m_mapStat[pActor->Name()][fsm->Name()]["ALIVE"]--;
         }
     }
-    virtual void ShowStat()
+    virtual string GetStat()
     {
+        stringstream ss;
         foreach(m_mapStat, it_a)
         {
-            cout << it_a->first << " :" << endl;
+            ss << it_a->first << " :" << endl;
             foreach(it_a->second, it_b)
             {
-                cout << "\t" << it_b->first << " :" << endl;
+                ss << "\t" << it_b->first << " :" << endl;
                 foreach(it_b->second, it_c)
                 {
-                    cout << "\t\t" << it_c->first << " : " << it_c->second << endl;
+                    ss << "\t\t" << it_c->first << " : " << it_c->second << endl;
                 }
             }
         }
+        return ss.str();
     }
 
 protected:
