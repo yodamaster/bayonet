@@ -97,7 +97,7 @@ class CAppFsmRsp : public CAppFsmBase
         pAppActor->Send2Client();
         return 0;
     }
-    virtual const string FsmName()
+    virtual const string Name()
     {
         return "CAppFsmRsp";
     }
@@ -108,7 +108,7 @@ class CAppFsmFini : public CAppFsmBase
     {
         return pAppActor->OnFini();
     }
-    virtual const string FsmName()
+    virtual const string Name()
     {
         return "CAppFsmFini";
     }

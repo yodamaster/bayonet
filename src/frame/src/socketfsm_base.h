@@ -46,7 +46,7 @@ public:
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
         return pSocketActor->OnInit();
     }
-    virtual const string FsmName()
+    virtual const string Name()
     {
         return "CSocketFsmInit";
     }
@@ -62,7 +62,7 @@ public:
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
         return pSocketActor->OnInitOver();
     }
-    virtual const string FsmName()
+    virtual const string Name()
     {
         return "CSocketFsmInitOver";
     }
@@ -78,7 +78,7 @@ public:
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
         return pSocketActor->OnFini();
     }
-    virtual const string FsmName()
+    virtual const string Name()
     {
         return "CSocketFsmFini";
     }
@@ -94,7 +94,7 @@ public:
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
         return pSocketActor->OnFiniOver();
     }
-    virtual const string FsmName()
+    virtual const string Name()
     {
         return "CSocketFsmFiniOver";
     }
@@ -112,7 +112,7 @@ public:
         pSocketActor->SetEvent(EPOLLOUT|EPOLLHUP|EPOLLERR);
         return 0;
     }
-    virtual const string FsmName()
+    virtual const string Name()
     {
         return "CSocketFsmWaitSend";
     }
@@ -128,7 +128,7 @@ public:
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
         return pSocketActor->OnSend();
     }
-    virtual const string FsmName()
+    virtual const string Name()
     {
         return "CSocketFsmSending";
     }
@@ -144,7 +144,7 @@ public:
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
         return pSocketActor->OnSendOver();
     }
-    virtual const string FsmName()
+    virtual const string Name()
     {
         return "CSocketFsmSendOver";
     }
@@ -163,7 +163,7 @@ public:
         pSocketActor->SetEvent(EPOLLIN|EPOLLHUP|EPOLLERR);
         return 0;
     }
-    virtual const string FsmName()
+    virtual const string Name()
     {
         return "CSocketFsmWaitRecv";
     }
@@ -179,7 +179,7 @@ public:
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
         return pSocketActor->OnRecv();
     }
-    virtual const string FsmName()
+    virtual const string Name()
     {
         return "CSocketFsmRecving";
     }
@@ -195,7 +195,7 @@ public:
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
         return pSocketActor->OnRecvOver();
     }
-    virtual const string FsmName()
+    virtual const string Name()
     {
         return "CSocketFsmRecvOver";
     }
@@ -214,7 +214,7 @@ public:
         pSocketActor->SetEvent(EPOLLHUP|EPOLLERR);
         return 0;
     }
-    virtual const string FsmName()
+    virtual const string Name()
     {
         return "CSocketFsmWaitClose";
     }
@@ -230,7 +230,7 @@ public:
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
         return pSocketActor->OnClose();
     }
-    virtual const string FsmName()
+    virtual const string Name()
     {
         return "CSocketFsmClosing";
     }
@@ -246,7 +246,7 @@ public:
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
         return pSocketActor->OnCloseOver();
     }
-    virtual const string FsmName()
+    virtual const string Name()
     {
         return "CSocketFsmCloseOver";
     }
@@ -263,7 +263,7 @@ public:
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
         return pSocketActor->OnError();
     }
-    virtual const string FsmName()
+    virtual const string Name()
     {
         return "CSocketFsmError";
     }
@@ -280,7 +280,7 @@ public:
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
         return pSocketActor->OnTimeout();
     }
-    virtual const string FsmName()
+    virtual const string Name()
     {
         return "CSocketFsmTimeout";
     }
