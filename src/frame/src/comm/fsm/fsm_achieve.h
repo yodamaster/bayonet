@@ -19,6 +19,12 @@
 
 #include "fsm_interface.h"
 using namespace std;
+
+#ifndef foreach
+#define foreach(container,it) \
+    for(typeof((container).begin()) it = (container).begin();it!=(container).end();++it)
+#endif
+
 class CFrameBase : public IFrame
 {
 public:
@@ -32,12 +38,11 @@ public:
     {
         m_listActors.push_front(pActor);
         m_allActorCount++;
-        return 0;
-    }
-    int DelActor(IActor* pActor)
-    {
-        m_listActors.remove(pActor);
-        m_allActorCount--;
+        m_mapStat["ALL"]["SELF"]["ALIVE"]++;
+        m_mapStat["ALL"]["SELF"]["TOTAL"]++;
+
+        m_mapStat[pActor->Name()]["SELF"]["ALIVE"]++;
+        m_mapStat[pActor->Name()]["SELF"]["TOTAL"]++;
         return 0;
     }
     int GetActorCount()
@@ -47,6 +52,7 @@ public:
     int AddNeedGCCount()
     {
         m_needGCCount++;
+        m_mapStat["GC"]["SELF"]["ALIVE"]++;
         return 0;
     }
     int SubNeedGCCount()
@@ -56,6 +62,8 @@ public:
         {
             m_needGCCount = 0;
         }
+        m_mapStat["GC"]["SELF"]["ALIVE"]--;
+        m_mapStat["GC"]["SELF"]["TOTAL"]--;
         return 0;
     }
     int GetNeedGCCount()
@@ -71,9 +79,7 @@ public:
 
             if ((*tempIt)->GetGCMark())
             {
-                delete (*tempIt);
-                m_listActors.erase(tempIt);
-                m_allActorCount--;
+                eraseActor(tempIt);
             }
         }
     }
@@ -91,13 +97,120 @@ public:
         m_mapFsmMgr[state] = fsm;
         return 0;
     }
+    virtual void ChangeFsmStat(IFsm *fsm, IActor* pActor, const string &strFsmFunc)
+    {
+        if (fsm == NULL || pActor == NULL)
+        {
+            return;
+        }
+        if (strFsmFunc == "Entry")
+        {
+            m_mapStat["ALL"][fsm->Name()]["TOTAL"]++;
+            m_mapStat["ALL"][fsm->Name()]["ALIVE"]++;
+            m_mapStat[pActor->Name()][fsm->Name()]["TOTAL"]++;
+            m_mapStat[pActor->Name()][fsm->Name()]["ALIVE"]++;
+        }
+        else if (strFsmFunc == "Exit")
+        {
+            m_mapStat["ALL"][fsm->Name()]["ALIVE"]--;
+            m_mapStat[pActor->Name()][fsm->Name()]["ALIVE"]--;
+        }
+    }
+    virtual void ShowStat()
+    {
+        foreach(m_mapStat, it_a)
+        {
+            cout << it_a->first << " :" << endl;
+            foreach(it_a->second, it_b)
+            {
+                cout << "\t" << it_b->first << " :" << endl;
+                foreach(it_b->second, it_c)
+                {
+                    cout << "\t\t" << it_c->first << " : " << it_c->second << endl;
+                }
+            }
+        }
+    }
 
+protected:
+    /**
+     * @brief   删除一个actor的指针
+     *
+     * @param   it
+     *
+     * @return  
+     */
+    int eraseActor(list<IActor*>::iterator it)
+    {
+        delete (*it);
+        m_listActors.erase(it);
+        m_allActorCount--;
+        m_mapStat["ALL"]["SELF"]["ALIVE"]--;
+
+        m_mapStat[(*it)->Name()]["SELF"]["ALIVE"]--;
+        return 0;
+    }
 protected:
     list<IActor*> m_listActors;
 
     int m_needGCCount;
     int m_allActorCount;
     map<int, IFsm*> m_mapFsmMgr;
+
+    //统计
+    /*
+    {
+        'ALL':{
+            'SELF':{
+                'ALIVE':count,
+                'TOTAL':count,
+            },
+            'fsmname1':{
+                'ALIVE':count,
+                'TOTAL':count,
+            },
+            'fsmname2':{
+                'ALIVE':count,
+                'TOTAL':count,
+            }
+        },
+        'GC':{
+            'SELF':{
+                'ALIVE':count,
+                'TOTAL':count,
+            },
+        },
+        'actorname':{
+            'SELF':{
+                'ALIVE':count,
+                'TOTAL':count,
+            },
+            'fsmname1':{
+                'ALIVE':count,
+                'TOTAL':count,
+            },
+            'fsmname2':{
+                'ALIVE':count,
+                'TOTAL':count,
+            }
+        },
+        'actorname2':{
+            'SELF':{
+                'ALIVE':count,
+                'TOTAL':count,
+            },
+            'fsmname1':{
+                'ALIVE':count,
+                'TOTAL':count,
+            },
+            'fsmname2':{
+                'ALIVE':count,
+                'TOTAL':count,
+            }
+        },
+    }
+    */
+    map<string, map<string, map<string, uint32_t> > > m_mapStat;
 };
 
 class CActorBase : public IActor
@@ -243,7 +356,7 @@ public:
     {
         if (m_pFrame)
         {
-            m_pFrame->ChangeFsmStat(Name(), EnumFsmOpTypeEntry);
+            m_pFrame->ChangeFsmStat(this, pActor, __func__);
         }
         return HandleEntry(pActor);
     }
@@ -252,7 +365,7 @@ public:
     {
         if (m_pFrame)
         {
-            m_pFrame->ChangeFsmStat(Name(), EnumFsmOpTypeProcess);
+            m_pFrame->ChangeFsmStat(this, pActor, __func__);
         }
         return HandleProcess(pActor);
     }
@@ -261,7 +374,7 @@ public:
     {
         if (m_pFrame)
         {
-            m_pFrame->ChangeFsmStat(Name(), EnumFsmOpTypeExit);
+            m_pFrame->ChangeFsmStat(this, pActor, __func__);
         }
         return HandleExit(pActor);
     }
