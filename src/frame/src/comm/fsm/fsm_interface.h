@@ -118,11 +118,11 @@ public:
     virtual void ChangeFsmStat(IFsm *fsm, IActor* pActor, const string &strFsmFunc)=0;
 
     /**
-     * @brief   展示统计
+     * @brief   获取统计
      *
      * @param   
      */
-    virtual void ShowStat()=0;
+    virtual string GetStat()=0;
 
     /**
      * @brief   获取状态机
