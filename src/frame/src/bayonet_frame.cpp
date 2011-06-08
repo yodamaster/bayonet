@@ -18,18 +18,18 @@ int CBayonetFrame::Process()
     {
         case PROTO_TYPE_TCP:
             pSocketActorListenTcp = new CSocketActorListenTcp();
+            pSocketActorListenTcp->AttachFrame(this);
             pSocketActorListenTcp->Init(m_StFrameParam.ip,m_StFrameParam.port,-1,m_StFrameParam.protoType);
             pSocketActorListenTcp->SetBackLog(m_StFrameParam.backlog);
             pSocketActorListenTcp->SetKeepcnt(m_StFrameParam.bKeepcnt);
             pSocketActorListenTcp->SetIActionPtr(m_StFrameParam.pAction);
-            pSocketActorListenTcp->AttachFrame(this);
             pSocketActorListenTcp->ChangeState(SOCKET_FSM_INIT);
             break;
         case PROTO_TYPE_UDP:
             pSocketActorListenUdp = new CSocketActorListenUdp();
+            pSocketActorListenUdp->AttachFrame(this);
             pSocketActorListenUdp->Init(m_StFrameParam.ip,m_StFrameParam.port,-1,m_StFrameParam.protoType);
             pSocketActorListenUdp->SetIActionPtr(m_StFrameParam.pAction);
-            pSocketActorListenUdp->AttachFrame(this);
             pSocketActorListenUdp->ChangeState(SOCKET_FSM_INIT);
             break;
         default:
