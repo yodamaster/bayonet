@@ -98,6 +98,7 @@ int CEPoller::LoopForEvent()
             (next_tm.tv_usec - prev_tm.tv_usec);
         if ( use_time_usec > (m_checkTimeMs*1000))
         {
+            m_pFrame->ShowStat();
             for(map<int, CSocketActorBase*>::iterator it = m_mapSocketActor.begin(); it != m_mapSocketActor.end();)
             {
                 //这样写，就可以自由的删掉自己了

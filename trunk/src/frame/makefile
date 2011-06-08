@@ -12,9 +12,9 @@ INC_DIRS = $(shell find ./src/ -type d | grep -v ".svn")
 
 INC = $(patsubst %, -I%, $(INC_DIRS))
 
-SOURCES = $(shell find ./src/ -name *.cpp)
+SOURCES = $(shell find src/ -name *.cpp)
 
-OBJS = $(patsubst ./src/%.cpp, $(OBJ_DIR)%.o, $(SOURCES))
+OBJS = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SOURCES))
 
 OBJ_SUB_DIRS = $(sort $(dir $(OBJS)))
 

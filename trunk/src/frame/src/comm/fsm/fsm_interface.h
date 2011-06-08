@@ -15,13 +15,6 @@
 #include "object_interface.h"
 using namespace std;
 
-enum EnumFsmOpType
-{
-    EnumFsmOpTypeEntry = 0,
-    EnumFsmOpTypeProcess = 1,
-    EnumFsmOpTypeExit = 2,
-};
-
 class IFsm;
 class IActor;
 
@@ -72,15 +65,6 @@ public:
     virtual int AddActor(IActor* pActor)=0;
 
     /**
-     * @brief   删除一个actor，一般不需要调用，Frame会统一用GC来调用析构
-     *
-     * @param   pActor
-     *
-     * @return  0
-     */
-    virtual int DelActor(IActor* pActor)=0;
-
-    /**
      * @brief   获取所有actor的个数,不用list的size是因为太慢了
      *
      * @return  actor count
@@ -114,13 +98,6 @@ public:
     virtual void GCActors()=0;
 
     /**
-     * @brief   获取状态机
-     *
-     * @return  
-     */
-    virtual map<int, IFsm*>* GetFsmMgr()=0;
-
-    /**
      * @brief   设置Fsm映射
      *
      * @param   state
@@ -131,12 +108,28 @@ public:
     virtual int RegFsm(int state, IFsm* fsm)=0;
 
     /**
+     * @brief   
      * @brief   改变某个fsm的统计
      *
-     * @param   fsmName         fsm的名字
-     * @param   fsmOpType       类型
+     * @param   fsm
+     * @param   pActor
+     * @param   strFsmFunc
      */
-    virtual void ChangeFsmStat(const string& fsmName, EnumFsmOpType fsmOpType)=0;
+    virtual void ChangeFsmStat(IFsm *fsm, IActor* pActor, const string &strFsmFunc)=0;
+
+    /**
+     * @brief   展示统计
+     *
+     * @param   
+     */
+    virtual void ShowStat()=0;
+
+    /**
+     * @brief   获取状态机
+     *
+     * @return  
+     */
+    virtual map<int, IFsm*>* GetFsmMgr()=0;
 };
 
 class IActor : public IObject
