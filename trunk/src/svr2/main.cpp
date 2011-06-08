@@ -88,7 +88,7 @@ public:
     {
         return 0;
     }
-    virtual const string FsmName()
+    virtual const string Name()
     {
         return "CAppFsmLogic1";
     }

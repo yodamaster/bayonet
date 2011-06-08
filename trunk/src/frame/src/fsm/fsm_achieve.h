@@ -243,7 +243,7 @@ public:
     {
         if (m_pFrame)
         {
-            m_pFrame->ChangeFsmStat(FsmName(), EnumFsmOpTypeEntry);
+            m_pFrame->ChangeFsmStat(Name(), EnumFsmOpTypeEntry);
         }
         return HandleEntry(pActor);
     }
@@ -252,7 +252,7 @@ public:
     {
         if (m_pFrame)
         {
-            m_pFrame->ChangeFsmStat(FsmName(), EnumFsmOpTypeProcess);
+            m_pFrame->ChangeFsmStat(Name(), EnumFsmOpTypeProcess);
         }
         return HandleProcess(pActor);
     }
@@ -261,7 +261,7 @@ public:
     {
         if (m_pFrame)
         {
-            m_pFrame->ChangeFsmStat(FsmName(), EnumFsmOpTypeExit);
+            m_pFrame->ChangeFsmStat(Name(), EnumFsmOpTypeExit);
         }
         return HandleExit(pActor);
     }

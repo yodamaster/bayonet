@@ -265,7 +265,7 @@ public:
      *
      * @return  名字
      */
-    virtual const string FsmName()=0;
+    virtual const string Name()=0;
 };
 
 #endif
