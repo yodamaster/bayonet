@@ -54,6 +54,21 @@ public:
             IActor* pAppActor,
             const char *buf, 
             int len)=0;
+    /**
+     * @brief   获取这个Fsm的名字，可以用来做统计使用
+     *
+     * @return  名字
+     */
+    virtual const string Name()
+    {
+        const char * name = typeid(*this).name();
+
+        char szTmp[strlen(name)+1];
+
+        sscanf(name, "%*d%s", szTmp);
+
+        return szTmp;
+    }
 };
 
 class IFrame
@@ -212,6 +227,22 @@ public:
      * @return  0
      */
     virtual int HandleEvent(IEvent* pEvent)=0;
+
+    /**
+     * @brief   获取这个Fsm的名字，可以用来做统计使用
+     *
+     * @return  名字
+     */
+    virtual const string Name()
+    {
+        const char * name = typeid(*this).name();
+
+        char szTmp[strlen(name)+1];
+
+        sscanf(name, "%*d%s", szTmp);
+
+        return szTmp;
+    }
 };
 
 
@@ -265,7 +296,16 @@ public:
      *
      * @return  名字
      */
-    virtual const string Name()=0;
+    virtual const string Name()
+    {
+        const char * name = typeid(*this).name();
+
+        char szTmp[strlen(name)+1];
+
+        sscanf(name, "%*d%s", szTmp);
+
+        return szTmp;
+    }
 };
 
 #endif

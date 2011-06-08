@@ -97,19 +97,11 @@ class CAppFsmRsp : public CAppFsmBase
         pAppActor->Send2Client();
         return 0;
     }
-    virtual const string Name()
-    {
-        return "CAppFsmRsp";
-    }
 };
 class CAppFsmFini : public CAppFsmBase
 {
     virtual int HandleProcess(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
     {
         return pAppActor->OnFini();
-    }
-    virtual const string Name()
-    {
-        return "CAppFsmFini";
     }
 };
