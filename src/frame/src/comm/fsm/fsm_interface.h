@@ -101,6 +101,13 @@ public:
     virtual void GCActors()=0;
 
     /**
+     * @brief   获取状态机
+     *
+     * @return  
+     */
+    virtual map<int, IFsm*>* GetFsmMgr()=0;
+
+    /**
      * @brief   设置Fsm映射
      *
      * @param   state
@@ -119,20 +126,6 @@ public:
      * @param   strFsmFunc
      */
     virtual void ChangeFsmStat(IFsm *fsm, IActor* pActor, const string &strFsmFunc)=0;
-
-    /**
-     * @brief   获取统计
-     *
-     * @param   
-     */
-    virtual string GetStat()=0;
-
-    /**
-     * @brief   获取状态机
-     *
-     * @return  
-     */
-    virtual map<int, IFsm*>* GetFsmMgr()=0;
 };
 
 class IActor : public IObject

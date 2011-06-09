@@ -19,6 +19,8 @@
 #include <sstream>
 
 #include "fsm_interface.h"
+#include "dirstat.h"
+#include "stat_def.h"
 using namespace std;
 
 #ifndef foreach
@@ -42,15 +44,26 @@ public:
     }
     virtual ~CFrameBase () {}
 
+    int Init(const char* statDir, const char* statFileName)
+    {
+        int ret = m_dirStat.Init(statDir, statFileName,stat_desc, STAT_OVER);
+        if (ret != 0)
+        {
+            return -1;
+        }
+        return 0;
+    }
+
     int AddActor(IActor* pActor)
     {
         m_listActors.push_front(pActor);
         m_allActorCount++;
-        m_mapStat["ALL"]["SELF"]["ALIVE"]++;
-        m_mapStat["ALL"]["SELF"]["TOTAL"]++;
+        m_dirStat.AddCount("ALL","SELF",STAT_ALIVE);
+        m_dirStat.AddCount("ALL","SELF",STAT_TOTAL);
 
-        m_mapStat[pActor->Name()]["SELF"]["ALIVE"]++;
-        m_mapStat[pActor->Name()]["SELF"]["TOTAL"]++;
+        m_dirStat.AddCount(pActor->Name().c_str(),"SELF",STAT_ALIVE);
+        m_dirStat.AddCount(pActor->Name().c_str(),"SELF",STAT_TOTAL);
+
         return 0;
     }
     int GetActorCount()
@@ -60,8 +73,8 @@ public:
     int AddNeedGCCount()
     {
         m_needGCCount++;
-        m_mapStat["GC"]["SELF"]["ALIVE"]++;
-        m_mapStat["GC"]["SELF"]["TOTAL"]++;
+        m_dirStat.AddCount("GC","SELF",STAT_ALIVE);
+        m_dirStat.AddCount("GC","SELF",STAT_TOTAL);
         return 0;
     }
     int SubNeedGCCount()
@@ -71,7 +84,7 @@ public:
         {
             m_needGCCount = 0;
         }
-        m_mapStat["GC"]["SELF"]["ALIVE"]--;
+        m_dirStat.DecCount("GC","SELF",STAT_ALIVE);
         return 0;
     }
     int GetNeedGCCount()
@@ -113,17 +126,19 @@ public:
         }
         if (strFsmFunc == "Entry")
         {
-            m_mapStat["ALL"][fsm->Name()]["TOTAL"]++;
-            m_mapStat["ALL"][fsm->Name()]["ALIVE"]++;
-            m_mapStat[pActor->Name()][fsm->Name()]["TOTAL"]++;
-            m_mapStat[pActor->Name()][fsm->Name()]["ALIVE"]++;
+            m_dirStat.AddCount("ALL",fsm->Name().c_str(), STAT_ALIVE);
+            m_dirStat.AddCount("ALL",fsm->Name().c_str(), STAT_TOTAL);
+
+            m_dirStat.AddCount(pActor->Name().c_str(),fsm->Name().c_str(), STAT_ALIVE);
+            m_dirStat.AddCount(pActor->Name().c_str(),fsm->Name().c_str(), STAT_TOTAL);
         }
         else if (strFsmFunc == "Exit")
         {
-            m_mapStat["ALL"][fsm->Name()]["ALIVE"]--;
-            m_mapStat[pActor->Name()][fsm->Name()]["ALIVE"]--;
+            m_dirStat.DecCount("ALL",fsm->Name().c_str(), STAT_ALIVE);
+            m_dirStat.DecCount(pActor->Name().c_str(),fsm->Name().c_str(), STAT_ALIVE);
         }
     }
+    /*
     virtual string GetStat()
     {
         stringstream ss;
@@ -163,6 +178,11 @@ public:
         return ss.str();
     }
 
+    void SetStatDir(const string& statDir)
+    {
+        m_statDir = statDir;
+    }
+    */
 protected:
     /**
      * @brief   删除一个actor的指针
@@ -173,8 +193,8 @@ protected:
      */
     int eraseActor(list<IActor*>::iterator it)
     {
-        m_mapStat["ALL"]["SELF"]["ALIVE"]--;
-        m_mapStat[(*it)->Name()]["SELF"]["ALIVE"]--;
+        m_dirStat.DecCount("ALL","SELF",STAT_ALIVE);
+        m_dirStat.DecCount((*it)->Name().c_str(),"SELF",STAT_ALIVE);
         SubNeedGCCount();
 
         delete (*it);
@@ -188,6 +208,8 @@ protected:
     int m_needGCCount;
     int m_allActorCount;
     map<int, IFsm*> m_mapFsmMgr;
+
+    string m_statDir;
 
     //统计
     /*
@@ -243,7 +265,7 @@ protected:
     }
 
     */
-    map<string, map<string, map<string, uint32_t> > > m_mapStat;
+    CDirStat m_dirStat;
 };
 
 class CActorBase : public IActor

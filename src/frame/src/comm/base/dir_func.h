@@ -1,0 +1,103 @@
+/*=============================================================================
+#
+#     FileName: dir_func.h
+#         Desc: 目录相关的函数
+#
+#       Author: dantezhu
+#        Email: zny2008@gmail.com
+#     HomePage: http://www.vimer.cn
+#
+#      Created: 2011-06-09 12:00:16
+#      Version: 0.0.1
+#      History:
+#               0.0.1 | dantezhu | 2011-06-09 12:00:16 | initialization
+#
+=============================================================================*/
+
+#ifndef __DIR_FUNC_H__
+#define __DIR_FUNC_H__
+#include <dirent.h>
+#include <iostream>
+#include <vector>
+#include <sys/stat.h>
+#include <sys/types.h>
+using namespace std;
+
+/**
+ * @brief   递归获取文件[要注意保存原来的目录]
+ *
+ * @param   dirName     目录
+ * @param   repr        文件匹配，为空即代表所有文件
+ * @param   vecFiles    返回的文件名列表
+ *
+ * @return  
+ */
+static int GetFileInDir(string dirName,string repr,vector<string> &vecFiles)
+{
+    DIR* Dir = NULL;
+    struct dirent* file = NULL;
+    if (dirName[dirName.size()-1] != '/')
+    {
+        dirName += "/";
+    }
+    if ((Dir = opendir(dirName.c_str())) == NULL)
+    {
+        return -1;
+    }
+
+    int ret;
+    while ((file = readdir(Dir)))
+    {
+        //if the file is a normal file
+        if (file->d_type == DT_REG)
+        {
+            if (repr.empty() || string(file->d_name) == repr)
+            {
+                vecFiles.push_back(dirName + file->d_name);
+            }
+        }
+        //if the file is a directory
+        else if (file->d_type == DT_DIR && strcmp(file->d_name, ".") != 0 && strcmp(file->d_name, "..") != 0)
+        {
+            ret = GetFileInDir(dirName + file->d_name, repr, vecFiles);
+            if (ret != 0)
+            {
+                return ret;
+            }
+        }
+    }
+    return 0;
+}
+
+/**
+ * @brief   递归创建目录[要注意保存原来的目录]
+ *
+ * @param   dir
+ *
+ * @return  
+ */
+static int mkdirs(string dir, string::size_type index = 0)
+{
+    string::size_type pos;
+
+    if (dir.empty()) {
+        return -1;
+    }
+
+    if (dir.size()>=2 && dir[index] == '/' && dir[index+1]== '/')
+        pos = dir.find('/', index+2);
+    else
+        pos = dir.find('/', index);
+
+    if (pos != string::npos) {
+        string sstr = dir.substr(0, pos);
+        mkdir(sstr.c_str(),0777);
+    } else {
+        mkdir(dir.c_str(),0777);
+        return 0;
+    }
+
+    return mkdirs(dir, pos+1);
+}
+
+#endif
