@@ -93,6 +93,7 @@ int main(int argc, const char *argv[])
 {
     CBayonetFrame srv;
     StFrameParam param;
+    param.infoDir="bayonet";
     param.ip="0.0.0.0";
     param.port = 10001;
     param.bKeepcnt= true;
@@ -100,7 +101,11 @@ int main(int argc, const char *argv[])
     param.protoType = PROTO_TYPE_TCP;
     param.pAction = new CActionFirst();
 
-    srv.Init(param);
+    int ret = srv.Init(param);
+    if (ret != 0)
+    {
+        return -1;
+    }
     srv.RegFsm(APP_FSM_LOGIC1,new CAppFsmLogic1());
     srv.Process();
     return 0;

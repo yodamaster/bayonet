@@ -93,8 +93,18 @@ public:
         string statDir = param.infoDir+string("/stat/");
         string logDir = param.infoDir + string("/log/");
 
-        mkdir(statDir.c_str(),0777);
-        mkdir(logDir.c_str(),0777);
+        ret = mkdir(statDir.c_str(),0777);
+        if (ret != 0 && errno != EEXIST)
+        {
+            fprintf(stderr,"mkdir %s fail\n", statDir.c_str());
+            return -1;
+        }
+        ret = mkdir(logDir.c_str(),0777);
+        if (ret != 0 && errno != EEXIST)
+        {
+            fprintf(stderr,"mkdir %s fail\n", logDir.c_str());
+            return -1;
+        }
 
         log_init(m_StFrameParam.iLogLevel,logDir.c_str(),m_StFrameParam.logFileName.c_str(),m_StFrameParam.iLogMaxSize);
 
