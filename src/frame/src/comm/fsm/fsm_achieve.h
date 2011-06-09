@@ -61,6 +61,7 @@ public:
     {
         m_needGCCount++;
         m_mapStat["GC"]["SELF"]["ALIVE"]++;
+        m_mapStat["GC"]["SELF"]["TOTAL"]++;
         return 0;
     }
     int SubNeedGCCount()
@@ -71,7 +72,6 @@ public:
             m_needGCCount = 0;
         }
         m_mapStat["GC"]["SELF"]["ALIVE"]--;
-        m_mapStat["GC"]["SELF"]["TOTAL"]--;
         return 0;
     }
     int GetNeedGCCount()
@@ -173,12 +173,13 @@ protected:
      */
     int eraseActor(list<IActor*>::iterator it)
     {
+        m_mapStat["ALL"]["SELF"]["ALIVE"]--;
+        m_mapStat[(*it)->Name()]["SELF"]["ALIVE"]--;
+        SubNeedGCCount();
+
         delete (*it);
         m_listActors.erase(it);
         m_allActorCount--;
-        m_mapStat["ALL"]["SELF"]["ALIVE"]--;
-
-        m_mapStat[(*it)->Name()]["SELF"]["ALIVE"]--;
         return 0;
     }
 protected:
@@ -190,57 +191,58 @@ protected:
 
     //统计
     /*
-       {
-       'ALL':{
-       'SELF':{
-       'ALIVE':count,
-       'TOTAL':count,
-       },
-       'fsmname1':{
-       'ALIVE':count,
-       'TOTAL':count,
-       },
-       'fsmname2':{
-       'ALIVE':count,
-       'TOTAL':count,
-       }
-       },
-       'GC':{
-       'SELF':{
-       'ALIVE':count,
-       'TOTAL':count,
-       },
-       },
-       'actorname':{
-       'SELF':{
-       'ALIVE':count,
-       'TOTAL':count,
-       },
-       'fsmname1':{
-       'ALIVE':count,
-       'TOTAL':count,
-       },
-       'fsmname2':{
-       'ALIVE':count,
-       'TOTAL':count,
-       }
-       },
-       'actorname2':{
-       'SELF':{
-       'ALIVE':count,
-       'TOTAL':count,
-       },
-       'fsmname1':{
-       'ALIVE':count,
-       'TOTAL':count,
-       },
-       'fsmname2':{
-       'ALIVE':count,
-       'TOTAL':count,
-       }
-       },
-       }
-       */
+        {
+        'ALL':{
+            'SELF':{
+                'ALIVE':count,
+                'TOTAL':count,
+            },
+            'fsmname1':{
+                'ALIVE':count,
+                'TOTAL':count,
+            },
+            'fsmname2':{
+                'ALIVE':count,
+                'TOTAL':count,
+            }
+        },
+        'GC':{
+            'SELF':{
+                'ALIVE':count,
+                'TOTAL':count,
+            },
+        },
+        'actorname':{
+            'SELF':{
+                'ALIVE':count,
+                'TOTAL':count,
+            },
+            'fsmname1':{
+                'ALIVE':count,
+                'TOTAL':count,
+            },
+            'fsmname2':{
+                'ALIVE':count,
+                'TOTAL':count,
+            }
+        },
+        'actorname2':{
+            'SELF':{
+                'ALIVE':count,
+                'TOTAL':count,
+            },
+            'fsmname1':{
+                'ALIVE':count,
+                'TOTAL':count,
+            },
+            'fsmname2':{
+                'ALIVE':count,
+                'TOTAL':count,
+            }
+        },
+    }
+
+    */
     map<string, map<string, map<string, uint32_t> > > m_mapStat;
 };
 
@@ -254,15 +256,14 @@ public:
         m_pFrame = NULL;
     }
 
-    virtual ~CActorBase () {
-        if (m_pFrame)
-        {
-            m_pFrame->SubNeedGCCount();
-        }
-    }
+    virtual ~CActorBase () {}
 
     virtual void SetGCMark()
     {
+        if (m_bGC)
+        {
+            return;
+        }
         m_bGC = true;
         if (m_pFrame)
         {
