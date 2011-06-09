@@ -18,6 +18,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <vector>
 using namespace std;
 
 class CStatInfo
@@ -34,7 +35,7 @@ class CStatInfo
         void ResetStat();
         void ShowStatInfo(int num=-1);
 
-        map<string,int> GetStatMap();
+        vector<pair<string,int> > GetStatMap();
     public:
         static CStatInfo *_ins;
         static CStatInfo * Ins();

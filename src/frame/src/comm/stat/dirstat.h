@@ -149,7 +149,7 @@ public:
                 }
                 ss << "\t\t\"" << it2->first << "\":{" << endl;
 
-                map<string,int> _map = it2->second->GetStatMap();
+                vector<pair<string,int> > _map = it2->second->GetStatMap();
                 foreach(_map, it3)
                 {
                     ss << "\t\t\t\"" << it3->first << "\":" << it3->second;
