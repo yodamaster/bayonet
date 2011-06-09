@@ -161,17 +161,23 @@ public:
                 }
                 ss << "\t\t}";
 
-                isnotlast(it1->second, it2)
+                if (!(key2 && strlen(key2)>0))
                 {
-                    ss << ",";
+                    isnotlast(it1->second, it2)
+                    {
+                        ss << ",";
+                    }
                 }
                 ss << endl;
             }
             ss << "\t}";
 
-            isnotlast(m_mapStat, it1)
+            if (!(key1 && strlen(key1)>0))
             {
-                ss << ",";
+                isnotlast(m_mapStat, it1)
+                {
+                    ss << ",";
+                }
             }
             ss << endl;
         }
