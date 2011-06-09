@@ -96,12 +96,20 @@ public:
         }
         return pStat->GetCount(index);
     }
-    int ResetStat()
+    int ResetStat(const char* key1=NULL, const char* key2=NULL)
     {
         foreach(m_mapStat, it1)
         {
+            if (key1 && strlen(key1)>0 && string(key1) != it1->first)
+            {
+                continue;
+            }
             foreach(it1->second, it2)
             {
+                if (key2 && strlen(key2)>0 && string(key2) != it2->first)
+                {
+                    continue;
+                }
                 if (it2->second == NULL)
                 {
                     return -1;
@@ -111,12 +119,20 @@ public:
         }
         return 0;
     }
-    int ShowStatInfo(int num=-1)
+    int ShowStatInfo(const char* key1=NULL, const char* key2=NULL, int num=-1)
     {
         foreach(m_mapStat, it1)
         {
+            if (key1 && strlen(key1)>0 && string(key1) != it1->first)
+            {
+                continue;
+            }
             foreach(it1->second, it2)
             {
+                if (key2 && strlen(key2)>0 && string(key2) != it2->first)
+                {
+                    continue;
+                }
                 if (it2->second == NULL)
                 {
                     return -1;

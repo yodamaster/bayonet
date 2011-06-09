@@ -21,6 +21,8 @@
 #include <vector>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <error.h>
+#include <errno.h>
 using namespace std;
 
 /**
@@ -79,6 +81,7 @@ static int GetFileInDir(string dirName,string repr,vector<string> &vecFiles)
 static int mkdirs(string dir, string::size_type index = 0)
 {
     string::size_type pos;
+    int ret;
 
     if (dir.empty()) {
         return -1;
@@ -91,9 +94,17 @@ static int mkdirs(string dir, string::size_type index = 0)
 
     if (pos != string::npos) {
         string sstr = dir.substr(0, pos);
-        mkdir(sstr.c_str(),0777);
+        ret = mkdir(sstr.c_str(),0777);
+        if (ret != 0 && errno != EEXIST)
+        {
+            return -1;
+        }
     } else {
-        mkdir(dir.c_str(),0777);
+        ret = mkdir(dir.c_str(),0777);
+        if (ret != 0 && errno != EEXIST)
+        {
+            return -1;
+        }
         return 0;
     }
 
