@@ -126,6 +126,28 @@ public:
      * @param   strFsmFunc
      */
     virtual void StatChangeFsm(IFsm *fsm, IActor* pActor, const string &strFsmFunc)=0;
+
+    /**
+     * @brief   统计增
+     *
+     * @param   key1
+     * @param   key2
+     * @param   index
+     *
+     * @return  
+     */
+    virtual int StatAddCount(const char* key1, const char* key2, int index)=0;
+
+    /**
+     * @brief   统计减
+     *
+     * @param   key1
+     * @param   key2
+     * @param   index
+     *
+     * @return  
+     */
+    virtual int StatDecCount(const char* key1, const char* key2, int index)=0;
 };
 
 class IActor : public IObject
@@ -202,6 +224,25 @@ public:
      * @return  0
      */
     virtual int HandleEvent(IEvent* pEvent)=0;
+
+    /**
+     * @brief   统计当进入某个fsm，会被frame调用
+     *
+     * @param   fsm
+     *
+     * @return  0
+     */
+    virtual int StatFsmEntry(IFsm* fsm)=0;
+
+    /**
+     * @brief   统计当退出某个fsm，会被frame调用
+     *
+     * @param   fsm
+     *
+     * @return  0
+     */
+    virtual int StatFsmExit(IFsm* fsm, int& pastTimeMs)=0;
+
 };
 
 
@@ -217,6 +258,23 @@ public:
      * @return  0
      */
     virtual int AttachFrame(IFrame* pFrame)=0;
+
+    /**
+     * @brief   设置state
+     *
+     * @param   state
+     *
+     * @return  0
+     */
+    virtual int SetStateID(int state)=0;
+
+    /**
+     * @brief   获取StateId
+     *
+     * @return  state
+     */
+    virtual int GetStateID()=0;
+
     /**
      * @brief   在进入这个状态的时候，pActor需要做的事情
      *

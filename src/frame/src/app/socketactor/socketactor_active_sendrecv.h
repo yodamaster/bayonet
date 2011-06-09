@@ -20,8 +20,8 @@ public:
 
     virtual int OnClose()
     {
-        int count = m_vecStates.size();
-        if (!(count > 2 && m_vecStates[count-2] == SOCKET_FSM_RECVOVER))
+        int count = m_vecFsmNodes.size();
+        if (!(count > 2 && m_vecFsmNodes[count-2].fsm->GetStateID() == SOCKET_FSM_RECVOVER))
         {
             //非正常关闭
             SetDealOver(ESocketHangup);

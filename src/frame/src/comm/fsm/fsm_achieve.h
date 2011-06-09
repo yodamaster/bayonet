@@ -18,10 +18,64 @@
 #include <list>
 #include <sstream>
 
+#include <sys/time.h>
+
 #include "fsm_interface.h"
 #include "dirstat.h"
 #include "stat_def.h"
+#include "timer.h"
 using namespace std;
+
+typedef struct _StFsmNode
+{
+    IFsm* fsm;
+    struct timeval m_Start_TV;
+    struct timeval m_Stop_TV;
+
+    _StFsmNode()
+    {
+        gettimeofday(&m_Start_TV, NULL);
+        fsm = NULL;
+    }
+
+    int Stop()
+    {
+        gettimeofday(&m_Stop_TV, NULL);
+        return 0;
+    }
+    int GetPastTime()
+    {
+        long past_time  = 0;
+        past_time = ((m_Stop_TV.tv_sec  - m_Start_TV.tv_sec ) * 1000000 + (m_Stop_TV.tv_usec - m_Start_TV.tv_usec)) / 1000;
+        return past_time;
+    }
+} StFsmNode;
+
+/**
+* @brief    映射时间到统计
+*
+* @param    msec
+* @param    baseLine
+*
+* @return   
+*/
+static int MapTime2StatIndex(int msec,int baseLine)
+{
+    int statTimeIndex;
+    if(msec<10)
+        statTimeIndex = baseLine;
+    else if(msec<50)
+        statTimeIndex = baseLine+1;
+    else if(msec<100)
+        statTimeIndex = baseLine+2;
+    else if(msec<200)
+        statTimeIndex = baseLine+3;
+    else if(msec<500)
+        statTimeIndex = baseLine+4;
+    else 
+        statTimeIndex = baseLine+5;
+    return statTimeIndex;
+}
 
 class CFrameBase : public IFrame
 {
@@ -103,6 +157,7 @@ public:
             return -1;
         }
         fsm->AttachFrame(this);
+        fsm->SetStateID(state);
         m_mapFsmMgr[state] = fsm;
         return 0;
     }
@@ -114,42 +169,35 @@ public:
         }
         if (strFsmFunc == "Entry")
         {
+            pActor->StatFsmEntry(fsm);
+
             StatAddCount("ALL",fsm->Name().c_str(), STAT_ALIVE);
             StatAddCount("ALL",fsm->Name().c_str(), STAT_TOTAL);
 
             StatAddCount(pActor->Name().c_str(),fsm->Name().c_str(), STAT_ALIVE);
             StatAddCount(pActor->Name().c_str(),fsm->Name().c_str(), STAT_TOTAL);
+
         }
         else if (strFsmFunc == "Exit")
         {
+            int pastTimeMs = 0;
+            pActor->StatFsmExit(fsm,pastTimeMs);
+
+            int statTimeIndex = MapTime2StatIndex(pastTimeMs, STAT_10MS_REQ);
+            //统计fsm的时间
+            StatAddCount("ALL",fsm->Name().c_str(), statTimeIndex);
+            StatAddCount(pActor->Name().c_str(),fsm->Name().c_str(), statTimeIndex);
+
             StatDecCount("ALL",fsm->Name().c_str(), STAT_ALIVE);
             StatDecCount(pActor->Name().c_str(),fsm->Name().c_str(), STAT_ALIVE);
         }
     }
 
-    /**
-     * @brief   统计增
-     *
-     * @param   key1
-     * @param   key2
-     * @param   index
-     *
-     * @return  
-     */
     virtual int StatAddCount(const char* key1, const char* key2, int index)
     {
         return m_dirStat.AddCount(key1,key2,index);
     }
 
-    /**
-     * @brief   统计减
-     *
-     * @param   key1
-     * @param   key2
-     * @param   index
-     *
-     * @return  
-     */
     virtual int StatDecCount(const char* key1, const char* key2, int index)
     {
         return m_dirStat.DecCount(key1,key2,index);
@@ -248,9 +296,14 @@ public:
         m_Fsm = NULL;
         m_ptrMapFsmMgr = NULL;
         m_pFrame = NULL;
+
+        m_freeTimer.Start();
     }
 
-    virtual ~CActorBase () {}
+    virtual ~CActorBase () {
+        statActorFree();
+        statActorGC();
+    }
 
     virtual void SetGCMark()
     {
@@ -259,6 +312,7 @@ public:
             return;
         }
         m_bGC = true;
+        m_gcTimer.Start();
         if (m_pFrame)
         {
             m_pFrame->AddNeedGCCount();
@@ -306,7 +360,6 @@ public:
 
     int ChangeState(int destState)
     {
-        m_vecStates.push_back(destState);
         if (m_ptrMapFsmMgr == NULL)
         {
             return -1;
@@ -337,6 +390,31 @@ public:
         //默认是什么也不做的，继承的类如果需要用到，就要重写
         return 0;
     }
+
+    virtual int StatFsmEntry(IFsm* fsm)
+    {
+        StFsmNode node;
+        node.fsm = fsm;
+        m_vecFsmNodes.push_back(node);
+        return 0;
+    }
+
+    virtual int StatFsmExit(IFsm* fsm, int& pastTimeMs)
+    {
+        if (m_vecFsmNodes.empty())
+        {
+            return -1;
+        }
+        StFsmNode& node = m_vecFsmNodes[m_vecFsmNodes.size()-1];
+        if (node.fsm != fsm)
+        {
+            return -2;
+        }
+
+        node.Stop();
+        pastTimeMs = node.GetPastTime();
+        return 0;
+    }
 private:
     int doChangeFsm(IFsm* destFsm)
     {
@@ -357,25 +435,78 @@ private:
         return m_Fsm->Process(this);
     }
 
+    /**
+     * @brief   统计整个actor存活的生命周期
+     *
+     * @param   fsm
+     *
+     * @return  
+     */
+    virtual int statActorFree()
+    {
+        int statTimeIndex = MapTime2StatIndex(m_freeTimer.GetPastTime(), STAT_10MS_REQ);
+        if (m_pFrame)
+        {
+            m_pFrame->StatAddCount("ALL","SELF",statTimeIndex);
+            m_pFrame->StatAddCount(Name().c_str(),"SELF",statTimeIndex);
+        }
+        return 0;
+    }
+
+    /**
+     * @brief   统计Actor从被标记GC到最终释放的时间
+     *
+     * @param   fsm
+     *
+     * @return  
+     */
+    virtual int statActorGC()
+    {
+        if (!GetGCMark())
+        {
+            return 0;
+        }
+        int statTimeIndex = MapTime2StatIndex(m_gcTimer.GetPastTime(), STAT_10MS_REQ);
+        if (m_pFrame)
+        {
+            m_pFrame->StatAddCount("GC","SELF",statTimeIndex);
+        }
+        return 0;
+    }
 
 protected:
     bool m_bGC;
     IFsm* m_Fsm;
     map<int, IFsm*> *m_ptrMapFsmMgr;
     IFrame* m_pFrame;
-    vector<int> m_vecStates;//历史的states
+    vector<StFsmNode> m_vecFsmNodes;//历史的states
+
+    CTimer m_freeTimer;
+    CTimer m_gcTimer;
 };
 class CFsmBase : public IFsm
 {
 public:
     CFsmBase () {
         m_pFrame = NULL;
+        m_stateID = -1;
     }
     virtual ~CFsmBase () {}
     int AttachFrame(IFrame* pFrame)
     {
         m_pFrame = pFrame;
         return 0;
+    }
+
+    int SetStateID(int state)
+    {
+        m_stateID = state;
+        return 0;
+    }
+
+    int GetStateID()
+    {
+        return m_stateID;
     }
 
     int Entry(IActor* pActor)
@@ -440,5 +571,7 @@ public:
 
 private:
     IFrame* m_pFrame;
+
+    int m_stateID;
 };
 #endif
