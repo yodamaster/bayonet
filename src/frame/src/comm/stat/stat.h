@@ -17,6 +17,7 @@
 #include <asm/atomic.h>
 #include <iostream>
 #include <string>
+#include <map>
 using namespace std;
 
 class CStatInfo
@@ -32,6 +33,8 @@ class CStatInfo
         int GetCount(int index);
         void ResetStat();
         void ShowStatInfo(int num=-1);
+
+        map<string,int> GetStatMap();
     public:
         static CStatInfo *_ins;
         static CStatInfo * Ins();

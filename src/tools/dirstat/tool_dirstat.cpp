@@ -83,7 +83,7 @@ int main(int argc,char** argv)
 
     while(1)
     {
-        _stat.ShowStatInfo(key1.c_str(),key2.c_str(),num);
+        cout << _stat.GetStatInfo(key1.c_str(),key2.c_str(),num);
         if ( _clear_flag )
         {
             _stat.ResetStat(key1.c_str(),key2.c_str());
