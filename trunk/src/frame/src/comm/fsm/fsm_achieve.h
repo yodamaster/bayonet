@@ -262,7 +262,7 @@ public:
         m_ptrMapFsmMgr = NULL;
         m_pFrame = NULL;
 
-        m_freeTimer.Start();
+        m_aliveTimer.Start();
     }
 
     virtual ~CActorBase () {
@@ -284,7 +284,7 @@ public:
             m_pFrame->StatDecCount("ALL","VALID",STAT_ALIVE);
             m_pFrame->StatDecCount(Name().c_str(),"VALID",STAT_ALIVE);
 
-            int pastTimeMs = m_freeTimer.GetPastTime();
+            int pastTimeMs = m_aliveTimer.GetPastTime();
             int statTimeIndex = MapTime2StatIndex(pastTimeMs, STAT_10MS_REQ);
             m_pFrame->StatAddCount("ALL","VALID",statTimeIndex);
             m_pFrame->StatAddCount(Name().c_str(),"VALID",statTimeIndex);
@@ -390,7 +390,7 @@ public:
 
     int GetAliveTimeMs()
     {
-        return m_freeTimer.GetPastTime();
+        return m_aliveTimer.GetPastTime();
     }
 
     int GetGCTimeMs()
@@ -425,7 +425,7 @@ protected:
     IFrame* m_pFrame;
     vector<StFsmNode> m_vecFsmNodes;//历史的states
 
-    CTimer m_freeTimer;
+    CTimer m_aliveTimer;
     CTimer m_gcTimer;
 };
 class CFsmBase : public IFsm
