@@ -67,7 +67,7 @@ int CSocketActorBase::SetEvent(unsigned event)
     CEPoller * pEpoller = GetEpoller();
     if (!pEpoller) 
     {
-        error_log("pEpoller is NULL");
+        error_log("[class:%s]pEpoller is NULL",Name().c_str());
         return -1;
     }
 

@@ -80,7 +80,7 @@ int CSocketActorData::OnInit()
     CEPoller* pEpoller = GetEpoller();
     if (!pEpoller)
     {
-        error_log("pEpoller is NULL");
+        error_log("[class:%s]pEpoller is NULL",Name().c_str());
         return SOCKET_FSM_CLOSING;
     }
     pEpoller->AttachSocket(this);//加入到epoll中
@@ -161,12 +161,12 @@ int CSocketActorData::OnSend()
         ret = HandleEncodeSendBuf(m_strSendBuf,m_sendBufLen);
         if (ret)
         {
-            error_log("HandleEncodeSendBuf error :%d",ret);
+            error_log("[class:%s]HandleEncodeSendBuf error :%d",Name().c_str(), ret);
             return SOCKET_FSM_CLOSING;
         }
         if ((int)m_strSendBuf.size() < m_sendBufLen)
         {
-            error_log("HandleEncodeSendBuf len error:%d/%d",m_strSendBuf.size(),m_sendBufLen);
+            error_log("[class:%s]HandleEncodeSendBuf len error:%d/%d",Name().c_str(),m_strSendBuf.size(),m_sendBufLen);
             return SOCKET_FSM_CLOSING;
         }
     }

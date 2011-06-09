@@ -19,7 +19,7 @@ int CSocketActorListenUdp::OnInit()
         listen_fd = socket(AF_INET,SOCK_DGRAM,0);
         if(listen_fd < 0)
         {   
-            error_log("Create socket error:%s\n",strerror(errno));
+            error_log("[class:%s]Create socket error:%s\n",Name().c_str(),strerror(errno));
             return SOCKET_FSM_FINI; 
         }   
         struct sockaddr_in myaddr;
@@ -32,22 +32,22 @@ int CSocketActorListenUdp::OnInit()
         if(bind(listen_fd,(struct sockaddr*)&myaddr,sizeof(struct sockaddr)) < 0)
         {   
             close(listen_fd);
-            error_log("CreateListen bind ip:%s port:%d sock:%d err:%s\n",
-                    m_IP.c_str(),m_Port,listen_fd,strerror(errno));
+            error_log("[class:%s]CreateListen bind ip:%s port:%d sock:%d err:%s\n",
+                    Name().c_str(),m_IP.c_str(),m_Port,listen_fd,strerror(errno));
             return SOCKET_FSM_FINI; 
         }
         m_SocketFd = listen_fd;
         int ret = m_pNetHandler->Init(m_SocketFd);
         if (ret)
         {
-            error_log("nethandler init error:%d",ret);
+            error_log("[class:%s]nethandler init error:%d",Name().c_str(),ret);
             return SOCKET_FSM_CLOSING; 
         }
     }
     CEPoller* pEpoller = GetEpoller();
     if (!pEpoller)
     {
-        error_log("pEpoller is NULL");
+        error_log("[class:%s]pEpoller is NULL",Name().c_str());
         return SOCKET_FSM_CLOSING;
     }
     pEpoller->AttachSocket(this);//加入到epoll中
