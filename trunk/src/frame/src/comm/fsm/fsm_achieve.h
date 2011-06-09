@@ -215,6 +215,16 @@ protected:
     {
         StatDecCount("ALL","SELF",STAT_ALIVE);
         StatDecCount((*it)->Name().c_str(),"SELF",STAT_ALIVE);
+
+        //统计存活时间和GC时间
+        int statTimeIndex = MapTime2StatIndex((*it)->GetAliveTimeMs(), STAT_10MS_REQ);
+        StatAddCount("ALL","SELF",statTimeIndex);
+        StatAddCount((*it)->Name().c_str(),"SELF",statTimeIndex);
+
+        statTimeIndex = MapTime2StatIndex((*it)->GetGCTimeMs(),STAT_10MS_REQ);
+        StatAddCount("GC","SELF",statTimeIndex);
+
+
         SubNeedGCCount();
 
         delete (*it);
@@ -301,11 +311,9 @@ public:
     }
 
     virtual ~CActorBase () {
-        statActorFree();
-        statActorGC();
     }
 
-    virtual void SetGCMark()
+    void SetGCMark()
     {
         if (m_bGC)
         {
@@ -318,7 +326,7 @@ public:
             m_pFrame->AddNeedGCCount();
         }
     }
-    virtual bool GetGCMark()
+    bool GetGCMark()
     {
         return m_bGC;
     }
@@ -415,6 +423,17 @@ public:
         pastTimeMs = node.GetPastTime();
         return 0;
     }
+
+    int GetAliveTimeMs()
+    {
+        return m_freeTimer.GetPastTime();
+    }
+
+    int GetGCTimeMs()
+    {
+        return m_gcTimer.GetPastTime();
+    }
+
 private:
     int doChangeFsm(IFsm* destFsm)
     {
@@ -433,45 +452,6 @@ private:
             m_Fsm->Entry(this);
         }
         return m_Fsm->Process(this);
-    }
-
-    /**
-     * @brief   统计整个actor存活的生命周期
-     *
-     * @param   fsm
-     *
-     * @return  
-     */
-    virtual int statActorFree()
-    {
-        int statTimeIndex = MapTime2StatIndex(m_freeTimer.GetPastTime(), STAT_10MS_REQ);
-        if (m_pFrame)
-        {
-            m_pFrame->StatAddCount("ALL","SELF",statTimeIndex);
-            m_pFrame->StatAddCount(Name().c_str(),"SELF",statTimeIndex);
-        }
-        return 0;
-    }
-
-    /**
-     * @brief   统计Actor从被标记GC到最终释放的时间
-     *
-     * @param   fsm
-     *
-     * @return  
-     */
-    virtual int statActorGC()
-    {
-        if (!GetGCMark())
-        {
-            return 0;
-        }
-        int statTimeIndex = MapTime2StatIndex(m_gcTimer.GetPastTime(), STAT_10MS_REQ);
-        if (m_pFrame)
-        {
-            m_pFrame->StatAddCount("GC","SELF",statTimeIndex);
-        }
-        return 0;
     }
 
 protected:

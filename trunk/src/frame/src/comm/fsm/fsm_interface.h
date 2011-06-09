@@ -243,6 +243,24 @@ public:
      */
     virtual int StatFsmExit(IFsm* fsm, int& pastTimeMs)=0;
 
+    /**
+     * @brief   获取整个actor存活的生命周期的时间
+     *
+     * @param   fsm
+     *
+     * @return  
+     */
+    virtual int GetAliveTimeMs()=0;
+
+    /**
+     * @brief   统计Actor从被标记GC到最终释放的时间
+     *
+     * @param   fsm
+     *
+     * @return  
+     */
+    virtual int GetGCTimeMs()=0;
+
 };
 
 
