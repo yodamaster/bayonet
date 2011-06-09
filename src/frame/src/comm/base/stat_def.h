@@ -11,8 +11,8 @@
 #define _STAT_DEF_H_
 typedef enum
 {
-    STAT_ALIVE = 0,
-    STAT_TOTAL,
+    STAT_TOTAL = 0,
+    STAT_ALIVE,
 
     STAT_10MS_REQ,
     STAT_50MS_REQ,
@@ -26,8 +26,8 @@ typedef enum
 
 const char * const stat_desc[] =
 {
-    "STAT_ALIVE",
     "STAT_TOTAL",
+    "STAT_ALIVE",
 
     "STAT_10MS_REQ",
     "STAT_50MS_REQ",

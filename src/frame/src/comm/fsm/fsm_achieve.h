@@ -103,8 +103,14 @@ public:
         StatAddCount("ALL","SELF",STAT_ALIVE);
         StatAddCount("ALL","SELF",STAT_TOTAL);
 
+        StatAddCount("ALL","VALID",STAT_ALIVE);
+        StatAddCount("ALL","VALID",STAT_TOTAL);
+
         StatAddCount(pActor->Name().c_str(),"SELF",STAT_ALIVE);
         StatAddCount(pActor->Name().c_str(),"SELF",STAT_TOTAL);
+
+        StatAddCount(pActor->Name().c_str(),"VALID",STAT_ALIVE);
+        StatAddCount(pActor->Name().c_str(),"VALID",STAT_TOTAL);
 
         return 0;
     }
@@ -324,6 +330,15 @@ public:
         if (m_pFrame)
         {
             m_pFrame->AddNeedGCCount();
+
+            //统计有效的数量
+            m_pFrame->StatDecCount("ALL","VALID",STAT_ALIVE);
+            m_pFrame->StatDecCount(Name().c_str(),"VALID",STAT_ALIVE);
+
+            int pastTimeMs = m_freeTimer.GetPastTime();
+            int statTimeIndex = MapTime2StatIndex(pastTimeMs, STAT_10MS_REQ);
+            m_pFrame->StatAddCount("ALL","VALID",statTimeIndex);
+            m_pFrame->StatAddCount(Name().c_str(),"VALID",statTimeIndex);
         }
     }
     bool GetGCMark()
