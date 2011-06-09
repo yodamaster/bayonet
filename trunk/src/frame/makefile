@@ -24,7 +24,7 @@ DEPENDS = $(patsubst %.o, %.d, $(OBJS))
 
 all: init $(TARGET)
 	find . -name "*.h" | xargs -If cp f $(RELEASE_INC_DIR)
-	cp lib/libbayonet.a $(RELEASE_LIB_DIR)
+	cp $(TARGET) $(RELEASE_LIB_DIR)
 	@echo -e "\033[1;32m\nSuccess!\033[0m"
 
 $(TARGET): $(OBJS)
