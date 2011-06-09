@@ -115,9 +115,10 @@ void CStatInfo::ShowStatInfo(int num)
 
     return ;
 }
-map<string,int> CStatInfo::GetStatMap()
+vector<pair<string,int> > CStatInfo::GetStatMap()
 {
     map<string,int> _map;
+    vector<pair<string,int> > vecData;
 
     for (int i = 0; i < _stat_num; i ++)
     {
@@ -125,8 +126,8 @@ map<string,int> CStatInfo::GetStatMap()
         {
             break;
         }
-        _map[_stat_desc[i]] = atomic_read(&_stat_buf[i]);
+        vecData.push_back(make_pair(_stat_desc[i], atomic_read(&_stat_buf[i])));
     }
 
-    return _map;
+    return vecData;
 }
