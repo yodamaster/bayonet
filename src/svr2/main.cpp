@@ -14,7 +14,6 @@ class CMyActor : public CAppActorBase
 public:
     CMyActor() {}
     virtual ~CMyActor() {}
-    
 
     string m_str;
 };
@@ -31,7 +30,7 @@ public:
             int &len)
     {
         CMyActor* app_actor = (CMyActor*)pAppActor;
-        strSendBuf = app_actor->m_str;
+        strSendBuf = app_actor->m_str+"_x_";
         len = strSendBuf.size();
         return 0;
     }
@@ -114,7 +113,8 @@ public:
         param.port = 20000;
         param.protoType = PROTO_TYPE_UDP;
         param.pAction = &actionGetData;
-        param.actionType = ACTIONTYPE_SENDONLY;
+        //param.actionType = ACTIONTYPE_SENDONLY;
+        param.actionType = ACTIONTYPE_SENDRECV;
         param.timeout_ms = 1000;
 
         CActionInfo * pActionInfo = new CActionInfo();
