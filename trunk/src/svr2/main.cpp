@@ -9,6 +9,16 @@ using namespace std;
 
 #define APP_FSM_LOGIC1 2000
 
+class CMyActor : public CAppActorBase
+{
+public:
+    CMyActor() {}
+    virtual ~CMyActor() {}
+    
+
+    string m_str;
+};
+
 class CAppFsmLogic1;
 class CActionFirst : public IAction
 {
@@ -20,8 +30,8 @@ public:
             string & strSendBuf,
             int &len)
     {
-        trace_log("send");
-        strSendBuf="woainizhende111111";
+        CMyActor* app_actor = (CMyActor*)pAppActor;
+        strSendBuf = app_actor->m_str;
         len = strSendBuf.size();
         return 0;
     }
@@ -43,11 +53,50 @@ public:
             const char *buf, 
             int len)
     {
-        CAppActorBase * app_actor = new CAppActorBase();
+        CMyActor * app_actor = new CMyActor();
         app_actor->AttachFrame(pSocketActor->GetFrame());
         app_actor->AttachCommu(pSocketActor);
         app_actor->ChangeState(APP_FSM_LOGIC1);
         trace_log("listen tcp HandleDecodeRecvBuf");
+        return 0;
+    }
+};
+
+class CActionGetData: public IAction
+{
+public:
+    // 为发送打包
+    int HandleEncodeSendBuf(
+            IActor* pSocketActor,
+            IActor* pAppActor,
+            string & strSendBuf,
+            int &len)
+    {
+        CMyActor* app_actor = (CMyActor*)pAppActor;
+        strSendBuf=app_actor->m_str+string("_gaoshenma");
+        len = strSendBuf.size();
+        return 0;
+    }
+
+    // 回应包完整性检查
+    int HandleInput(
+            IActor* pSocketActor,
+            IActor* pAppActor,
+            const char *buf,
+            int len)
+    {
+        return len;
+    }
+
+    // 回应包解析
+    int HandleDecodeRecvBuf(
+            IActor* pSocketActor,
+            IActor* pAppActor,
+            const char *buf, 
+            int len)
+    {
+        CMyActor* app_actor = (CMyActor*)pAppActor;
+        app_actor->m_str+=string(buf);
         return 0;
     }
 };
@@ -61,8 +110,8 @@ public:
         static CActionFirst actionFirst;
         StActionInfoParam param;
         param.id = 1;
-        param.ip = "127.0.0.1";
-        param.port = 100;
+        param.ip = "0.0.0.0";
+        param.port = 20000;
         param.protoType = PROTO_TYPE_UDP;
         param.pAction = &actionFirst;
         param.actionType = ACTIONTYPE_SENDONLY;
