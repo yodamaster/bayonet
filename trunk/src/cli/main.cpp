@@ -65,7 +65,6 @@ int udp_process(
         return -3;
     }
     recvLen = ret;
-    cout<<recvLen<<endl;
     close(socketFd);
     return 0;
 }
@@ -302,6 +301,6 @@ int main(int argc, const char *argv[])
             strSend.c_str(),strSend.size(),
             (char*)strRecv.c_str(),strRecv.size(),len
             );
-    cout<<ret<<endl;
+    cout<<"ret:"<< ret << ",recv:" << strRecv <<endl;
     return 0;
 }
