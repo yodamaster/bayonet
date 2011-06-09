@@ -46,11 +46,11 @@ public:
     {
         m_listActors.push_front(pActor);
         m_allActorCount++;
-        m_dirStat.AddCount("ALL","SELF",STAT_ALIVE);
-        m_dirStat.AddCount("ALL","SELF",STAT_TOTAL);
+        StatAddCount("ALL","SELF",STAT_ALIVE);
+        StatAddCount("ALL","SELF",STAT_TOTAL);
 
-        m_dirStat.AddCount(pActor->Name().c_str(),"SELF",STAT_ALIVE);
-        m_dirStat.AddCount(pActor->Name().c_str(),"SELF",STAT_TOTAL);
+        StatAddCount(pActor->Name().c_str(),"SELF",STAT_ALIVE);
+        StatAddCount(pActor->Name().c_str(),"SELF",STAT_TOTAL);
 
         return 0;
     }
@@ -61,8 +61,8 @@ public:
     int AddNeedGCCount()
     {
         m_needGCCount++;
-        m_dirStat.AddCount("GC","SELF",STAT_ALIVE);
-        m_dirStat.AddCount("GC","SELF",STAT_TOTAL);
+        StatAddCount("GC","SELF",STAT_ALIVE);
+        StatAddCount("GC","SELF",STAT_TOTAL);
         return 0;
     }
     int SubNeedGCCount()
@@ -72,7 +72,7 @@ public:
         {
             m_needGCCount = 0;
         }
-        m_dirStat.DecCount("GC","SELF",STAT_ALIVE);
+        StatDecCount("GC","SELF",STAT_ALIVE);
         return 0;
     }
     int GetNeedGCCount()
@@ -114,63 +114,47 @@ public:
         }
         if (strFsmFunc == "Entry")
         {
-            m_dirStat.AddCount("ALL",fsm->Name().c_str(), STAT_ALIVE);
-            m_dirStat.AddCount("ALL",fsm->Name().c_str(), STAT_TOTAL);
+            StatAddCount("ALL",fsm->Name().c_str(), STAT_ALIVE);
+            StatAddCount("ALL",fsm->Name().c_str(), STAT_TOTAL);
 
-            m_dirStat.AddCount(pActor->Name().c_str(),fsm->Name().c_str(), STAT_ALIVE);
-            m_dirStat.AddCount(pActor->Name().c_str(),fsm->Name().c_str(), STAT_TOTAL);
+            StatAddCount(pActor->Name().c_str(),fsm->Name().c_str(), STAT_ALIVE);
+            StatAddCount(pActor->Name().c_str(),fsm->Name().c_str(), STAT_TOTAL);
         }
         else if (strFsmFunc == "Exit")
         {
-            m_dirStat.DecCount("ALL",fsm->Name().c_str(), STAT_ALIVE);
-            m_dirStat.DecCount(pActor->Name().c_str(),fsm->Name().c_str(), STAT_ALIVE);
+            StatDecCount("ALL",fsm->Name().c_str(), STAT_ALIVE);
+            StatDecCount(pActor->Name().c_str(),fsm->Name().c_str(), STAT_ALIVE);
         }
     }
-    /*
-    virtual string GetStat()
+
+    /**
+     * @brief   统计增
+     *
+     * @param   key1
+     * @param   key2
+     * @param   index
+     *
+     * @return  
+     */
+    virtual int StatAddCount(const char* key1, const char* key2, int index)
     {
-        stringstream ss;
-        ss << "{" << endl;
-        foreach(m_mapStat, it_a)
-        {
-            ss << "\t\"" << it_a->first << "\":{" << endl;
-            foreach(it_a->second, it_b)
-            {
-                ss << "\t\t\"" << it_b->first << "\":{" << endl;
-                foreach(it_b->second, it_c)
-                {
-                    ss << "\t\t\t\"" << it_c->first << "\":" << it_c->second;
-                    isnotlast(it_b->second, it_c)
-                    {
-                        ss << ",";
-                    }
-                    ss << endl;
-                }
-                ss << "\t\t}";
-
-                isnotlast(it_a->second, it_b)
-                {
-                    ss << ",";
-                }
-                ss << endl;
-            }
-            ss << "\t}";
-
-            isnotlast(m_mapStat, it_a)
-            {
-                ss << ",";
-            }
-            ss << endl;
-        }
-        ss << "}" << endl;
-        return ss.str();
+        return m_dirStat.AddCount(key1,key2,index);
     }
 
-    void SetStatDir(const string& statDir)
+    /**
+     * @brief   统计减
+     *
+     * @param   key1
+     * @param   key2
+     * @param   index
+     *
+     * @return  
+     */
+    virtual int StatDecCount(const char* key1, const char* key2, int index)
     {
-        m_statDir = statDir;
+        return m_dirStat.DecCount(key1,key2,index);
     }
-    */
+
 protected:
     /**
      * @brief   删除一个actor的指针
@@ -181,8 +165,8 @@ protected:
      */
     int eraseActor(list<IActor*>::iterator it)
     {
-        m_dirStat.DecCount("ALL","SELF",STAT_ALIVE);
-        m_dirStat.DecCount((*it)->Name().c_str(),"SELF",STAT_ALIVE);
+        StatDecCount("ALL","SELF",STAT_ALIVE);
+        StatDecCount((*it)->Name().c_str(),"SELF",STAT_ALIVE);
         SubNeedGCCount();
 
         delete (*it);
