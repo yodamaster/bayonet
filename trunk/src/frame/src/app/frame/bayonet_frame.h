@@ -41,10 +41,13 @@ typedef struct _StFrameParam
 
     int gcMaxCount;     //actorGC回收的最大值
 
+    string infoDir;      //信息存放目录,包括 stat, log
+
     LogLevel iLogLevel; //log等级(LM_ALL,LM_TRACE,LM_DEBUG,LM_WARNING,LM_ERROR,LM_FATAL,LM_NONE)
-    string logDir;      //log目录
     string logFileName; //log文件名
     int iLogMaxSize;    //log文件最大大小
+
+    string statFileName; //统计文件名字
 
     _StFrameParam()
     {
@@ -61,10 +64,13 @@ typedef struct _StFrameParam
 
         gcMaxCount = 1024;
 
+        infoDir = "./";
+
         iLogLevel = LM_TRACE;
-        logDir = "./";
         logFileName = "log";
         iLogMaxSize = LOG_DEFAULT_SIZE;
+
+        statFileName = "stat_file";
     }
 } StFrameParam;
 
@@ -81,7 +87,24 @@ public:
     int Init(StFrameParam param)
     {
         m_StFrameParam = param;
-        log_init(m_StFrameParam.iLogLevel,m_StFrameParam.logDir.c_str(),m_StFrameParam.logFileName.c_str(),m_StFrameParam.iLogMaxSize);
+
+        int ret;
+
+        string statDir = param.infoDir+string("/stat/");
+        string logDir = param.infoDir + string("/log/");
+
+        mkdir(statDir.c_str(),0777);
+        mkdir(logDir.c_str(),0777);
+
+        log_init(m_StFrameParam.iLogLevel,logDir.c_str(),m_StFrameParam.logFileName.c_str(),m_StFrameParam.iLogMaxSize);
+
+        ret = CFrameBase::Init(statDir.c_str(), param.statFileName.c_str());
+        if (ret != 0)
+        {
+            error_log("CFrameBase init fail,ret:%d",ret);
+            return -1;
+        }
+
         m_epoller.Init(m_StFrameParam.epollSize,m_StFrameParam.epollWaitTimeMs,m_StFrameParam.epollCheckTimeMs,m_StFrameParam.gcMaxCount);
         m_epoller.AttachFrame(this);
         return 0;
