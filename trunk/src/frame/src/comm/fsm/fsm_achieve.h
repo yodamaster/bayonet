@@ -248,59 +248,6 @@ protected:
     string m_statDir;
 
     //统计
-    /*
-        {
-        'ALL':{
-            'SELF':{
-                'ALIVE':count,
-                'TOTAL':count,
-            },
-            'fsmname1':{
-                'ALIVE':count,
-                'TOTAL':count,
-            },
-            'fsmname2':{
-                'ALIVE':count,
-                'TOTAL':count,
-            }
-        },
-        'GC':{
-            'SELF':{
-                'ALIVE':count,
-                'TOTAL':count,
-            },
-        },
-        'actorname':{
-            'SELF':{
-                'ALIVE':count,
-                'TOTAL':count,
-            },
-            'fsmname1':{
-                'ALIVE':count,
-                'TOTAL':count,
-            },
-            'fsmname2':{
-                'ALIVE':count,
-                'TOTAL':count,
-            }
-        },
-        'actorname2':{
-            'SELF':{
-                'ALIVE':count,
-                'TOTAL':count,
-            },
-            'fsmname1':{
-                'ALIVE':count,
-                'TOTAL':count,
-            },
-            'fsmname2':{
-                'ALIVE':count,
-                'TOTAL':count,
-            }
-        },
-    }
-
-    */
     CDirStat m_dirStat;
 };
 
