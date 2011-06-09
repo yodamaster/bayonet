@@ -21,7 +21,7 @@ CStatInfo::~CStatInfo()
     if ( _stat_buf )
     {
         int length = _stat_num * sizeof(atomic_t);
-        munmap(_stat_buf, length);
+        munmap((void*)_stat_buf, length);
         if (_ins != NULL)
         {
             delete this;
@@ -65,7 +65,7 @@ void CStatInfo::ResetStat()
 {
     int length = _stat_num * sizeof(atomic_t);
     memset((char *)_stat_buf, 0, length);
-    msync(_stat_buf, length, MS_SYNC);
+    msync((void*)_stat_buf, length, MS_SYNC);
     
     return ;
 }
