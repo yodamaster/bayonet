@@ -115,3 +115,18 @@ void CStatInfo::ShowStatInfo(int num)
 
     return ;
 }
+map<string,int> CStatInfo::GetStatMap()
+{
+    map<string,int> _map;
+
+    for (int i = 0; i < _stat_num; i ++)
+    {
+        if (_stat_desc[i] == NULL)
+        {
+            break;
+        }
+        _map[_stat_desc[i]] = atomic_read(&_stat_buf[i]);
+    }
+
+    return _map;
+}

@@ -23,18 +23,6 @@
 #include "stat_def.h"
 using namespace std;
 
-#ifndef foreach
-#define foreach(container,it) \
-    for(typeof((container).begin()) it = (container).begin();it!=(container).end();++it)
-#endif
-
-#ifndef isnotlast
-#define isnotlast(container,it) \
-    typeof(it) tmp = it; \
-    tmp++; \
-    if (tmp != container.end())
-#endif
-
 class CFrameBase : public IFrame
 {
 public:

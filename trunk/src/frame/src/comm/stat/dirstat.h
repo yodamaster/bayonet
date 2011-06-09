@@ -40,6 +40,13 @@ using namespace std;
     for(typeof((container).begin()) it = (container).begin();it!=(container).end();++it)
 #endif
 
+#ifndef isnotlast
+#define isnotlast(container,it) \
+    typeof(it) tmp = it; \
+    tmp++; \
+    if (tmp != container.end())
+#endif
+
 class CDirStat
 {
 public:
@@ -119,14 +126,17 @@ public:
         }
         return 0;
     }
-    int ShowStatInfo(const char* key1=NULL, const char* key2=NULL, int num=-1)
+    string GetStatInfo(const char* key1=NULL, const char* key2=NULL, int num=-1)
     {
+        stringstream ss;
+        ss << "{" << endl;
         foreach(m_mapStat, it1)
         {
             if (key1 && strlen(key1)>0 && string(key1) != it1->first)
             {
                 continue;
             }
+            ss << "\t\"" << it1->first << "\":{" << endl;
             foreach(it1->second, it2)
             {
                 if (key2 && strlen(key2)>0 && string(key2) != it2->first)
@@ -135,12 +145,38 @@ public:
                 }
                 if (it2->second == NULL)
                 {
-                    return -1;
+                    return "";
                 }
-                it2->second->ShowStatInfo();
+                ss << "\t\t\"" << it2->first << "\":{" << endl;
+
+                map<string,int> _map = it2->second->GetStatMap();
+                foreach(_map, it3)
+                {
+                    ss << "\t\t\t\"" << it3->first << "\":" << it3->second;
+                    isnotlast(_map, it3)
+                    {
+                        ss << ",";
+                    }
+                    ss << endl;
+                }
+                ss << "\t\t}";
+
+                isnotlast(it1->second, it2)
+                {
+                    ss << ",";
+                }
+                ss << endl;
             }
+            ss << "\t}";
+
+            isnotlast(m_mapStat, it1)
+            {
+                ss << ",";
+            }
+            ss << endl;
         }
-        return 0;
+        ss << "}" << endl;
+        return ss.str();
     }
 
 private:
