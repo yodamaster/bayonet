@@ -31,8 +31,9 @@ int CActionInfo::HandleStart()
             return -1;
     }
     CSocketActorActive* pSocketActorActive = (CSocketActorActive*)m_pSocketActorActive;
-    pSocketActorActive->SetIActionPtr(m_stActionTypeParam.pAction);
     pSocketActorActive->AttachFrame(m_pAppActor->GetFrame());
+    pSocketActorActive->SetAppActor(m_pAppActor);
+    pSocketActorActive->SetIActionPtr(m_stActionTypeParam.pAction);
     pSocketActorActive->SetActionInfoPtr(this);
     pSocketActorActive->Init(m_stActionTypeParam.ip,m_stActionTypeParam.port,m_stActionTypeParam.timeout_ms,m_stActionTypeParam.protoType);
     pSocketActorActive->ChangeState(SOCKET_FSM_INIT);
