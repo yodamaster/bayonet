@@ -107,13 +107,13 @@ public:
     virtual ~CAppFsmLogic1 () {}
     virtual int HandleEntry(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
     {
-        static CActionFirst actionFirst;
+        static CActionGetData actionGetData;
         StActionInfoParam param;
         param.id = 1;
         param.ip = "0.0.0.0";
         param.port = 20000;
         param.protoType = PROTO_TYPE_UDP;
-        param.pAction = &actionFirst;
+        param.pAction = &actionGetData;
         param.actionType = ACTIONTYPE_SENDONLY;
         param.timeout_ms = 1000;
 
