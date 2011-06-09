@@ -125,7 +125,7 @@ public:
      * @param   pActor
      * @param   strFsmFunc
      */
-    virtual void ChangeFsmStat(IFsm *fsm, IActor* pActor, const string &strFsmFunc)=0;
+    virtual void StatChangeFsm(IFsm *fsm, IActor* pActor, const string &strFsmFunc)=0;
 };
 
 class IActor : public IObject

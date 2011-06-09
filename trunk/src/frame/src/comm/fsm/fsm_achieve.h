@@ -106,7 +106,7 @@ public:
         m_mapFsmMgr[state] = fsm;
         return 0;
     }
-    virtual void ChangeFsmStat(IFsm *fsm, IActor* pActor, const string &strFsmFunc)
+    virtual void StatChangeFsm(IFsm *fsm, IActor* pActor, const string &strFsmFunc)
     {
         if (fsm == NULL || pActor == NULL)
         {
@@ -382,7 +382,7 @@ public:
     {
         if (m_pFrame)
         {
-            m_pFrame->ChangeFsmStat(this, pActor, __func__);
+            m_pFrame->StatChangeFsm(this, pActor, __func__);
         }
         return HandleEntry(pActor);
     }
@@ -391,7 +391,7 @@ public:
     {
         if (m_pFrame)
         {
-            m_pFrame->ChangeFsmStat(this, pActor, __func__);
+            m_pFrame->StatChangeFsm(this, pActor, __func__);
         }
         return HandleProcess(pActor);
     }
@@ -400,7 +400,7 @@ public:
     {
         if (m_pFrame)
         {
-            m_pFrame->ChangeFsmStat(this, pActor, __func__);
+            m_pFrame->StatChangeFsm(this, pActor, __func__);
         }
         return HandleExit(pActor);
     }
