@@ -93,6 +93,8 @@ public:
         {
             return -1;
         }
+
+        m_dirStat.ResetStat();
         return 0;
     }
 
