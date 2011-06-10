@@ -58,7 +58,10 @@ public:
      *
      * @return  id
      */
-    int GetID();
+    int GetID()
+    {
+        return m_stActionTypeParam.id;
+    }
 
     /**
      * @brief   socket处理完成时标记结束
