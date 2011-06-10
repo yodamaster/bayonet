@@ -118,7 +118,7 @@ public:
         }
 
         m_epoller.Init(m_StFrameParam.epollSize,m_StFrameParam.epollWaitTimeMs,m_StFrameParam.epollCheckTimeMs,m_StFrameParam.gcMaxCount);
-        m_epoller.AttachFrame(this);
+        m_epoller.SetFrame(this);
         return 0;
     }
 
