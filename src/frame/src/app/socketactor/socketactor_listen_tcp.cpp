@@ -21,7 +21,6 @@ int CSocketActorListenTcp::GetBackLog()
 
 int CSocketActorListenTcp::OnInit()
 {
-    trace_log("%s",__func__);
     if (m_SocketFd <= 0)
     {
         int optval;
@@ -61,7 +60,6 @@ int CSocketActorListenTcp::OnInit()
         return SOCKET_FSM_CLOSING;
     }
     pEpoller->AttachSocket(this);//加入到epoll中
-    trace_log("%s over",__func__);
 
     return SOCKET_FSM_INITOVER;
 }
@@ -80,7 +78,6 @@ int CSocketActorListenTcp::OnFiniOver()
 }
 int CSocketActorListenTcp::OnRecv()
 {
-    trace_log("%s",__func__);
     struct sockaddr_in addr;
     int length = sizeof(struct sockaddr_in);
     int clientfd = accept(m_SocketFd,(struct sockaddr *)&addr,(socklen_t*)&length);
@@ -116,7 +113,6 @@ int CSocketActorListenTcp::OnRecv()
     pSocketActorAccept->Init(clientfd,m_TimeoutMs,m_ProtoType);
     pSocketActorAccept->SetKeepcnt(m_bKeepcnt);
     pSocketActorAccept->ChangeState(SOCKET_FSM_INIT);
-    trace_log("%s over",__func__);
 
     return SOCKET_FSM_RECVOVER;
 }

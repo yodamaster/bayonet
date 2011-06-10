@@ -51,7 +51,6 @@ int CSocketActorListenUdp::OnInit()
         return SOCKET_FSM_CLOSING;
     }
     pEpoller->AttachSocket(this);//加入到epoll中
-    trace_log("%s over",__func__);
 
     return SOCKET_FSM_INITOVER;
 }

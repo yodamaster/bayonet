@@ -40,4 +40,8 @@ void CSocketActorPassive::NotifyAppActor()
     {
         m_pAppActor->ChangeState(APP_FSM_FINI);
     }
+    else
+    {
+        error_log("[class:%s]m_pAppActor is NULL",Name().c_str());
+    }
 }

@@ -38,7 +38,6 @@ int CSocketActorData::Init(string ip,int port,int timeout_ms,int protoType)
 
 int CSocketActorData::Init(int socketFd,int timeout_ms,int protoType)
 {
-    trace_log("");
     int ret = CSocketActorBase::Init(socketFd,timeout_ms,protoType);
     if (ret)
     {
@@ -60,21 +59,17 @@ int CSocketActorData::Init(int socketFd,int timeout_ms,int protoType)
     {
         return -3;
     }
-    trace_log("");
     return 0;
 }
 int CSocketActorData::OnInit()
 {
-    trace_log("");
     int ret = m_pNetHandler->Create();
     if (ret)
     {
-        trace_log("");
         return SOCKET_FSM_CLOSING;
     }
     else
     {
-        trace_log("");
         m_SocketFd = m_pNetHandler->GetSocketFd();
     }
     CEPoller* pEpoller = GetEpoller();
@@ -84,7 +79,6 @@ int CSocketActorData::OnInit()
         return SOCKET_FSM_CLOSING;
     }
     pEpoller->AttachSocket(this);//加入到epoll中
-    trace_log("");
     return SOCKET_FSM_INITOVER;
 }
 int CSocketActorData::OnFini()
@@ -153,7 +147,6 @@ int CSocketActorData::OnRecv()
 }
 int CSocketActorData::OnSend()
 {
-    trace_log("");
     int ret = 0;
     if (m_sendFlag == 0)
     {
@@ -170,20 +163,15 @@ int CSocketActorData::OnSend()
             return SOCKET_FSM_CLOSING;
         }
     }
-    trace_log("");
     while (m_sendedLen != m_sendBufLen)
     {
-        trace_log("");
         ret = m_pNetHandler->Send((char*)(m_strSendBuf.c_str()+m_sendedLen),m_sendBufLen-m_sendedLen);
-        trace_log("%s",m_strSendBuf.c_str());
         if ( ret == 0 )
         {
-            trace_log("");
             return SOCKET_FSM_WAITSEND;
         }
         else if ( ret < 0 )
         {
-            trace_log("");
             if ( errno == EINTR || errno == EAGAIN )
             {
                 return SOCKET_FSM_WAITSEND;
@@ -192,11 +180,9 @@ int CSocketActorData::OnSend()
         }
         else
         {
-            trace_log("");
             m_sendedLen += ret;
         }
     }
-    trace_log("");
     return SOCKET_FSM_SENDOVER;
 }
 int CSocketActorData::OnClose()
