@@ -14,11 +14,16 @@ typedef enum
     STAT_TOTAL = 0,
     STAT_ALIVE,
 
+    STAT_5MS_REQ,
     STAT_10MS_REQ,
     STAT_50MS_REQ,
     STAT_100MS_REQ,
     STAT_200MS_REQ,
     STAT_500MS_REQ,
+    STAT_1000MS_REQ,
+    STAT_2000MS_REQ,
+    STAT_3000MS_REQ,
+    STAT_5000MS_REQ,
     STAT_MORE_REQ,
 
     STAT_OVER
@@ -29,11 +34,16 @@ const char * const stat_desc[] =
     "STAT_TOTAL",
     "STAT_ALIVE",
 
+    "STAT_5MS_REQ",
     "STAT_10MS_REQ",
     "STAT_50MS_REQ",
     "STAT_100MS_REQ",
     "STAT_200MS_REQ",
     "STAT_500MS_REQ",
+    "STAT_1000MS_REQ",
+    "STAT_2000MS_REQ",
+    "STAT_3000MS_REQ",
+    "STAT_5000MS_REQ",
     "STAT_MORE_REQ",
 };
 #endif
