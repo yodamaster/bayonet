@@ -26,6 +26,9 @@
 #include "timer.h"
 using namespace std;
 
+/**
+ * @brief   统计每个actor状态变化的路径以及经过的时间
+ */
 typedef struct _StFsmNode
 {
     IFsm* fsm;
@@ -62,18 +65,28 @@ typedef struct _StFsmNode
 static int MapTime2StatIndex(int msec,int baseLine)
 {
     int statTimeIndex;
-    if(msec<10)
+    if(msec<5)
         statTimeIndex = baseLine;
-    else if(msec<50)
+    else if(msec<10)
         statTimeIndex = baseLine+1;
-    else if(msec<100)
+    else if(msec<50)
         statTimeIndex = baseLine+2;
-    else if(msec<200)
+    else if(msec<100)
         statTimeIndex = baseLine+3;
-    else if(msec<500)
+    else if(msec<200)
         statTimeIndex = baseLine+4;
-    else 
+    else if(msec<500)
         statTimeIndex = baseLine+5;
+    else if(msec<1000)
+        statTimeIndex = baseLine+6;
+    else if(msec<2000)
+        statTimeIndex = baseLine+7;
+    else if(msec<3000)
+        statTimeIndex = baseLine+8;
+    else if(msec<5000)
+        statTimeIndex = baseLine+9;
+    else
+        statTimeIndex = baseLine+10;
     return statTimeIndex;
 }
 
@@ -191,7 +204,7 @@ public:
             int pastTimeMs = 0;
             pActor->StatFsmExit(fsm,pastTimeMs);
 
-            int statTimeIndex = MapTime2StatIndex(pastTimeMs, STAT_10MS_REQ);
+            int statTimeIndex = MapTime2StatIndex(pastTimeMs, STAT_5MS_REQ);
             //统计fsm的时间
             StatAddCount("ALL",fsm->Name().c_str(), statTimeIndex);
             StatAddCount(pActor->Name().c_str(),fsm->Name().c_str(), statTimeIndex);
@@ -225,11 +238,11 @@ protected:
         StatDecCount((*it)->Name().c_str(),"SELF",STAT_ALIVE);
 
         //统计存活时间和GC时间
-        int statTimeIndex = MapTime2StatIndex((*it)->GetAliveTimeMs(), STAT_10MS_REQ);
+        int statTimeIndex = MapTime2StatIndex((*it)->GetAliveTimeMs(), STAT_5MS_REQ);
         StatAddCount("ALL","SELF",statTimeIndex);
         StatAddCount((*it)->Name().c_str(),"SELF",statTimeIndex);
 
-        statTimeIndex = MapTime2StatIndex((*it)->GetGCTimeMs(),STAT_10MS_REQ);
+        statTimeIndex = MapTime2StatIndex((*it)->GetGCTimeMs(),STAT_5MS_REQ);
         StatAddCount("GC","SELF",statTimeIndex);
 
 
@@ -285,7 +298,7 @@ public:
             m_pFrame->StatDecCount(Name().c_str(),"VALID",STAT_ALIVE);
 
             int pastTimeMs = m_aliveTimer.GetPastTime();
-            int statTimeIndex = MapTime2StatIndex(pastTimeMs, STAT_10MS_REQ);
+            int statTimeIndex = MapTime2StatIndex(pastTimeMs, STAT_5MS_REQ);
             m_pFrame->StatAddCount("ALL","VALID",statTimeIndex);
             m_pFrame->StatAddCount(Name().c_str(),"VALID",statTimeIndex);
         }

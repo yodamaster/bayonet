@@ -27,6 +27,7 @@
 #include <vector>
 #include <set>
 #include <map>
+#include <iomanip> 
 
 #include "dir_func.h"
 #include "comm_func.h"
@@ -128,6 +129,7 @@ public:
     }
     string GetStatInfo(const char* key1=NULL, const char* key2=NULL, int num=-1)
     {
+        char szTmp[512]={0};
         stringstream ss;
         ss << "{" << endl;
         foreach(m_mapStat, it1)
@@ -152,7 +154,8 @@ public:
                 vector<pair<string,int> > _map = it2->second->GetStatMap();
                 foreach(_map, it3)
                 {
-                    ss << "\t\t\t\"" << it3->first << "\":" << it3->second;
+                    snprintf(szTmp,sizeof(szTmp),"%-20s: %d", (string("\"")+it3->first+string("\"")).c_str(), it3->second);
+                    ss  << "\t\t\t" << szTmp;
                     isnotlast(_map, it3)
                     {
                         ss << ",";
