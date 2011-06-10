@@ -13,7 +13,7 @@ CEPoller::CEPoller()
 CEPoller::~CEPoller()
 {
 }
-int CEPoller::AttachFrame(IFrame* pFrame)
+int CEPoller::SetFrame(IFrame* pFrame)
 {
     m_pFrame = pFrame;
     return 0;

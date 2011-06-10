@@ -30,7 +30,7 @@ public:
     ~CEPoller();
 
     int Init(int epoll_size,int waittime_ms,int check_time,int gc_maxcount);
-    int AttachFrame(IFrame* pFrame);
+    int SetFrame(IFrame* pFrame);
     int AddEpollIO(int fd,unsigned flag);
     int ModEpollIO(int fd,unsigned flag);
     int SetEpollIO(int fd,unsigned flag);

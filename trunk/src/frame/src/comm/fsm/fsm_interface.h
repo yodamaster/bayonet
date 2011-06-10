@@ -189,9 +189,8 @@ public:
      *
      * @param   ptrMapFsmMgr
      *
-     * @return  0
      */
-    virtual int AttachFsmMgr(map<int, IFsm*> *ptrMapFsmMgr)=0;
+    virtual void SetFsmMgr(map<int, IFsm*> *ptrMapFsmMgr)=0;
 
     /**
      * @brief   获取关联状态机的管理器
@@ -273,18 +272,16 @@ public:
      *
      * @param   pFrame
      *
-     * @return  0
      */
-    virtual int AttachFrame(IFrame* pFrame)=0;
+    virtual void SetFrame(IFrame* pFrame)=0;
 
     /**
      * @brief   设置state
      *
      * @param   state
      *
-     * @return  0
      */
-    virtual int SetStateID(int state)=0;
+    virtual void SetStateID(int state)=0;
 
     /**
      * @brief   获取StateId

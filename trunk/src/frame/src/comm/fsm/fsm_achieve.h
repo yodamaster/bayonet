@@ -177,7 +177,7 @@ public:
         {
             return -1;
         }
-        fsm->AttachFrame(this);
+        fsm->SetFrame(this);
         fsm->SetStateID(state);
         m_mapFsmMgr[state] = fsm;
         return 0;
@@ -315,7 +315,7 @@ public:
         }
         m_pFrame = pFrame;
         m_pFrame->AddActor(this);
-        AttachFsmMgr(m_pFrame->GetFsmMgr());
+        SetFsmMgr(m_pFrame->GetFsmMgr());
         return 0;
     }
     IFrame* GetFrame()
@@ -323,10 +323,9 @@ public:
         return m_pFrame;
     }
 
-    int AttachFsmMgr(map<int, IFsm*> * ptrMapFsmMgr)
+    void SetFsmMgr(map<int, IFsm*> * ptrMapFsmMgr)
     {
         m_ptrMapFsmMgr = ptrMapFsmMgr;
-        return 0;
     }
     map<int, IFsm*>* GetFsmMgr()
     {
@@ -449,16 +448,14 @@ public:
         m_stateID = -1;
     }
     virtual ~CFsmBase () {}
-    int AttachFrame(IFrame* pFrame)
+    void SetFrame(IFrame* pFrame)
     {
         m_pFrame = pFrame;
-        return 0;
     }
 
-    int SetStateID(int state)
+    void SetStateID(int state)
     {
         m_stateID = state;
-        return 0;
     }
 
     int GetStateID()
