@@ -26,5 +26,7 @@ public:
         return SOCKET_FSM_WAITRECV;
     }
     virtual int OnRecvOver();
+
+    virtual bool IsTimeOut(struct timeval& now_time);
 };
 #endif

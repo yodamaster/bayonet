@@ -74,3 +74,8 @@ int CSocketActorListenUdp::OnRecvOver()
     }
     return SOCKET_FSM_WAITRECV;
 }
+bool CSocketActorListenUdp::IsTimeOut(struct timeval& now_time)
+{
+    //永不超时
+    return false;
+}

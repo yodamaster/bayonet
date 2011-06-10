@@ -18,15 +18,15 @@ public:
     }
     virtual ~CSocketActorActiveSendRecv () {}
 
-    virtual int OnClose()
+    virtual int OnCloseOver()
     {
         int count = m_vecFsmNodes.size();
-        if (!(count > 2 && m_vecFsmNodes[count-2].fsm->GetStateID() == SOCKET_FSM_RECVOVER))
+        if (!(count > 3 && m_vecFsmNodes[count-3].fsm->GetStateID() == SOCKET_FSM_RECVOVER))
         {
             //非正常关闭
             SetDealOver(ESocketHangup);
         }
-        return CSocketActorActive::OnClose();
+        return CSocketActorActive::OnCloseOver();
     }
 
     virtual int OnSendOver()

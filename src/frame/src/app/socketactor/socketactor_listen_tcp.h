@@ -45,6 +45,8 @@ public:
 
     virtual int OnCloseOver();
 
+    virtual bool IsTimeOut(struct timeval& now_time);
+
 protected:
     int m_BackLog;
 };
