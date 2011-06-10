@@ -31,7 +31,6 @@ int CAppActorBase::DetachCommu()
 }
 int CAppActorBase::Send2Client()
 {
-    trace_log("");
     if (m_pCommuSocketActor)
     {
         m_pCommuSocketActor->ChangeState(SOCKET_FSM_WAITSEND);

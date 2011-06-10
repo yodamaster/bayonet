@@ -20,12 +20,9 @@ public:
     }
     virtual int OnRecvOver()
     {
-        trace_log("");
         //TODO
-        //这个时候,应该是要等数据处理的阶段，现在是测试，直接回报
+        //这个时候,应该是要等数据处理的阶段
         return SOCKET_FSM_WAITCLOSE;
-        //return 0;
-        //return SOCKET_FSM_WAITSEND;
     }
 };
 #endif
