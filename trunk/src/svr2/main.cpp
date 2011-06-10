@@ -114,12 +114,29 @@ public:
         param.pAction = &actionGetData;
         //param.actionType = ACTIONTYPE_SENDONLY;
         param.actionType = ACTIONTYPE_SENDRECV;
-        param.timeout_ms = 1000;
+        param.timeout_ms = 500;
 
         CActionInfo * pActionInfo = new CActionInfo();
         pActionInfo->Init(param);
         pActionInfo->SetAppActor(pAppActor);
+
         pActionInfoSet->Add(pActionInfo);
+
+        StActionInfoParam param2;
+        param2.id = 2;
+        param2.ip = "0.0.0.0";
+        param2.port = 20000;
+        param2.protoType = PROTO_TYPE_UDP;
+        param2.pAction = &actionGetData;
+        //param2.actionType = ACTIONTYPE_SENDONLY;
+        param2.actionType = ACTIONTYPE_SENDRECV;
+        param2.timeout_ms = 500;
+
+        CActionInfo * pActionInfo2 = new CActionInfo();
+        pActionInfo2->Init(param2);
+        pActionInfo2->SetAppActor(pAppActor);
+
+        pActionInfoSet->Add(pActionInfo2);
         return 0;
     }
     virtual int HandleProcess(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
@@ -127,7 +144,7 @@ public:
         set<CActionInfo*> &setAction = pActionInfoSet->GetActionSet();
         for(set<CActionInfo*>::iterator it = setAction.begin(); it != setAction.end(); ++it)
         {
-            trace_log("error no:%d",(*it)->GetErrno());
+            trace_log("id:%d,error no:%d,timecost:%u ms",(*it)->GetID(),(*it)->GetErrno(),(*it)->GetTimeCost());
         }
         return APP_FSM_RSP;//代表要回复客户端啦
     }
