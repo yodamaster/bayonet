@@ -25,7 +25,7 @@ public:
         m_pAppActor = NULL;
     }
     virtual ~CActionInfoSet() {}
-    virtual void AttachActor(IActor* pActor)
+    virtual void SetAppActor(IActor* pActor)
     {
         m_pAppActor = pActor;
     }
@@ -42,6 +42,7 @@ public:
      */
     virtual int Add(CActionInfo* pActionInfo)
     {
+        pActionInfo->SetAppActor(m_pAppActor);
         m_setActionInfos.insert(pActionInfo);
         return 0;
     }
@@ -88,7 +89,7 @@ public:
         for(set<CActionInfo*>::iterator it = m_setActionInfos.begin(); it != m_setActionInfos.end();)
         {
             set<CActionInfo*>::iterator tempIt = it;
-            ++it;
+            it++;
             if (*tempIt)
             {
                 delete (*tempIt);
