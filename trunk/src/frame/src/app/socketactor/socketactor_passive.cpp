@@ -45,3 +45,8 @@ void CSocketActorPassive::NotifyAppActor()
         error_log("[class:%s]m_pAppActor is NULL",Name().c_str());
     }
 }
+int CSocketActorPassive::OnCloseOver()
+{
+    NotifyAppActor();//通知上层状态机可以FINI了
+    return CSocketActorData::OnCloseOver();
+}

@@ -88,8 +88,41 @@ void CSocketActorBase::SetKeepcnt(bool bKeepcnt)
 }
 int CSocketActorBase::CheckTimeOut(struct timeval& now_time)
 {
+    if (GetGCMark())
+    {
+        return 0;
+    }
     //默认是永不超时的
+    if (IsTimeOut(now_time))
+    {
+        ChangeState(SOCKET_FSM_TIMEOUT);
+    }
     return 0;
+}
+bool CSocketActorBase::IsTimeOut(struct timeval& now_time)
+{
+    if (m_TimeoutMs < 0)
+    {
+        //永不超时
+        return false;
+    }
+
+    if (m_ProtoType == PROTO_TYPE_TCP && m_bKeepcnt)
+    {
+        //长连接
+        return false;
+    }
+
+    int pastTime = m_aliveTimer.GetPastTime();
+
+    if (pastTime > m_TimeoutMs)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 CEPoller* CSocketActorBase::GetEpoller()
 {

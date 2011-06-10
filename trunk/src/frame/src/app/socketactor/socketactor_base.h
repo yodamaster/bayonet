@@ -58,6 +58,8 @@ public:
 
     virtual int CheckTimeOut(struct timeval& now_time);
 
+    virtual bool IsTimeOut(struct timeval& now_time);
+
     virtual int SetEvent(unsigned event);
 
     virtual int OnTimeout();

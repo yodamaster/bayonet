@@ -20,6 +20,8 @@ public:
     virtual int OnFiniOver();
     virtual int OnSendOver();
 
+    virtual int OnCloseOver();
+
 protected:
     void NotifyAppActor();
 };

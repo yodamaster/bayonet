@@ -23,7 +23,14 @@ public:
     }
     int GetPastTime()
     {
-        static struct timeval now_tv;
+        struct timeval now_tv;
+        long past_time  = 0;
+        gettimeofday(&now_tv, NULL);
+        past_time = ((now_tv.tv_sec  - m_Start_TV.tv_sec ) * 1000000 + (now_tv.tv_usec - m_Start_TV.tv_usec)) / 1000;
+        return past_time;
+    }
+    int GetPastTime(struct timeval& now_tv)
+    {
         long past_time  = 0;
         gettimeofday(&now_tv, NULL);
         past_time = ((now_tv.tv_sec  - m_Start_TV.tv_sec ) * 1000000 + (now_tv.tv_usec - m_Start_TV.tv_usec)) / 1000;

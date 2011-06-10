@@ -56,7 +56,6 @@ public:
         app_actor->AttachFrame(pSocketActor->GetFrame());
         app_actor->AttachCommu(pSocketActor);
         app_actor->ChangeState(APP_FSM_LOGIC1);
-        trace_log("listen tcp HandleDecodeRecvBuf");
         return 0;
     }
 };
@@ -125,7 +124,6 @@ public:
     }
     virtual int HandleProcess(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
     {
-        trace_log("HandleProcess");
         set<CActionInfo*> &setAction = pActionInfoSet->GetActionSet();
         for(set<CActionInfo*>::iterator it = setAction.begin(); it != setAction.end(); ++it)
         {
