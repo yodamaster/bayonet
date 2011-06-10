@@ -25,7 +25,7 @@ class CAppActorBase : public CActorBase
 public:
     CAppActorBase()
     {
-        m_ActionInfoSet.AttachActor(this);
+        m_ActionInfoSet.SetAppActor(this);
         m_pCommuSocketActor = NULL;
     }
     virtual ~CAppActorBase () {}

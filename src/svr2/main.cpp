@@ -118,8 +118,6 @@ public:
 
         CActionInfo * pActionInfo = new CActionInfo();
         pActionInfo->Init(param);
-        pActionInfo->SetAppActor(pAppActor);
-
         pActionInfoSet->Add(pActionInfo);
 
         StActionInfoParam param2;
@@ -134,7 +132,6 @@ public:
 
         CActionInfo * pActionInfo2 = new CActionInfo();
         pActionInfo2->Init(param2);
-        pActionInfo2->SetAppActor(pAppActor);
 
         pActionInfoSet->Add(pActionInfo2);
         return 0;
