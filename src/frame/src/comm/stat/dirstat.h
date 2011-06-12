@@ -30,7 +30,6 @@
 #include <iomanip> 
 
 #include "dir_func.h"
-#include "comm_func.h"
 #include "stat.h"
 using namespace std;
 
@@ -50,6 +49,40 @@ using namespace std;
 
 class CDirStat
 {
+public:
+    static int SplitString(const string &srcStr,const string &splitStr,vector<string> &destVec)
+    {
+        if(srcStr.size()==0)
+        {
+            return 0;
+        }
+        size_t oldPos,newPos;
+        oldPos=0;
+        newPos=0;
+        string tempData;
+        while(1)
+        {
+            newPos=srcStr.find(splitStr,oldPos);
+            if(newPos!=string::npos)
+            {
+                tempData = srcStr.substr(oldPos,newPos-oldPos);
+                destVec.push_back(tempData);
+                oldPos=newPos+splitStr.size();
+            }
+            else if(oldPos<=srcStr.size())
+            {
+                tempData= srcStr.substr(oldPos);
+                destVec.push_back(tempData);
+                break;
+            }
+            else
+            {
+                break;
+            }
+        }
+        return 0;
+    }
+
 public:
     CDirStat() {
         m_statDir = "./";
@@ -104,20 +137,29 @@ public:
         }
         return pStat->GetCount(index);
     }
-    int ResetStat(const char* key1=NULL, const char* key2=NULL)
+    int ResetStat(vector<string>& vecKey1, vector<string>& vecKey2)
     {
+        map<string, map<string, CStatInfo* > > mapTmp;
         foreach(m_mapStat, it1)
         {
-            if (key1 && strlen(key1)>0 && string(key1) != it1->first)
+            if (!vecKey1.empty() && find(vecKey1.begin(), vecKey1.end(), it1->first) == vecKey1.end())
             {
                 continue;
             }
             foreach(it1->second, it2)
             {
-                if (key2 && strlen(key2)>0 && string(key2) != it2->first)
+                if (!vecKey2.empty() && find(vecKey2.begin(), vecKey2.end(), it2->first) == vecKey2.end())
                 {
                     continue;
                 }
+                mapTmp[it1->first][it2->first] = it2->second;
+            }
+        }
+
+        foreach(mapTmp, it1)
+        {
+            foreach(it1->second, it2)
+            {
                 if (it2->second == NULL)
                 {
                     return -1;
@@ -127,24 +169,33 @@ public:
         }
         return 0;
     }
-    string GetStatInfo(const char* key1=NULL, const char* key2=NULL, int num=-1)
+    string GetStatInfo(vector<string>& vecKey1, vector<string>& vecKey2)
     {
-        char szTmp[512]={0};
-        stringstream ss;
-        ss << "{" << endl;
+        map<string, map<string, CStatInfo* > > mapTmp;
         foreach(m_mapStat, it1)
         {
-            if (key1 && strlen(key1)>0 && string(key1) != it1->first)
+            if (!vecKey1.empty() && find(vecKey1.begin(), vecKey1.end(), it1->first) == vecKey1.end())
             {
                 continue;
             }
-            ss << "\t\"" << it1->first << "\":{" << endl;
             foreach(it1->second, it2)
             {
-                if (key2 && strlen(key2)>0 && string(key2) != it2->first)
+                if (!vecKey2.empty() && find(vecKey2.begin(), vecKey2.end(), it2->first) == vecKey2.end())
                 {
                     continue;
                 }
+                mapTmp[it1->first][it2->first] = it2->second;
+            }
+        }
+
+        char szTmp[512]={0};
+        stringstream ss;
+        ss << "{" << endl;
+        foreach(mapTmp, it1)
+        {
+            ss << "\t\"" << it1->first << "\":{" << endl;
+            foreach(it1->second, it2)
+            {
                 if (it2->second == NULL)
                 {
                     return "";
@@ -164,24 +215,19 @@ public:
                 }
                 ss << "\t\t}";
 
-                if (!(key2 && strlen(key2)>0))
+                isnotlast(it1->second, it2)
                 {
-                    isnotlast(it1->second, it2)
-                    {
-                        ss << ",";
-                    }
+                    ss << ",";
                 }
                 ss << endl;
             }
             ss << "\t}";
 
-            if (!(key1 && strlen(key1)>0))
+            isnotlast(m_mapStat, it1)
             {
-                isnotlast(m_mapStat, it1)
-                {
-                    ss << ",";
-                }
+                ss << ",";
             }
+
             ss << endl;
         }
         ss << "}" << endl;
@@ -247,7 +293,7 @@ private:
         }
 
         vector<string> destVec;
-        SplitString(filePath,"/",destVec);
+        CDirStat::SplitString(filePath,"/",destVec);
 
         vector<string> vecNew;
         foreach(destVec, it)

@@ -107,7 +107,8 @@ public:
             return -1;
         }
 
-        m_dirStat.ResetStat();
+        vector<string> vecKey1,vecKey2;
+        m_dirStat.ResetStat(vecKey1,vecKey2);
         return 0;
     }
 

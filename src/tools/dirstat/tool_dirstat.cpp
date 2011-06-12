@@ -19,6 +19,7 @@
 
 int _clear_flag = 0;
 int _loop_flag = 0;
+
 int main(int argc,char** argv)
 {
     int input;
@@ -74,6 +75,10 @@ int main(int argc,char** argv)
     }
     //printf("show num:%d\n",num);
 
+    vector<string> vecKey1,vecKey2;
+    CDirStat::SplitString(key1,"&",vecKey1);
+    CDirStat::SplitString(key2,"&",vecKey2);
+
     CDirStat _stat;
     if ( _stat.Init(stat_dir.c_str(),_stat_file.c_str(),&stat_desc[0],STAT_OVER) < 0 )
     {
@@ -83,10 +88,10 @@ int main(int argc,char** argv)
 
     while(1)
     {
-        cout << _stat.GetStatInfo(key1.c_str(),key2.c_str(),num);
+        cout << _stat.GetStatInfo(vecKey1,vecKey2);
         if ( _clear_flag )
         {
-            _stat.ResetStat(key1.c_str(),key2.c_str());
+            _stat.ResetStat(vecKey1,vecKey2);
         }
         printf("\n");
         printf(".............................................\n");
