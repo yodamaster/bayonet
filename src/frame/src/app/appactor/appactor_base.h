@@ -28,7 +28,9 @@ public:
         m_ActionInfoSet.SetAppActor(this);
         m_pCommuSocketActor = NULL;
     }
-    virtual ~CAppActorBase () {}
+    virtual ~CAppActorBase () {
+        DetachCommu();
+    }
 
     CActionInfoSet* GetActionInfoSet()
     {
@@ -37,6 +39,7 @@ public:
     int OnFini()
     {
         SetGCMark();
+        DetachCommu();
         return APP_FSM_ALLOVER;
     }
 

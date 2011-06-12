@@ -283,8 +283,7 @@ public:
         m_aliveTimer.Start();
     }
 
-    virtual ~CActorBase () {
-    }
+    virtual ~CActorBase () {}
 
     void SetGCMark()
     {

@@ -130,6 +130,7 @@ int CSocketActorListenTcp::OnSendOver()
 }
 int CSocketActorListenTcp::OnClose()
 {
+    DetachFromEpoller();
     if (m_SocketFd>0)
     {
         close(m_SocketFd);
