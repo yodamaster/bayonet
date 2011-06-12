@@ -157,14 +157,18 @@ public:
     }
     void GCActors()
     {
-        for(list<IActor*>::iterator it = m_listActors.begin(); it != m_listActors.end(); ++it)
+        for(list<IActor*>::iterator it = m_listActors.begin(); it != m_listActors.end();)
         {
-            list<IActor*>::iterator tempIt = it;
-            it++;
+            //list<IActor*>::iterator tempIt = it;
+            //it++;
 
-            if ((*tempIt)->GetGCMark())
+            if ((*it)->GetGCMark())
             {
-                eraseActor(tempIt);
+                it = eraseActor(it);
+            }
+            else
+            {
+                ++it;
             }
         }
     }
@@ -233,7 +237,7 @@ protected:
      *
      * @return  
      */
-    int eraseActor(list<IActor*>::iterator it)
+    list<IActor*>::iterator eraseActor(list<IActor*>::iterator it)
     {
         StatDecCount("ALL","SELF",STAT_ALIVE);
         StatDecCount((*it)->Name().c_str(),"SELF",STAT_ALIVE);
@@ -250,9 +254,9 @@ protected:
         SubNeedGCCount();
 
         delete (*it);
-        m_listActors.erase(it);
+        list<IActor*>::iterator next_it = m_listActors.erase(it);
         m_allActorCount--;
-        return 0;
+        return next_it;
     }
 protected:
     list<IActor*> m_listActors;
