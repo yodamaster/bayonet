@@ -135,6 +135,16 @@ CEPoller* CSocketActorBase::GetEpoller()
     CEPoller * pEpoller = pBayonetFrame->GetEpoller();
     return pEpoller;
 }
+int CSocketActorBase::DetachFromEpoller()
+{
+    CEPoller* pEpoller = GetEpoller();
+    if (pEpoller)
+    {
+        pEpoller->DetachSocket(this);
+        return 0;
+    }
+    return 1;
+}
 int CSocketActorBase::OnTimeout()
 {
     return SOCKET_FSM_CLOSING;

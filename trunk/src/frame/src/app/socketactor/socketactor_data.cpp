@@ -206,6 +206,7 @@ int CSocketActorData::OnSend()
 }
 int CSocketActorData::OnClose()
 {
+    DetachFromEpoller();
     if (m_pNetHandler)
     {
         m_pNetHandler->Close();

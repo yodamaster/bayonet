@@ -88,6 +88,7 @@ public:
 
 protected:
     virtual CEPoller* GetEpoller();
+    int DetachFromEpoller();
 
 protected:
     int m_SocketFd;
