@@ -150,7 +150,7 @@ int CSocketActorData::OnRecv()
     return SOCKET_FSM_RECVOVER;*/
 //TO
     //这里的主要是考虑，appactor可能直接就返回
-    if (!m_vecFsmNodes.empty() && m_vecFsmNodes.back().fsm->GetStateID() == SOCKET_FSM_RECVOVER)
+    if (!m_vecFsmNodes.empty() && m_vecFsmNodes.back().fsm->GetStateID() == SOCKET_FSM_RECVING)
     {
         if (ret)
         {
