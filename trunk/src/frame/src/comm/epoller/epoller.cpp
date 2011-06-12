@@ -110,7 +110,7 @@ int CEPoller::LoopForEvent()
             prev_tm = next_tm;
         }
         //进行垃圾回收
-        if (m_pFrame->GetActorCount() > m_gcMaxCount)
+        if (m_pFrame->GetNeedGCCount() > m_gcMaxCount)
         {
             m_pFrame->GCActors();
         }

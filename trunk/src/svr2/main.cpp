@@ -112,8 +112,8 @@ public:
         param.port = 20000;
         param.protoType = PROTO_TYPE_UDP;
         param.pAction = &actionGetData;
-        //param.actionType = ACTIONTYPE_SENDONLY;
-        param.actionType = ACTIONTYPE_SENDRECV;
+        param.actionType = ACTIONTYPE_SENDONLY;
+        //param.actionType = ACTIONTYPE_SENDRECV;
         param.timeout_ms = 500;
 
         CActionInfo * pActionInfo = new CActionInfo();
@@ -126,8 +126,8 @@ public:
         param2.port = 20000;
         param2.protoType = PROTO_TYPE_UDP;
         param2.pAction = &actionGetData;
-        //param2.actionType = ACTIONTYPE_SENDONLY;
-        param2.actionType = ACTIONTYPE_SENDRECV;
+        param2.actionType = ACTIONTYPE_SENDONLY;
+        //param2.actionType = ACTIONTYPE_SENDRECV;
         param2.timeout_ms = 500;
 
         CActionInfo * pActionInfo2 = new CActionInfo();
