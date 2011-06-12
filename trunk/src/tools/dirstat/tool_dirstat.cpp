@@ -76,8 +76,8 @@ int main(int argc,char** argv)
     //printf("show num:%d\n",num);
 
     vector<string> vecKey1,vecKey2;
-    CDirStat::SplitString(key1,"&",vecKey1);
-    CDirStat::SplitString(key2,"&",vecKey2);
+    CDirStat::SplitString(key1,"*",vecKey1);
+    CDirStat::SplitString(key2,"*",vecKey2);
 
     CDirStat _stat;
     if ( _stat.Init(stat_dir.c_str(),_stat_file.c_str(),&stat_desc[0],STAT_OVER) < 0 )
