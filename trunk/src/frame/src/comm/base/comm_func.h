@@ -15,37 +15,5 @@
 =============================================================================*/
 #ifndef __COMM_FUNC_H__
 #define __COMM_FUNC_H__
-static int SplitString(const string &srcStr,const string &splitStr,vector<string> &destVec)
-{
-    if(srcStr.size()==0)
-    {
-        return 0;
-    }
-    size_t oldPos,newPos;
-    oldPos=0;
-    newPos=0;
-    string tempData;
-    while(1)
-    {
-        newPos=srcStr.find(splitStr,oldPos);
-        if(newPos!=string::npos)
-        {
-            tempData = srcStr.substr(oldPos,newPos-oldPos);
-            destVec.push_back(tempData);
-            oldPos=newPos+splitStr.size();
-        }
-        else if(oldPos<=srcStr.size())
-        {
-            tempData= srcStr.substr(oldPos);
-            destVec.push_back(tempData);
-            break;
-        }
-        else
-        {
-            break;
-        }
-    }
-    return 0;
-}
 
 #endif
