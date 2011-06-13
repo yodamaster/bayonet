@@ -37,7 +37,6 @@ using namespace std;
 static int GetFileInDir(string dirName,string repr,vector<string> &vecFiles)
 {
     DIR* Dir = NULL;
-    struct dirent* file = NULL;
     if (dirName[dirName.size()-1] != '/')
     {
         dirName += "/";
@@ -48,26 +47,34 @@ static int GetFileInDir(string dirName,string repr,vector<string> &vecFiles)
     }
 
     int ret;
-    while ((file = readdir(Dir)))
+    struct dirent entry;
+    struct dirent *entryPtr = NULL;
+
+    while (readdir_r(Dir,&entry,&entryPtr) == 0)
     {
-        //if the file is a normal file
-        if (file->d_type == DT_REG)
+        if (entryPtr == NULL)
         {
-            if (repr.empty() || string(file->d_name) == repr)
+            break;
+        }
+        //if the entry is a normal entry
+        if (entry.d_type == DT_REG)
+        {
+            if (repr.empty() || string(entry.d_name) == repr)
             {
-                vecFiles.push_back(dirName + file->d_name);
+                vecFiles.push_back(dirName + entry.d_name);
             }
         }
-        //if the file is a directory
-        else if (file->d_type == DT_DIR && strcmp(file->d_name, ".") != 0 && strcmp(file->d_name, "..") != 0)
+        //if the entry is a directory
+        else if (entry.d_type == DT_DIR && strcmp(entry.d_name, ".") != 0 && strcmp(entry.d_name, "..") != 0)
         {
-            ret = GetFileInDir(dirName + file->d_name, repr, vecFiles);
+            ret = GetFileInDir(dirName + entry.d_name, repr, vecFiles);
             if (ret != 0)
             {
                 return ret;
             }
         }
     }
+    closedir(Dir);
     return 0;
 }
 
