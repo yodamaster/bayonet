@@ -33,7 +33,7 @@ template <typename T>
 class ptr_proxy
 {
 public:
-    ptr_proxy(const T* pobj=NULL) : m_ppobj(NULL),m_pcount(NULL)
+    ptr_proxy(const T* pobj=NULL) : m_ppobj(NULL), m_pcount(NULL)
     {
         if (pobj == NULL)
         {
@@ -98,7 +98,7 @@ public:
     }
 
     /**
-     * @brief   获取内部关联的obj的引用(要注意不能为NULL)
+     * @brief   获取内部关联的obj的指针
      *
      * @return
      */
@@ -115,7 +115,7 @@ public:
     }
 
     /**
-     * @brief   获取内部关联的obj的引用(要注意不能为NULL)
+     * @brief   获取内部关联的obj的指针
      *
      * @return
      */
