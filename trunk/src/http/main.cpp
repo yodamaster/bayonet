@@ -106,6 +106,7 @@ public:
             int len)
     {
         CMyActor* app_actor = (CMyActor*)pAppActor;
+        //因为很有可能，appactor已经由于commu超时的原因被析构掉了
         if (app_actor == NULL)
         {
             return -1;
