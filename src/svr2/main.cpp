@@ -8,6 +8,7 @@ using namespace std;
 #include "bayonet_frame.h"
 
 #define APP_FSM_LOGIC1 2000
+#define APP_FSM_LOGIC2 2001
 
 class CMyActor : public CAppActorBase
 {
@@ -143,6 +144,59 @@ public:
         {
             trace_log("id:%d,error no:%d,timecost:%u ms",(*it)->GetID(),(*it)->GetErrno(),(*it)->GetTimeCost());
         }
+        //return APP_FSM_RSP;//代表要回复客户端啦
+        return APP_FSM_LOGIC2;//代表要回复客户端啦
+    }
+    virtual int HandleExit(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
+    {
+        return 0;
+    }
+};
+
+class CAppFsmLogic2 : public CAppFsmBase
+{
+public:
+    virtual ~CAppFsmLogic2 () {}
+    virtual int HandleEntry(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
+    {
+        static CActionGetData actionGetData;
+        StActionInfoParam param;
+        param.id = 1;
+        param.ip = "0.0.0.0";
+        param.port = 20000;
+        param.protoType = PROTO_TYPE_UDP;
+        param.pAction = &actionGetData;
+        //param.actionType = ACTIONTYPE_SENDONLY;
+        param.actionType = ACTIONTYPE_SENDRECV;
+        param.timeout_ms = 500;
+
+        CActionInfo * pActionInfo = new CActionInfo();
+        pActionInfo->Init(param);
+        pActionInfoSet->Add(pActionInfo);
+
+        StActionInfoParam param2;
+        param2.id = 2;
+        param2.ip = "0.0.0.0";
+        param2.port = 20000;
+        param2.protoType = PROTO_TYPE_UDP;
+        param2.pAction = &actionGetData;
+        //param2.actionType = ACTIONTYPE_SENDONLY;
+        param2.actionType = ACTIONTYPE_SENDRECV;
+        param2.timeout_ms = 500;
+
+        CActionInfo * pActionInfo2 = new CActionInfo();
+        pActionInfo2->Init(param2);
+
+        pActionInfoSet->Add(pActionInfo2);
+        return 0;
+    }
+    virtual int HandleProcess(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
+    {
+        set<CActionInfo*> &setAction = pActionInfoSet->GetActionSet();
+        for(set<CActionInfo*>::iterator it = setAction.begin(); it != setAction.end(); ++it)
+        {
+            trace_log("id:%d,error no:%d,timecost:%u ms",(*it)->GetID(),(*it)->GetErrno(),(*it)->GetTimeCost());
+        }
         return APP_FSM_RSP;//代表要回复客户端啦
     }
     virtual int HandleExit(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
@@ -169,6 +223,7 @@ int main(int argc, const char *argv[])
         return -1;
     }
     srv.RegFsm(APP_FSM_LOGIC1,new CAppFsmLogic1());
+    srv.RegFsm(APP_FSM_LOGIC2,new CAppFsmLogic2());
     srv.Process();
     return 0;
 }
