@@ -26,8 +26,8 @@ class CActionFirst : public IAction
 public:
     // 为发送打包
     int HandleEncodeSendBuf(
-            IActor* pSocketActor,
-            IActor* pAppActor,
+            CActorBase* pSocketActor,
+            CActorBase* pAppActor,
             string & strSendBuf,
             int &len)
     {
@@ -39,8 +39,8 @@ public:
 
     // 回应包完整性检查
     int HandleInput(
-            IActor* pSocketActor,
-            IActor* pAppActor,
+            CActorBase* pSocketActor,
+            CActorBase* pAppActor,
             const char *buf,
             int len)
     {
@@ -49,8 +49,8 @@ public:
 
     // 接受包解析
     int HandleDecodeRecvBuf(
-            IActor* pSocketActor,
-            IActor* pAppActor,
+            CActorBase* pSocketActor,
+            CActorBase* pAppActor,
             const char *buf, 
             int len)
     {
@@ -69,8 +69,8 @@ class CActionGetData: public IAction
 public:
     // 为发送打包
     int HandleEncodeSendBuf(
-            IActor* pSocketActor,
-            IActor* pAppActor,
+            CActorBase* pSocketActor,
+            CActorBase* pAppActor,
             string & strSendBuf,
             int &len)
     {
@@ -82,8 +82,8 @@ public:
 
     // 回应包完整性检查
     int HandleInput(
-            IActor* pSocketActor,
-            IActor* pAppActor,
+            CActorBase* pSocketActor,
+            CActorBase* pAppActor,
             const char *buf,
             int len)
     {
@@ -92,8 +92,8 @@ public:
 
     // 回应包解析
     int HandleDecodeRecvBuf(
-            IActor* pSocketActor,
-            IActor* pAppActor,
+            CActorBase* pSocketActor,
+            CActorBase* pAppActor,
             const char *buf, 
             int len)
     {

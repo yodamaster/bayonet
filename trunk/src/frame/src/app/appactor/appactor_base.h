@@ -26,7 +26,6 @@ public:
     CAppActorBase()
     {
         m_ActionInfoSet.SetAppActor(this);
-        m_pCommuSocketActor = NULL;
     }
     virtual ~CAppActorBase () {
         DetachCommu();
@@ -43,7 +42,7 @@ public:
         return APP_FSM_ALLOVER;
     }
 
-    int AttachCommu(IActor* pActor);
+    int AttachCommu(CActorBase* pActor);
 
     int DetachCommu();
 
@@ -51,6 +50,6 @@ public:
 
 private:
     CActionInfoSet m_ActionInfoSet;
-    IActor* m_pCommuSocketActor;
+    ptr_proxy<CActorBase> m_pCommuSocketActorProxy;
 };
 #endif
