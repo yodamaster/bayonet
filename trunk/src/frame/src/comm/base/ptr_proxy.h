@@ -157,7 +157,6 @@ protected:
             m_pcount = NULL;
             return;
         }
-        printf("init\n");
         m_ppobj = new (T*)();
         *m_ppobj = (T*)pobj;
         m_pcount = new int(); // 初始化计数值为 1
