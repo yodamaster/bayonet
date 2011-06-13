@@ -117,7 +117,7 @@ public:
         param.protoType = PROTO_TYPE_TCP;
         param.pAction = &actionGetData;
         param.actionType = ACTIONTYPE_SENDRECV;
-        param.timeout_ms = 500;
+        param.timeout_ms = 1000;
 
         CActionInfo * pActionInfo = new CActionInfo();
         pActionInfo->Init(param);

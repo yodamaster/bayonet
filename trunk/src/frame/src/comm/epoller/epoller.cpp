@@ -37,20 +37,28 @@ int CEPoller::Init(int epoll_size,int waittime_ms,int checktime_ms,int gc_maxcou
 
 void CEPoller::AttachSocket(CSocketActorBase* pSocketActor)
 {
+    if (pSocketActor == NULL)
+    {
+        return;
+    }
     int fd = pSocketActor->GetSocketFd();
     if ( fd > 0 )
-        m_mapSocketActor[fd]=pSocketActor;
+        m_mapSocketActorProxy[fd]=pSocketActor->get_ptr_proxy();
 
     return ;
 }
 
 void CEPoller::DetachSocket(CSocketActorBase* pSocketActor)
 {
+    if (pSocketActor == NULL)
+    {
+        return;
+    }
     int fd = pSocketActor->GetSocketFd();
     if ( fd > 0 )
     {
         DelEpollIO(fd);
-        m_mapSocketActor.erase(fd);
+        m_mapSocketActorProxy.erase(fd);
     }
 
     return ;
@@ -83,7 +91,7 @@ int CEPoller::LoopForEvent()
         for( int i=0;i<nfds;i++ )
         {
             fd = m_events[i].data.fd;
-            pSocketActor = m_mapSocketActor[fd];
+            pSocketActor = (CSocketActorBase*)(m_mapSocketActorProxy[fd].true_ptr());
             if ( pSocketActor == NULL )
             {
                 DelEpollIO(fd); close(fd);
@@ -98,13 +106,17 @@ int CEPoller::LoopForEvent()
             (next_tm.tv_usec - prev_tm.tv_usec);
         if ( use_time_usec > (m_checkTimeMs*1000))
         {
-            for(map<int, CSocketActorBase*>::iterator it = m_mapSocketActor.begin(); it != m_mapSocketActor.end();)
+            for(map<int, ptr_proxy<CActorBase> >::iterator it = m_mapSocketActorProxy.begin(); it != m_mapSocketActorProxy.end();)
             {
                 //这样写，就可以自由的删掉自己了
-                map<int, CSocketActorBase*>::iterator tempIt = it;
+                map<int, ptr_proxy<CActorBase> >::iterator tempIt = it;
                 it++;
 
-                CSocketActorBase* pActor = tempIt->second;
+                CSocketActorBase* pActor = (CSocketActorBase*)(tempIt->second.true_ptr());
+                if (pActor == NULL)
+                {
+                    m_mapSocketActorProxy.erase(tempIt);
+                }
                 pActor->CheckTimeOut(next_tm);
             }
             prev_tm = next_tm;

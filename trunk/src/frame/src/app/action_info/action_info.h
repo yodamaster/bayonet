@@ -32,14 +32,12 @@ typedef struct _StActionInfoParam
     }
 } StActionInfoParam;
 
-class CActionInfo
+class CActionInfo:public IPtrProxy<CActionInfo>
 {
 public:
     CActionInfo () {
-        m_pAppActor = NULL;
         m_err_no = 0;
         m_timecost_ms= 0;
-        m_pSocketActorActive = NULL;
         m_bDealOver = false;
     }
     virtual ~CActionInfo () {}
@@ -75,9 +73,9 @@ public:
         m_err_no = err_no;
         m_timecost_ms = timecost_ms;
 
-        if (m_pAppActor)
+        if (m_pAppActorProxy.true_ptr())
         {
-            m_pAppActor->ProcessState();
+            m_pAppActorProxy.true_ptr()->ProcessState();
         }
     }
 
@@ -127,9 +125,12 @@ public:
      *
      * @param   pActor
      */
-    void SetAppActor(IActor* pActor)
+    void SetAppActor(CActorBase* pActor)
     {
-        m_pAppActor = pActor;
+        if (pActor)
+        {
+            m_pAppActorProxy = pActor->get_ptr_proxy();
+        }
     }
 
     /**
@@ -139,12 +140,12 @@ public:
 
 protected:
     StActionInfoParam m_stActionTypeParam;
-    IActor* m_pAppActor;
+    ptr_proxy<CActorBase> m_pAppActorProxy;
 
     int m_err_no;
     int m_timecost_ms;
 
-    IActor* m_pSocketActorActive;
+    ptr_proxy<CActorBase> m_pSocketActorActiveProxy;
 
     bool m_bDealOver;
 };

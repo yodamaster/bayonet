@@ -22,16 +22,18 @@ class CActionInfoSet
 {
 public:
     CActionInfoSet() {
-        m_pAppActor = NULL;
     }
     virtual ~CActionInfoSet() {}
-    virtual void SetAppActor(IActor* pActor)
+    virtual void SetAppActor(CActorBase* pActor)
     {
-        m_pAppActor = pActor;
+        if (pActor)
+        {
+            m_pAppActorProxy = pActor->get_ptr_proxy();
+        }
     }
-    virtual IActor* GetActor()
+    virtual CActorBase* GetActor()
     {
-        return m_pAppActor;
+        return m_pAppActorProxy.true_ptr();
     }
     /**
      * @brief   添加一个pActionInfo
@@ -42,7 +44,7 @@ public:
      */
     virtual int Add(CActionInfo* pActionInfo)
     {
-        pActionInfo->SetAppActor(m_pAppActor);
+        pActionInfo->SetAppActor(m_pAppActorProxy.true_ptr());
         m_setActionInfos.insert(pActionInfo);
         return 0;
     }
@@ -104,6 +106,6 @@ public:
     }
 private:
     set<CActionInfo*> m_setActionInfos;
-    IActor * m_pAppActor;
+    ptr_proxy<CActorBase> m_pAppActorProxy;
 };
 #endif

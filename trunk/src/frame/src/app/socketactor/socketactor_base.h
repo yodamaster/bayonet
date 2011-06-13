@@ -38,13 +38,12 @@ public:
         m_ProtoType = 0;
         m_pAction = NULL;
         m_bKeepcnt = false;
-        m_pAppActor = NULL;
     }
     virtual ~CSocketActorBase () {}
 
     virtual int HandleEvent(IEvent* pEvent);
 
-    virtual void SetAppActor(IActor* pActor);
+    virtual void SetAppActor(CActorBase* pActor);
 
     virtual int Init(string ip,int port,int timeout_ms,int protoType);
 
@@ -101,6 +100,6 @@ protected:
     IAction* m_pAction;
     bool m_bKeepcnt;
 
-    IActor* m_pAppActor;
+    ptr_proxy<CActorBase> m_pAppActorProxy;
 };
 #endif
