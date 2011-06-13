@@ -70,6 +70,26 @@ int CSocketActorListenUdp::OnInit()
 }
 int CSocketActorListenUdp::OnRecvOver()
 {
+    CreatePassiveActor();
+    return SOCKET_FSM_WAITRECV;
+}
+int CSocketActorListenUdp::OnWaitSend()
+{
+    CSocketActorPassiveUdp* pSocketActorAccept = CreatePassiveActor();
+    if (pSocketActorAccept)
+    {
+        pSocketActorAccept->ChangeState(SOCKET_FSM_WAITSEND);
+    }
+    return SOCKET_FSM_WAITRECV;
+}
+
+bool CSocketActorListenUdp::IsTimeOut(struct timeval& now_time)
+{
+    //永不超时
+    return false;
+}
+CSocketActorPassiveUdp* CSocketActorListenUdp::CreatePassiveActor()
+{
     if (m_pNetHandler->GetClientIp().size()>0 && m_pNetHandler->GetClientPort()>0)
     {
         CSocketActorPassiveUdp * pSocketActorAccept = new CSocketActorPassiveUdp();
@@ -86,11 +106,7 @@ int CSocketActorListenUdp::OnRecvOver()
         trace_log("%s,%d",m_pNetHandler->GetClientIp().c_str(),m_pNetHandler->GetClientPort());
         pSocketActorAccept->Init(m_pNetHandler->GetClientIp(),m_pNetHandler->GetClientPort(),m_TimeoutMs,m_ProtoType);
         pSocketActorAccept->ChangeState(SOCKET_FSM_INIT);
+        return pSocketActorAccept;
     }
-    return SOCKET_FSM_WAITRECV;
-}
-bool CSocketActorListenUdp::IsTimeOut(struct timeval& now_time)
-{
-    //永不超时
-    return false;
+    return NULL;
 }

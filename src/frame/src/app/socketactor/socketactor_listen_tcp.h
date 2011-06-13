@@ -37,6 +37,8 @@ public:
 
     virtual int OnRecvOver();
 
+    virtual int OnWaitSend() {return SOCKET_FSM_WAITRECV;}
+
     virtual int OnSend();
 
     virtual int OnSendOver();

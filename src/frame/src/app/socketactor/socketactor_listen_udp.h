@@ -21,6 +21,8 @@ public:
     {
         return SOCKET_FSM_WAITRECV;
     }
+    virtual int OnWaitSend();
+
     virtual int OnSendOver()
     {
         return SOCKET_FSM_WAITRECV;
@@ -28,5 +30,8 @@ public:
     virtual int OnRecvOver();
 
     virtual bool IsTimeOut(struct timeval& now_time);
+
+protected:
+    CSocketActorPassiveUdp* CreatePassiveActor();
 };
 #endif

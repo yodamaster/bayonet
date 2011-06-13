@@ -73,13 +73,19 @@ public:
 
     virtual int OnFiniOver()=0;
 
+    virtual int OnWaitRecv() {return 0;}
+
     virtual int OnRecv()=0;
 
     virtual int OnRecvOver()=0;
 
+    virtual int OnWaitSend() {return 0;}
+
     virtual int OnSend()=0;
 
     virtual int OnSendOver()=0;
+
+    virtual int OnWaitClose() {return 0;}
 
     virtual int OnClose()=0;
 

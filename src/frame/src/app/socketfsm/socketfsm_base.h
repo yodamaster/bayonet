@@ -96,6 +96,11 @@ public:
         pSocketActor->SetEvent(EPOLLOUT|EPOLLHUP|EPOLLERR);
         return 0;
     }
+    virtual int HandleProcess(IActor* pActor)
+    {
+        CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
+        return pSocketActor->OnWaitSend();
+    }
 };
 class CSocketFsmSending : public CSocketFsmBase
 {
@@ -135,6 +140,11 @@ public:
         pSocketActor->SetEvent(EPOLLIN|EPOLLHUP|EPOLLERR);
         return 0;
     }
+    virtual int HandleProcess(IActor* pActor)
+    {
+        CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
+        return pSocketActor->OnWaitRecv();
+    }
 };
 class CSocketFsmRecving : public CSocketFsmBase
 {
@@ -173,6 +183,11 @@ public:
         CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
         pSocketActor->SetEvent(EPOLLHUP|EPOLLERR);
         return 0;
+    }
+    virtual int HandleProcess(IActor* pActor)
+    {
+        CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
+        return pSocketActor->OnWaitClose();
     }
 };
 class CSocketFsmClosing : public CSocketFsmBase
