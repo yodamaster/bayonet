@@ -9,31 +9,31 @@
 =============================================================================*/
 #include "appactor_base.h"
 #include "socketactor_base.h"
-int CAppActorBase::AttachCommu(IActor* pActor)
+int CAppActorBase::AttachCommu(CActorBase* pActor)
 {
-    m_pCommuSocketActor = pActor;
-    if (m_pCommuSocketActor)
+    m_pCommuSocketActorProxy = pActor->get_ptr_proxy();
+    if (m_pCommuSocketActorProxy.true_ptr())
     {
-        CSocketActorBase* pCommuSocketActor = (CSocketActorBase*)m_pCommuSocketActor;
+        CSocketActorBase* pCommuSocketActor = (CSocketActorBase*)(m_pCommuSocketActorProxy.true_ptr());
         pCommuSocketActor->SetAppActor(this);
     }
     return 0;
 }
 int CAppActorBase::DetachCommu()
 {
-    if (m_pCommuSocketActor)
+    if (m_pCommuSocketActorProxy.true_ptr())
     {
-        CSocketActorBase* pCommuSocketActor = (CSocketActorBase*)m_pCommuSocketActor;
+        CSocketActorBase* pCommuSocketActor = (CSocketActorBase*)(m_pCommuSocketActorProxy.true_ptr());
         pCommuSocketActor->SetAppActor(NULL);
     }
-    m_pCommuSocketActor = NULL;
+    m_pCommuSocketActorProxy = NULL;
     return 0;
 }
 int CAppActorBase::Send2Client()
 {
-    if (m_pCommuSocketActor)
+    if (m_pCommuSocketActorProxy.true_ptr())
     {
-        m_pCommuSocketActor->ChangeState(SOCKET_FSM_WAITSEND);
+        m_pCommuSocketActorProxy.true_ptr()->ChangeState(SOCKET_FSM_WAITSEND);
     }
     else
     {
