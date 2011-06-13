@@ -232,6 +232,7 @@ int CSocketActorData::HandleEncodeSendBuf(
 {
     if (m_pAction == NULL)
     {
+        error_log("m_pAction is null");
         return -1;
     }
     return m_pAction->HandleEncodeSendBuf(this,m_pAppActorProxy.true_ptr(),strSendBuf,len);
@@ -242,6 +243,7 @@ int CSocketActorData::HandleInput(
 {
     if (m_pAction == NULL)
     {
+        error_log("m_pAction is null");
         return -1;
     }
     return m_pAction->HandleInput(this,m_pAppActorProxy.true_ptr(),buf,len);
@@ -250,6 +252,7 @@ int CSocketActorData::HandleDecodeRecvBuf(const char *buf, int len)
 {
     if (m_pAction == NULL)
     {
+        error_log("m_pAction is null");
         return -1;
     }
     return m_pAction->HandleDecodeRecvBuf(this,m_pAppActorProxy.true_ptr(),buf,len);
