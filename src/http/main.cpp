@@ -4,8 +4,9 @@
 #include <vector>
 #include <set>
 #include <map>
-using namespace std;
+
 #include "bayonet_frame.h"
+using namespace std;
 
 #define APP_FSM_PROXY 2000
 #define APP_FSM_LOGIC2 2001
@@ -24,12 +25,48 @@ class CAppFsmProxy;
 class CActionFirst : public IAction
 {
 public:
+    int HandleInit(
+            CActorBase* pSocketActor,
+            CActorBase* pAppActor)
+    {
+        CSocketActorBase* socketactor_base = (CSocketActorBase*)pSocketActor;
+
+        int fd = socketactor_base->GetSocketFd();
+        if (fd >= 0)
+        {
+            int rcvbuf; 
+            socklen_t rcvbufsize=sizeof(int); 
+
+            if(getsockopt(fd,SOL_SOCKET,SO_RCVBUF,(char*) 
+                          &rcvbuf,&rcvbufsize)!=-1) 
+            { 
+                if(rcvbuf<65536) 
+                {
+                    rcvbuf=65536; 
+                    setsockopt(fd,SOL_SOCKET,SO_RCVBUF,(char*) 
+                               &rcvbuf,rcvbufsize); 
+                }
+            } 
+
+            if(getsockopt(fd,SOL_SOCKET,SO_SNDBUF,(char*) 
+                          &rcvbuf,&rcvbufsize)!=-1) 
+            { 
+                if(rcvbuf<65536) 
+                {
+                    rcvbuf=65536; 
+                    setsockopt(fd,SOL_SOCKET,SO_SNDBUF,(char*) 
+                               &rcvbuf,rcvbufsize); 
+                }
+            }  
+        }
+        return 0;
+    }
     // 为发送打包
     int HandleEncodeSendBuf(
-            CActorBase* pSocketActor,
-            CActorBase* pAppActor,
-            string & strSendBuf,
-            int &len)
+        CActorBase* pSocketActor,
+        CActorBase* pAppActor,
+        string & strSendBuf,
+        int &len)
     {
         CMyActor* app_actor = (CMyActor*)pAppActor;
         if (app_actor == NULL)
@@ -43,20 +80,20 @@ public:
 
     // 回应包完整性检查
     int HandleInput(
-            CActorBase* pSocketActor,
-            CActorBase* pAppActor,
-            const char *buf,
-            int len)
+        CActorBase* pSocketActor,
+        CActorBase* pAppActor,
+        const char *buf,
+        int len)
     {
         return len;
     }
 
     // 接受包解析
     int HandleDecodeRecvBuf(
-            CActorBase* pSocketActor,
-            CActorBase* pAppActor,
-            const char *buf, 
-            int len)
+        CActorBase* pSocketActor,
+        CActorBase* pAppActor,
+        const char *buf, 
+        int len)
     {
         CMyActor * app_actor = new CMyActor();
         app_actor->AttachFrame(pSocketActor->GetFrame());
@@ -73,10 +110,10 @@ class CActionGetData: public IAction
 public:
     // 为发送打包
     int HandleEncodeSendBuf(
-            CActorBase* pSocketActor,
-            CActorBase* pAppActor,
-            string & strSendBuf,
-            int &len)
+        CActorBase* pSocketActor,
+        CActorBase* pAppActor,
+        string & strSendBuf,
+        int &len)
     {
         CMyActor* app_actor = (CMyActor*)pAppActor;
         if (app_actor == NULL)
@@ -90,20 +127,20 @@ public:
 
     // 回应包完整性检查
     int HandleInput(
-            CActorBase* pSocketActor,
-            CActorBase* pAppActor,
-            const char *buf,
-            int len)
+        CActorBase* pSocketActor,
+        CActorBase* pAppActor,
+        const char *buf,
+        int len)
     {
         return len;
     }
 
     // 回应包解析
     int HandleDecodeRecvBuf(
-            CActorBase* pSocketActor,
-            CActorBase* pAppActor,
-            const char *buf, 
-            int len)
+        CActorBase* pSocketActor,
+        CActorBase* pAppActor,
+        const char *buf, 
+        int len)
     {
         CMyActor* app_actor = (CMyActor*)pAppActor;
         //因为很有可能，appactor已经由于commu超时的原因被析构掉了
