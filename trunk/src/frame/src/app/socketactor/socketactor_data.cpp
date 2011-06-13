@@ -79,6 +79,20 @@ int CSocketActorData::OnInit()
         return SOCKET_FSM_CLOSING;
     }
     pEpoller->AttachSocket(this);//加入到epoll中
+
+    if (m_pAction == NULL)
+    {
+        return SOCKET_FSM_CLOSING;
+    }
+    else
+    {
+        ret = m_pAction->HandleInit(this, m_pAppActorProxy.true_ptr());
+        if (ret != 0)
+        {
+            error_log("m_pAction HandleInit fail,ret:%d",ret);
+            return SOCKET_FSM_CLOSING;
+        }
+    }
     return SOCKET_FSM_INITOVER;
 }
 int CSocketActorData::OnFini()

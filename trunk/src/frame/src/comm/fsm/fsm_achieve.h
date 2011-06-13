@@ -539,6 +539,11 @@ class IAction : public IObject
 {
 public:
     virtual ~IAction () {}
+    // 初始化-比如可以设置socketbuf，可选实现
+    virtual int HandleInit(
+            CActorBase* pSocketActor,
+            CActorBase* pAppActor) {return 0;}
+
     // 为发送打包
     virtual int HandleEncodeSendBuf(
             CActorBase* pSocketActor,
