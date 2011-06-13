@@ -23,6 +23,12 @@ class CAppFsmLogic1;
 class CActionFirst : public IAction
 {
 public:
+    int HandleInit(
+            CActorBase* pSocketActor,
+            CActorBase* pAppActor)
+    {
+        return 0;
+    }
     // 为发送打包
     int HandleEncodeSendBuf(
             CActorBase* pSocketActor,
@@ -64,6 +70,12 @@ public:
 class CActionGetData: public IAction
 {
 public:
+    int HandleInit(
+            CActorBase* pSocketActor,
+            CActorBase* pAppActor)
+    {
+        return 0;
+    }
     // 为发送打包
     int HandleEncodeSendBuf(
             CActorBase* pSocketActor,
