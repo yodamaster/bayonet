@@ -73,10 +73,13 @@ public:
         m_err_no = err_no;
         m_timecost_ms = timecost_ms;
 
-        if (m_pAppActorProxy.true_ptr())
+//Del-Begin by dantezhu in 2011-06-14 01:36:26
+//这里不直接去执行ProcessState的原因是，因为这个函数可能会导致this指针失效
+        /*if (m_pAppActorProxy.true_ptr())
         {
             m_pAppActorProxy.true_ptr()->ProcessState();
-        }
+        }*/
+//Del-End
     }
 
     bool IsDealOver()

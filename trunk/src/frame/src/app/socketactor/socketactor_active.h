@@ -58,6 +58,10 @@ protected:
         {
             m_pActionInfoProxy.true_ptr()->SetDealOver(err_no, GetAliveTimeMs());
         }
+        if (m_pAppActorProxy.true_ptr())
+        {
+            m_pAppActorProxy.true_ptr()->ProcessState();
+        }
     }
 protected:
     ptr_proxy<CActionInfo> m_pActionInfoProxy;
