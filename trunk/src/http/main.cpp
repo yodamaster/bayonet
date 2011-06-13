@@ -32,6 +32,10 @@ public:
             int &len)
     {
         CMyActor* app_actor = (CMyActor*)pAppActor;
+        if (app_actor == NULL)
+        {
+            return -1;
+        }
         strSendBuf = app_actor->m_rsp;
         len = strSendBuf.size();
         return 0;
@@ -75,6 +79,10 @@ public:
             int &len)
     {
         CMyActor* app_actor = (CMyActor*)pAppActor;
+        if (app_actor == NULL)
+        {
+            return -1;
+        }
         strSendBuf=app_actor->m_req;
         len = strSendBuf.size();
         return 0;
@@ -98,6 +106,10 @@ public:
             int len)
     {
         CMyActor* app_actor = (CMyActor*)pAppActor;
+        if (app_actor == NULL)
+        {
+            return -1;
+        }
         app_actor->m_rsp = string(buf,len);
         return 0;
     }
