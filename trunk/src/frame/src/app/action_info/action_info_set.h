@@ -88,16 +88,14 @@ public:
     }
     int Clear()
     {
-        for(set<CActionInfo*>::iterator it = m_setActionInfos.begin(); it != m_setActionInfos.end();)
+        for(set<CActionInfo*>::iterator it = m_setActionInfos.begin(); it != m_setActionInfos.end(); ++it)
         {
-            set<CActionInfo*>::iterator tempIt = it;
-            it++;
-            if (*tempIt)
+            if (*it)
             {
-                delete (*tempIt);
-                m_setActionInfos.erase(tempIt);
+                delete (*it);
             }
         }
+        m_setActionInfos.clear();
         return 0;
     }
     set<CActionInfo*>& GetActionSet()
