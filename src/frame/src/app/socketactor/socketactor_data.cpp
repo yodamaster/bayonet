@@ -140,22 +140,18 @@ int CSocketActorData::OnRecv()
     }
     ret = HandleDecodeRecvBuf(m_strRecvBuf.c_str(), m_recvedLen);
 
-
-//Mod-Begin by dantezhu in 2011-06-12 18:58:48
-//FROM
-    /*if (ret)
+    if (ret)
     {
         return SOCKET_FSM_CLOSING;
     }
-    return SOCKET_FSM_RECVOVER;*/
+
+//Mod-Begin by dantezhu in 2011-06-12 18:58:48
+//FROM
+    /*return SOCKET_FSM_RECVOVER;*/
 //TO
     //这里的主要是考虑，appactor可能直接就返回
     if (!m_vecFsmNodes.empty() && m_vecFsmNodes.back().fsm->GetStateID() == SOCKET_FSM_RECVING)
     {
-        if (ret)
-        {
-            return SOCKET_FSM_CLOSING;
-        }
         return SOCKET_FSM_RECVOVER;
     }
     else
