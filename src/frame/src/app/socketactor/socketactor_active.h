@@ -16,13 +16,15 @@ class CSocketActorActive : public CSocketActorData
 {
 public:
     CSocketActorActive () {
-        m_pActionInfo = NULL;
     }
     virtual ~CSocketActorActive () {}
 
     void SetActionInfoPtr(CActionInfo *pActionInfo)
     {
-        m_pActionInfo = pActionInfo;
+        if (pActionInfo)
+        {
+            m_pActionInfoProxy = pActionInfo->get_ptr_proxy();
+        }
     }
 
     virtual int OnTimeout()
@@ -52,12 +54,12 @@ protected:
     }
     virtual void SetDealOver(int err_no)
     {
-        if (m_pActionInfo)
+        if (m_pActionInfoProxy.true_ptr())
         {
-            m_pActionInfo->SetDealOver(err_no, GetAliveTimeMs());
+            m_pActionInfoProxy.true_ptr()->SetDealOver(err_no, GetAliveTimeMs());
         }
     }
 protected:
-    CActionInfo *m_pActionInfo;
+    ptr_proxy<CActionInfo> m_pActionInfoProxy;
 };
 #endif

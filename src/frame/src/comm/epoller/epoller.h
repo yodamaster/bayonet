@@ -51,7 +51,8 @@ protected:
 
     IFrame* m_pFrame;
 
-    map<int,CSocketActorBase*> m_mapSocketActor;
+    //map<int,CSocketActorBase*> m_mapSocketActor;
+    map<int,ptr_proxy<CActorBase> > m_mapSocketActorProxy;
 };
 
 #endif

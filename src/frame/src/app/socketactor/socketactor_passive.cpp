@@ -12,9 +12,9 @@
 
 int CSocketActorPassive::OnFiniOver()
 {
-    if (m_pAppActor)
+    if (m_pAppActorProxy.true_ptr())
     {
-        CAppActorBase* pAppActor = (CAppActorBase*)m_pAppActor;
+        CAppActorBase* pAppActor = (CAppActorBase*)m_pAppActorProxy.true_ptr();
         pAppActor->ChangeState(APP_FSM_FINI);
         pAppActor->DetachCommu();
     }
@@ -36,9 +36,9 @@ int CSocketActorPassive::OnSendOver()
 }
 void CSocketActorPassive::NotifyAppActor()
 {
-    if (m_pAppActor)
+    if (m_pAppActorProxy.true_ptr())
     {
-        m_pAppActor->ChangeState(APP_FSM_FINI);
+        m_pAppActorProxy.true_ptr()->ChangeState(APP_FSM_FINI);
     }
     else
     {

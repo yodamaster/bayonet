@@ -234,7 +234,7 @@ int CSocketActorData::HandleEncodeSendBuf(
     {
         return -1;
     }
-    return m_pAction->HandleEncodeSendBuf(this,m_pAppActor,strSendBuf,len);
+    return m_pAction->HandleEncodeSendBuf(this,m_pAppActorProxy.true_ptr(),strSendBuf,len);
 }
 int CSocketActorData::HandleInput(
         const char *buf,
@@ -244,7 +244,7 @@ int CSocketActorData::HandleInput(
     {
         return -1;
     }
-    return m_pAction->HandleInput(this,m_pAppActor,buf,len);
+    return m_pAction->HandleInput(this,m_pAppActorProxy.true_ptr(),buf,len);
 }
 int CSocketActorData::HandleDecodeRecvBuf(const char *buf, int len)
 {
@@ -252,6 +252,6 @@ int CSocketActorData::HandleDecodeRecvBuf(const char *buf, int len)
     {
         return -1;
     }
-    return m_pAction->HandleDecodeRecvBuf(this,m_pAppActor,buf,len);
+    return m_pAction->HandleDecodeRecvBuf(this,m_pAppActorProxy.true_ptr(),buf,len);
 }
 //=============================================================================

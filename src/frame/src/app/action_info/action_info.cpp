@@ -21,18 +21,23 @@ int CActionInfo::HandleStart()
     switch (m_stActionTypeParam.actionType)
     {
         case ACTIONTYPE_SENDRECV:
-            m_pSocketActorActive = new CSocketActorActiveSendRecv();
+            m_pSocketActorActiveProxy = new CSocketActorActiveSendRecv();
             break;
         case ACTIONTYPE_SENDONLY:
-            m_pSocketActorActive = new CSocketActorActiveSendOnly();
+            m_pSocketActorActiveProxy = new CSocketActorActiveSendOnly();
             break;
         default:
             error_log("actionType error:%d",m_stActionTypeParam.actionType);
             return -1;
     }
-    CSocketActorActive* pSocketActorActive = (CSocketActorActive*)m_pSocketActorActive;
-    pSocketActorActive->AttachFrame(m_pAppActor->GetFrame());
-    pSocketActorActive->SetAppActor(m_pAppActor);
+    if (m_pAppActorProxy.is_null())
+    {
+        error_log("m_pAppActor is null");
+        return -1;
+    }
+    CSocketActorActive* pSocketActorActive = (CSocketActorActive*)(m_pSocketActorActiveProxy.true_ptr());
+    pSocketActorActive->AttachFrame(m_pAppActorProxy.true_ptr()->GetFrame());
+    pSocketActorActive->SetAppActor(m_pAppActorProxy.true_ptr());
     pSocketActorActive->SetIActionPtr(m_stActionTypeParam.pAction);
     pSocketActorActive->SetActionInfoPtr(this);
     pSocketActorActive->Init(m_stActionTypeParam.ip,m_stActionTypeParam.port,m_stActionTypeParam.timeout_ms,m_stActionTypeParam.protoType);

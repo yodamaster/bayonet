@@ -24,6 +24,7 @@
 #include "dirstat.h"
 #include "stat_def.h"
 #include "timer.h"
+#include "ptr_proxy.h"
 using namespace std;
 
 /**
@@ -271,7 +272,7 @@ protected:
     CDirStat m_dirStat;
 };
 
-class CActorBase : public IActor
+class CActorBase : public IActor, public IPtrProxy<CActorBase>
 {
 public:
     CActorBase () {
