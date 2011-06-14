@@ -74,12 +74,12 @@ int CSocketActorBase::SetEvent(unsigned event)
         return -1;
     }
 
-    if ( pEpoller->ModEpollIO(m_SocketFd,event) < 0 )
+    /*if ( pEpoller->ModEpollIO(m_SocketFd,event) < 0 )
     {
         return pEpoller->AddEpollIO(m_SocketFd,event);
-    }
+    }*/
 
-    return 0;
+    return pEpoller->SetEpollIO(m_SocketFd,event);
 }
 int CSocketActorBase::GetSocketFd()
 {

@@ -137,6 +137,7 @@ char * CEPoller::GetErrMsg()
 int CEPoller::SetEpollIO(int fd,unsigned flag)
 {
     epoll_event ev;
+    memset((void*)&ev,0,sizeof(epoll_event));
     ev.data.fd = fd;
     ev.events = flag|EPOLLHUP|EPOLLERR;
 
@@ -155,6 +156,7 @@ int CEPoller::SetEpollIO(int fd,unsigned flag)
 int CEPoller::AddEpollIO(int fd,unsigned flag)
 {
     epoll_event ev;
+    memset((void*)&ev,0,sizeof(epoll_event));
     ev.data.fd = fd;
     ev.events = flag;
 
@@ -167,6 +169,7 @@ int CEPoller::AddEpollIO(int fd,unsigned flag)
 int CEPoller::ModEpollIO(int fd,unsigned flag)
 {
     epoll_event ev;
+    memset((void*)&ev,0,sizeof(epoll_event));
     ev.data.fd = fd;
     ev.events = flag;
 
@@ -181,6 +184,7 @@ int CEPoller::ModEpollIO(int fd,unsigned flag)
 int CEPoller::DelEpollIO(int fd)
 {
     epoll_event ev;
+    memset((void*)&ev,0,sizeof(epoll_event));
     ev.data.fd = fd;
     ev.events = 0;
     if ( epoll_ctl(m_epollFd, EPOLL_CTL_DEL, fd, &ev) < 0 )
