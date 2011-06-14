@@ -71,6 +71,8 @@ int CSocketActorListenUdp::OnInit()
 int CSocketActorListenUdp::OnRecvOver()
 {
     CreatePassiveActor();
+    //清空标志，要不然会有内存泄漏
+    ResetStatusData();
     return SOCKET_FSM_WAITRECV;
 }
 int CSocketActorListenUdp::OnWaitSend()
@@ -80,6 +82,8 @@ int CSocketActorListenUdp::OnWaitSend()
     {
         pSocketActorAccept->ChangeState(SOCKET_FSM_WAITSEND);
     }
+    //清空标志，要不然会有内存泄漏
+    ResetStatusData();
     return SOCKET_FSM_WAITRECV;
 }
 
