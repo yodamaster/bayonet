@@ -58,7 +58,7 @@ int CSocketActorListenUdp::OnInit()
     }
     else
     {
-        int ret = m_pAction->HandleInit(this, m_pAppActorProxy.true_ptr());
+        int ret = ActionHandleInit();
         if (ret != 0)
         {
             error_log("m_pAction HandleInit fail,ret:%d",ret);

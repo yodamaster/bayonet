@@ -53,19 +53,6 @@ protected:
     //清理接收/发送标记位等
     virtual int ResetStatusData();
 
-    // 为发送打包
-    virtual int HandleEncodeSendBuf(
-            string & strSendBuf,
-            int &len);
-
-    // 回应包完整性检查
-    virtual int HandleInput(
-            const char *buf,
-            int len);
-
-    // 回应包解析
-    virtual int HandleDecodeRecvBuf(const char *buf, int len);
-
 protected:
     CNetHandlerBase* m_pNetHandler;
 

@@ -21,6 +21,7 @@
 #include "socketfsm_base.h"
 #include "appfsm_base.h"
 #include "epoller.h"
+#include "action.h"
 
 using namespace std;
 

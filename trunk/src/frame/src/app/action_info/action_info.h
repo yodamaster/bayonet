@@ -12,6 +12,10 @@
 #include "comm_def.h"
 #include "fl_log.h"
 #include "fsm_achieve.h"
+#include "action.h"
+
+class IAction;
+
 typedef struct _StActionInfoParam
 {
     int id;             //用来做标识
