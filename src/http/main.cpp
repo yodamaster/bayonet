@@ -105,12 +105,10 @@ class CActionFirst : public IAction
 {
 public:
     int HandleInit(
-        CActorBase* pSocketActor,
-        CActorBase* pAppActor)
+        CSocketActorBase* pSocketActor,
+        CAppActorBase* pAppActor)
     {
-        CSocketActorBase* socketactor_base = (CSocketActorBase*)pSocketActor;
-
-        int fd = socketactor_base->GetSocketFd();
+        int fd = pSocketActor->GetSocketFd();
         if (fd >= 0)
         {
             int rcvbuf; 
@@ -138,13 +136,13 @@ public:
                 }
             }  
         }
-        socketactor_base->ResizeRecvBuf(4096,4096);
+        pSocketActor->ResizeRecvBuf(4096,4096);
         return 0;
     }
     // 为发送打包
     int HandleEncodeSendBuf(
-        CActorBase* pSocketActor,
-        CActorBase* pAppActor,
+        CSocketActorBase* pSocketActor,
+        CAppActorBase* pAppActor,
         string & strSendBuf,
         int &len)
     {
@@ -160,8 +158,8 @@ public:
 
     // 接收包完整性检查
     int HandleInput(
-        CActorBase* pSocketActor,
-        CActorBase* pAppActor,
+        CSocketActorBase* pSocketActor,
+        CAppActorBase* pAppActor,
         const char *buf,
         int len)
     {
@@ -170,17 +168,19 @@ public:
 
     // 接收包解析
     int HandleDecodeRecvBuf(
-        CActorBase* pSocketActor,
-        CActorBase* pAppActor,
+        CSocketActorBase* pSocketActor,
+        CAppActorBase* pAppActor,
         const char *buf, 
         int len)
     {
         CMyActor * app_actor = new CMyActor();
         app_actor->AttachFrame(pSocketActor->GetFrame());
         app_actor->AttachCommu(pSocketActor);
-        app_actor->ChangeState(APP_FSM_PROXY);
 
         app_actor->m_req = string(buf,len);
+
+        //转化状态操作一定要放在最后一步
+        app_actor->ChangeState(APP_FSM_PROXY);
         return 0;
     }
 };
@@ -190,8 +190,8 @@ class CActionGetData: public IAction
 public:
     // 为发送打包
     int HandleEncodeSendBuf(
-        CActorBase* pSocketActor,
-        CActorBase* pAppActor,
+        CSocketActorBase* pSocketActor,
+        CAppActorBase* pAppActor,
         string & strSendBuf,
         int &len)
     {
@@ -207,8 +207,8 @@ public:
 
     // 回应包完整性检查
     int HandleInput(
-        CActorBase* pSocketActor,
-        CActorBase* pAppActor,
+        CSocketActorBase* pSocketActor,
+        CAppActorBase* pAppActor,
         const char *buf,
         int len)
     {
@@ -217,8 +217,8 @@ public:
 
     // 回应包解析
     int HandleDecodeRecvBuf(
-        CActorBase* pSocketActor,
-        CActorBase* pAppActor,
+        CSocketActorBase* pSocketActor,
+        CAppActorBase* pAppActor,
         const char *buf, 
         int len)
     {

@@ -15,8 +15,8 @@ class CActionFirst : public IAction
 public:
     // 为发送打包
     int HandleEncodeSendBuf(
-            CActorBase* pSocketActor,
-            CActorBase* pAppActor,
+            CSocketActorBase* pSocketActor,
+            CAppActorBase* pAppActor,
             string & strSendBuf,
             int &len)
     {
@@ -28,8 +28,8 @@ public:
 
     // 回应包完整性检查
     int HandleInput(
-            CActorBase* pSocketActor,
-            CActorBase* pAppActor,
+            CSocketActorBase* pSocketActor,
+            CAppActorBase* pAppActor,
             const char *buf,
             int len)
     {
@@ -38,8 +38,8 @@ public:
 
     // 回应包解析
     int HandleDecodeRecvBuf(
-            CActorBase* pSocketActor,
-            CActorBase* pAppActor,
+            CSocketActorBase* pSocketActor,
+            CAppActorBase* pAppActor,
             const char *buf, 
             int len)
     {
