@@ -270,8 +270,13 @@ private:
             {
                 return NULL;
             }
+            if (m_fileName.size() > ((sizeof(m_szBuf)-strlen(m_szBuf)-1)))
+            {
+                //buf不够长
+                return NULL;
+            }
             //文件路径
-            strncat(m_szBuf,m_fileName.c_str(), m_fileName.size());
+            strncat(m_szBuf,m_fileName.c_str(), sizeof(m_szBuf)-strlen(m_szBuf)-1);
             pStat = new CStatInfo();
             pStat->Init(m_szBuf, m_stat_desc, m_stat_num);
         }
