@@ -124,6 +124,7 @@ public:
         param.ip = "0.0.0.0";
         param.port = 20000;
         param.protoType = PROTO_TYPE_UDP;
+        //param.protoType = PROTO_TYPE_TCP;
         param.pAction = &actionGetData;
         //param.actionType = ACTIONTYPE_SENDONLY;
         param.actionType = ACTIONTYPE_SENDRECV;
@@ -138,15 +139,16 @@ public:
         param2.ip = "0.0.0.0";
         param2.port = 20000;
         param2.protoType = PROTO_TYPE_UDP;
+        //param2.protoType = PROTO_TYPE_TCP;
         param2.pAction = &actionGetData;
         //param2.actionType = ACTIONTYPE_SENDONLY;
         param2.actionType = ACTIONTYPE_SENDRECV;
         param2.timeout_ms = 500;
 
-        /*CActionInfo * pActionInfo2 = new CActionInfo();
+        CActionInfo * pActionInfo2 = new CActionInfo();
         pActionInfo2->Init(param2);
 
-        pActionInfoSet->Add(pActionInfo2);*/
+        pActionInfoSet->Add(pActionInfo2);
         return 0;
     }
     virtual int HandleProcess(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
