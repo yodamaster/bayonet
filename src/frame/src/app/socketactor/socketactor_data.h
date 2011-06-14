@@ -21,8 +21,8 @@ class CSocketActorData:public CSocketActorBase
 public:
     CSocketActorData () {
         m_pNetHandler = NULL;
-        m_strSingleRecvBuf.resize(1024);
-        m_strRecvBuf.resize(2048);
+        //m_strSingleRecvBuf.resize(1024);
+        //m_strRecvBuf.resize(2048);
         ResetStatusData();
     }
     virtual ~CSocketActorData () {
@@ -46,6 +46,8 @@ public:
     virtual int OnRecvOver()=0;
     virtual int OnClose();
     virtual int OnCloseOver();
+
+    virtual int ResizeRecvBuf(int singleBufSize, int initBufSize);
 
 protected:
     //清理接收/发送标记位等

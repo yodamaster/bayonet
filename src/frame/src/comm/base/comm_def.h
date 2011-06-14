@@ -33,6 +33,11 @@
 #include <map>
 using namespace std;
 
+//recv一次的buf大小
+#define RECV_SINGLE_BUFSIZE     1024
+//recv的所有的数据的大小，避免不停的申请内存
+#define RECV_INIT_BUFSIZE       2048
+
 //Frame的AddActor方法的actorType的值
 enum PROTOTYPE
 {

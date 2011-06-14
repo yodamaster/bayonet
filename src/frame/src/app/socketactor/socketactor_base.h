@@ -100,6 +100,9 @@ public:
 
     virtual int OnCloseOver()=0;
 
+    //初始化接收缓冲区大小，包括一次接收的大小，和总共的初始化大小;<=0代表不修改
+    virtual int ResizeRecvBuf(int singleBufSize, int initBufSize) {return 0;}
+
 protected:
     virtual CEPoller* GetEpoller();
     int DetachFromEpoller();

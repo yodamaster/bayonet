@@ -107,8 +107,18 @@ int CSocketActorData::OnFiniOver()
 int CSocketActorData::OnRecv()
 {
     int ret = 0;
+
     if (m_recvFlag == 0)
     {
+        //万一用户没有调用ResizeRecvBuf，那么用默认值
+        if (m_strSingleRecvBuf.size()==0)
+        {
+            m_strSingleRecvBuf.resize(RECV_SINGLE_BUFSIZE);
+        }
+        if (m_strRecvBuf.size()==0)
+        {
+            m_strSingleRecvBuf.resize(RECV_SINGLE_BUFSIZE);
+        }
         m_recvFlag = 1;
     }
     for(;;)
@@ -240,6 +250,19 @@ int CSocketActorData::ResetStatusData()
 
     return 0;
 }
+int CSocketActorData::ResizeRecvBuf(int singleBufSize, int initBufSize)
+{
+    if (singleBufSize>0)
+    {
+        m_strSingleRecvBuf.resize(singleBufSize);
+    }
+    if (initBufSize > 0 && initBufSize > m_recvedLen)
+    {
+        m_strRecvBuf.resize(initBufSize);
+    }
+    return 0;   
+}
+
 int CSocketActorData::HandleEncodeSendBuf(
         string & strSendBuf,
         int &len)
