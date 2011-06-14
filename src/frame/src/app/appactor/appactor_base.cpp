@@ -9,6 +9,21 @@
 =============================================================================*/
 #include "appactor_base.h"
 #include "socketactor_base.h"
+CAppActorBase::CAppActorBase()
+{
+    m_pActionInfoSet = new CActionInfoSet();
+    m_pActionInfoSet->SetAppActor(this);
+}
+
+CAppActorBase::~CAppActorBase () {
+    DetachCommu();
+    if (m_pActionInfoSet)
+    {
+        delete m_pActionInfoSet;
+        m_pActionInfoSet = NULL;
+    }
+}
+
 int CAppActorBase::AttachCommu(CActorBase* pActor)
 {
     m_pCommuSocketActorProxy = pActor->get_ptr_proxy();

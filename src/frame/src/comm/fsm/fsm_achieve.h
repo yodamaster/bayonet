@@ -539,35 +539,4 @@ private:
 
     int m_stateID;
 };
-
-class IAction : public IObject
-{
-public:
-    virtual ~IAction () {}
-    // 初始化-比如可以设置socketbuf，可选实现
-    virtual int HandleInit(
-            CActorBase* pSocketActor,
-            CActorBase* pAppActor) {return 0;}
-
-    // 为发送打包
-    virtual int HandleEncodeSendBuf(
-            CActorBase* pSocketActor,
-            CActorBase* pAppActor,
-            string & strSendBuf,
-            int &len)=0;
-
-    // 回应包完整性检查
-    virtual int HandleInput(
-            CActorBase* pSocketActor,
-            CActorBase* pAppActor,
-            const char *buf,
-            int len)=0;
-
-    // 回应包解析
-    virtual int HandleDecodeRecvBuf(
-            CActorBase* pSocketActor,
-            CActorBase* pAppActor,
-            const char *buf, 
-            int len)=0;
-};
 #endif

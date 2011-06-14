@@ -18,6 +18,8 @@
 #include "fsm_achieve.h"
 #include "action_info.h"
 
+class CActionInfo;
+
 class CActionInfoSet
 {
 public:
@@ -44,12 +46,7 @@ public:
      *
      * @return  0
      */
-    virtual int Add(CActionInfo* pActionInfo)
-    {
-        pActionInfo->SetAppActor(m_pAppActorProxy.true_ptr());
-        m_setActionInfos.insert(pActionInfo);
-        return 0;
-    }
+    virtual int Add(CActionInfo* pActionInfo);
 
     /**
      * @brief   删除一个pActionInfo
@@ -58,48 +55,14 @@ public:
      *
      * @return  0
      */
-    virtual int Del(CActionInfo* pActionInfo)
-    {
-        m_setActionInfos.erase(pActionInfo);
-        return 0;
-    }
-    bool IsDealOver()
-    {
-        for(set<CActionInfo*>::iterator it = m_setActionInfos.begin(); it != m_setActionInfos.end(); ++it)
-        {
-            if (!(*it)->IsDealOver())
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-    int Start()
-    {
-        int ret = 0;
-        for(set<CActionInfo*>::iterator it = m_setActionInfos.begin(); it != m_setActionInfos.end(); ++it)
-        {
-            ret = (*it)->HandleStart();
-            if (ret)
-            {
-                error_log("CActionInfo HandleStart error:%d", ret);
-                return -1;
-            }
-        }
-        return 0;
-    }
-    int Clear()
-    {
-        for(set<CActionInfo*>::iterator it = m_setActionInfos.begin(); it != m_setActionInfos.end(); ++it)
-        {
-            if (*it)
-            {
-                delete (*it);
-            }
-        }
-        m_setActionInfos.clear();
-        return 0;
-    }
+    virtual int Del(CActionInfo* pActionInfo);
+
+    bool IsDealOver();
+
+    int Start();
+
+    int Clear();
+
     set<CActionInfo*>& GetActionSet()
     {
         return m_setActionInfos;

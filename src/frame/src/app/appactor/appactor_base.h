@@ -20,20 +20,18 @@
 
 using namespace std;
 
+class CActionInfoSet;
+
 class CAppActorBase : public CActorBase
 {
 public:
-    CAppActorBase()
-    {
-        m_ActionInfoSet.SetAppActor(this);
-    }
-    virtual ~CAppActorBase () {
-        DetachCommu();
-    }
+    CAppActorBase();
+
+    virtual ~CAppActorBase ();
 
     CActionInfoSet* GetActionInfoSet()
     {
-        return &m_ActionInfoSet;
+        return m_pActionInfoSet;
     }
     int OnFini()
     {
@@ -49,7 +47,7 @@ public:
     int Send2Client();
 
 private:
-    CActionInfoSet m_ActionInfoSet;
+    CActionInfoSet* m_pActionInfoSet;
     ptr_proxy<CActorBase> m_pCommuSocketActorProxy;
 };
 #endif

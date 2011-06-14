@@ -157,3 +157,43 @@ int CSocketActorBase::OnError()
 {
     return SOCKET_FSM_CLOSING;
 }
+int CSocketActorBase::ActionHandleInit()
+{
+    if (m_pAction == NULL)
+    {
+        error_log("m_pAction is null");
+        return -1;
+    }
+    return m_pAction->HandleInit(this,(CAppActorBase*)m_pAppActorProxy.true_ptr());
+}
+int CSocketActorBase::ActionHandleEncodeSendBuf(
+        string & strSendBuf,
+        int &len)
+{
+    if (m_pAction == NULL)
+    {
+        error_log("m_pAction is null");
+        return -1;
+    }
+    return m_pAction->HandleEncodeSendBuf(this,(CAppActorBase*)m_pAppActorProxy.true_ptr(),strSendBuf,len);
+}
+int CSocketActorBase::ActionHandleInput(
+        const char *buf,
+        int len)
+{
+    if (m_pAction == NULL)
+    {
+        error_log("m_pAction is null");
+        return -1;
+    }
+    return m_pAction->HandleInput(this,(CAppActorBase*)m_pAppActorProxy.true_ptr(),buf,len);
+}
+int CSocketActorBase::ActionHandleDecodeRecvBuf(const char *buf, int len)
+{
+    if (m_pAction == NULL)
+    {
+        error_log("m_pAction is null");
+        return -1;
+    }
+    return m_pAction->HandleDecodeRecvBuf(this,(CAppActorBase*)m_pAppActorProxy.true_ptr(),buf,len);
+}

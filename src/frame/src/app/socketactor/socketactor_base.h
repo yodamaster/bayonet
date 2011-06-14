@@ -15,6 +15,8 @@
 #include "fl_log.h"
 #include "net_handler.h"
 //#include "appactor_base.h"
+#include "action.h"
+class IAction;
 
 class CEpollEvent : public IEvent
 {
@@ -106,6 +108,22 @@ public:
 protected:
     virtual CEPoller* GetEpoller();
     int DetachFromEpoller();
+
+    //初始化数据
+    virtual int ActionHandleInit();
+
+    // 为发送打包
+    virtual int ActionHandleEncodeSendBuf(
+            string & strSendBuf,
+            int &len);
+
+    // 收到包完整性检查,<0出错，=0继续接收，>0收到的长度
+    virtual int ActionHandleInput(
+            const char *buf,
+            int len);
+
+    // 收到包解析
+    virtual int ActionHandleDecodeRecvBuf(const char *buf, int len);
 
 protected:
     int m_SocketFd;

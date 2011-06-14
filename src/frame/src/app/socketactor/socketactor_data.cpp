@@ -80,18 +80,11 @@ int CSocketActorData::OnInit()
     }
     pEpoller->AttachSocket(this);//加入到epoll中
 
-    if (m_pAction == NULL)
+    ret = ActionHandleInit();
+    if (ret != 0)
     {
+        error_log("m_pAction HandleInit fail,ret:%d",ret);
         return SOCKET_FSM_CLOSING;
-    }
-    else
-    {
-        ret = m_pAction->HandleInit(this, m_pAppActorProxy.true_ptr());
-        if (ret != 0)
-        {
-            error_log("m_pAction HandleInit fail,ret:%d",ret);
-            return SOCKET_FSM_CLOSING;
-        }
     }
     return SOCKET_FSM_INITOVER;
 }
@@ -145,7 +138,7 @@ int CSocketActorData::OnRecv()
             memcpy((char*)(m_strRecvBuf.c_str()+m_recvedLen),m_strSingleRecvBuf.c_str(),ret);
             m_recvedLen += ret;
         }
-        ret = HandleInput(m_strRecvBuf.c_str(), m_recvedLen);
+        ret = ActionHandleInput(m_strRecvBuf.c_str(), m_recvedLen);
         if (ret == 0)
         {
             continue;
@@ -162,7 +155,7 @@ int CSocketActorData::OnRecv()
             break;
         }
     }
-    ret = HandleDecodeRecvBuf(m_strRecvBuf.c_str(), m_recvedLen);
+    ret = ActionHandleDecodeRecvBuf(m_strRecvBuf.c_str(), m_recvedLen);
 
     if (ret)
     {
@@ -190,7 +183,7 @@ int CSocketActorData::OnSend()
     if (m_sendFlag == 0)
     {
         m_sendFlag = 1;
-        ret = HandleEncodeSendBuf(m_strSendBuf,m_sendBufLen);
+        ret = ActionHandleEncodeSendBuf(m_strSendBuf,m_sendBufLen);
         if (ret)
         {
             error_log("[class:%s]HandleEncodeSendBuf error :%d",Name().c_str(), ret);
@@ -261,37 +254,5 @@ int CSocketActorData::ResizeRecvBuf(int singleBufSize, int initBufSize)
         m_strRecvBuf.resize(initBufSize);
     }
     return 0;   
-}
-
-int CSocketActorData::HandleEncodeSendBuf(
-        string & strSendBuf,
-        int &len)
-{
-    if (m_pAction == NULL)
-    {
-        error_log("m_pAction is null");
-        return -1;
-    }
-    return m_pAction->HandleEncodeSendBuf(this,m_pAppActorProxy.true_ptr(),strSendBuf,len);
-}
-int CSocketActorData::HandleInput(
-        const char *buf,
-        int len)
-{
-    if (m_pAction == NULL)
-    {
-        error_log("m_pAction is null");
-        return -1;
-    }
-    return m_pAction->HandleInput(this,m_pAppActorProxy.true_ptr(),buf,len);
-}
-int CSocketActorData::HandleDecodeRecvBuf(const char *buf, int len)
-{
-    if (m_pAction == NULL)
-    {
-        error_log("m_pAction is null");
-        return -1;
-    }
-    return m_pAction->HandleDecodeRecvBuf(this,m_pAppActorProxy.true_ptr(),buf,len);
 }
 //=============================================================================
