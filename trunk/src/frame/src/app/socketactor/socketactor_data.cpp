@@ -128,7 +128,7 @@ int CSocketActorData::OnRecv()
         }
         else
         {
-            while ((ret + m_recvedLen) > (int)m_strRecvBuf.size())
+            if ((ret + m_recvedLen) > (int)m_strRecvBuf.size())
             {
                 m_strRecvBuf.resize(m_recvedLen*2 + ret);
             }
