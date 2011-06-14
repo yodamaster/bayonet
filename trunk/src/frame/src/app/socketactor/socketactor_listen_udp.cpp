@@ -93,15 +93,15 @@ CSocketActorPassiveUdp* CSocketActorListenUdp::CreatePassiveActor()
     if (m_pNetHandler->GetClientIp().size()>0 && m_pNetHandler->GetClientPort()>0)
     {
         CSocketActorPassiveUdp * pSocketActorAccept = new CSocketActorPassiveUdp();
-        pSocketActorAccept->SetIActionPtr(m_pAction);
         pSocketActorAccept->AttachFrame(m_pFrame);
+        pSocketActorAccept->SetIActionPtr(m_pAction);
         if (m_pAppActorProxy.true_ptr())
         {
             CAppActorBase* pAppActor = (CAppActorBase*)m_pAppActorProxy.true_ptr();
             pAppActor->AttachCommu(pSocketActorAccept);
-            //重新指向一个新的
-            m_pAppActorProxy = NULL;
         }
+        //重新指向一个新的
+        m_pAppActorProxy = NULL;
 
         trace_log("%s,%d",m_pNetHandler->GetClientIp().c_str(),m_pNetHandler->GetClientPort());
         pSocketActorAccept->Init(m_pNetHandler->GetClientIp(),m_pNetHandler->GetClientPort(),m_TimeoutMs,m_ProtoType);
