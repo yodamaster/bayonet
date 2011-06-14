@@ -106,7 +106,7 @@ int CNetHandlerTcp::Send(char* pBuf,int bufLen)
 }
 int CNetHandlerTcp::Recv(char* pBuf,int bufSize)
 {
-    int ret = recv(m_SocketFd, pBuf, bufSize- 1, 0);
+    int ret = recv(m_SocketFd, pBuf, bufSize, 0);
     return ret;
 }
 int CNetHandlerTcp::netConnect()
