@@ -19,7 +19,7 @@ int CBayonetFrame::Process()
         case PROTO_TYPE_TCP:
             pSocketActorListenTcp = new CSocketActorListenTcp();
             pSocketActorListenTcp->AttachFrame(this);
-            pSocketActorListenTcp->Init(m_StFrameParam.ip,m_StFrameParam.port,-1,m_StFrameParam.protoType);
+            pSocketActorListenTcp->Init(m_StFrameParam.ip,m_StFrameParam.port,m_StFrameParam.timeOutMs,m_StFrameParam.protoType);
             pSocketActorListenTcp->SetBackLog(m_StFrameParam.backlog);
             pSocketActorListenTcp->SetKeepcnt(m_StFrameParam.bKeepcnt);
             pSocketActorListenTcp->SetIActionPtr(m_StFrameParam.pAction);
@@ -28,7 +28,7 @@ int CBayonetFrame::Process()
         case PROTO_TYPE_UDP:
             pSocketActorListenUdp = new CSocketActorListenUdp();
             pSocketActorListenUdp->AttachFrame(this);
-            pSocketActorListenUdp->Init(m_StFrameParam.ip,m_StFrameParam.port,-1,m_StFrameParam.protoType);
+            pSocketActorListenUdp->Init(m_StFrameParam.ip,m_StFrameParam.port,m_StFrameParam.timeOutMs,m_StFrameParam.protoType);
             pSocketActorListenUdp->SetIActionPtr(m_StFrameParam.pAction);
             pSocketActorListenUdp->ChangeState(SOCKET_FSM_INIT);
             break;
