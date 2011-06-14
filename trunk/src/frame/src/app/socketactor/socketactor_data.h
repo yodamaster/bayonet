@@ -23,7 +23,7 @@ public:
         m_pNetHandler = NULL;
         m_strSingleRecvBuf.resize(1024);
         m_strRecvBuf.resize(2048);
-        Clear();
+        ResetStatusData();
     }
     virtual ~CSocketActorData () {
         if (m_pNetHandler)
@@ -48,7 +48,8 @@ public:
     virtual int OnCloseOver();
 
 protected:
-    virtual int Clear();
+    //清理接收/发送标记位等
+    virtual int ResetStatusData();
 
     // 为发送打包
     virtual int HandleEncodeSendBuf(

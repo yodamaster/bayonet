@@ -381,6 +381,11 @@ public:
         return 0;
     }
 
+    void ClearFsmNodes()
+    {
+        m_vecFsmNodes.clear();
+    }
+
     virtual int StatFsmEntry(IFsm* fsm)
     {
         StFsmNode node;
@@ -395,7 +400,7 @@ public:
         {
             return -1;
         }
-        StFsmNode& node = m_vecFsmNodes[m_vecFsmNodes.size()-1];
+        StFsmNode& node = m_vecFsmNodes.back();
         if (node.fsm != fsm)
         {
             return -2;

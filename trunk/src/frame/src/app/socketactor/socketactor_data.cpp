@@ -228,7 +228,7 @@ int CSocketActorData::OnCloseOver()
 {
     return SOCKET_FSM_FINI;
 }
-int CSocketActorData::Clear()
+int CSocketActorData::ResetStatusData()
 {
     m_sendedLen = 0;
     m_sendBufLen = 0;
