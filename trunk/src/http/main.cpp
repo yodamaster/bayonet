@@ -11,6 +11,85 @@ using namespace std;
 #define APP_FSM_PROXY 2000
 #define APP_FSM_LOGIC2 2001
 
+/**
+ * @brief   获取ContentLen的数字的起始和长度
+ *
+ * @param   strHttpBuf
+ * @param   len
+ *
+ * @return  
+ */
+size_t GetContentLenPos(const string& strHttpBuf, int& len)
+{
+    string strContentLenKey = "Content-Length";
+
+    size_t pos;
+    size_t end_pos;
+    pos = strHttpBuf.find(strContentLenKey);
+    if (pos == string::npos)
+    {
+        return pos;
+    }
+    pos += strContentLenKey.size();
+
+    pos = strHttpBuf.find(":", pos);
+    if (pos == string::npos)
+    {
+        return pos;
+    }
+    pos += 1;
+
+    end_pos = strHttpBuf.find("\r\n", pos);
+    if (end_pos == string::npos)
+    {
+        return end_pos;
+    }
+
+    pos = strHttpBuf.find_first_not_of(" ", pos);//只能查找字符
+    if (pos == string::npos || pos >= end_pos)
+    {
+        return pos;
+    }
+    len = end_pos - pos;
+    return pos;
+}
+
+int HttpHandleInput(const char* buf, int len)
+{
+    string strHttpBuf(buf,len);
+
+    int contentLenLen = 0;
+    size_t contentLenPos = GetContentLenPos(strHttpBuf,contentLenLen);
+    if (contentLenPos == string::npos)
+    {
+        //说明直接接收完了
+        return len;
+    }
+
+    //获取原来的content-len的值
+    string lenNum = strHttpBuf.substr(contentLenPos, contentLenLen);
+    int iContentLen = atoi(lenNum.c_str());
+
+    //接下来我们要看看当前接受的buf大小是否等于 head + content len
+
+    string spStr = "\r\n\r\n";
+    size_t spPos = strHttpBuf.find(spStr);
+    if (spPos == string::npos)
+    {
+        //没接收完，继续接收
+        return 0;
+    }
+    int headLen = spPos+spStr.size();
+
+    int realLen = headLen + iContentLen;
+    if (realLen > len)
+    {
+        return 0;
+    }
+
+    return realLen;
+}
+
 class CMyActor : public CAppActorBase
 {
 public:
@@ -26,8 +105,8 @@ class CActionFirst : public IAction
 {
 public:
     int HandleInit(
-            CActorBase* pSocketActor,
-            CActorBase* pAppActor)
+        CActorBase* pSocketActor,
+        CActorBase* pAppActor)
     {
         CSocketActorBase* socketactor_base = (CSocketActorBase*)pSocketActor;
 
@@ -59,6 +138,7 @@ public:
                 }
             }  
         }
+        socketactor_base->ResizeRecvBuf(4096,4096);
         return 0;
     }
     // 为发送打包
@@ -78,17 +158,17 @@ public:
         return 0;
     }
 
-    // 回应包完整性检查
+    // 接收包完整性检查
     int HandleInput(
         CActorBase* pSocketActor,
         CActorBase* pAppActor,
         const char *buf,
         int len)
     {
-        return len;
+        return HttpHandleInput(buf,len);
     }
 
-    // 接受包解析
+    // 接收包解析
     int HandleDecodeRecvBuf(
         CActorBase* pSocketActor,
         CActorBase* pAppActor,
@@ -132,7 +212,7 @@ public:
         const char *buf,
         int len)
     {
-        return len;
+        return HttpHandleInput(buf,len);
     }
 
     // 回应包解析
