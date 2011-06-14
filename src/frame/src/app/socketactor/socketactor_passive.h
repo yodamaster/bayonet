@@ -15,6 +15,13 @@ class CSocketActorPassive : public CSocketActorData
 public:
     virtual ~CSocketActorPassive () {}
     virtual int OnInitOver()=0;
+
+    virtual int OnWaitRecv()
+    {
+        ClearFsmNodes();
+        return CSocketActorData::OnWaitRecv();
+    }
+
     virtual int OnRecvOver()=0;
 
     virtual int OnFiniOver();

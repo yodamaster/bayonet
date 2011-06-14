@@ -200,6 +200,11 @@ public:
     virtual int HandleEvent(IEvent* pEvent)=0;
 
     /**
+     * @brief   清空状态变化历程列表
+     */
+    virtual void ClearFsmNodes()=0;
+
+    /**
      * @brief   统计当进入某个fsm，会被frame调用
      *
      * @param   fsm

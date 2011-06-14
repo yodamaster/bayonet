@@ -24,7 +24,8 @@ int CSocketActorPassive::OnFiniOver()
 int CSocketActorPassive::OnSendOver()
 {
     NotifyAppActor();//通知上层状态机可以FINI了
-    Clear();
+
+    ResetStatusData();
     if (m_bKeepcnt && m_ProtoType == PROTO_TYPE_TCP)
     {
         return SOCKET_FSM_WAITRECV;

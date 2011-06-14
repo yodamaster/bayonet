@@ -68,10 +68,10 @@ public:
         param.actionType = ACTIONTYPE_SENDONLY;
         param.timeout_ms = 1000;
 
-        CActionInfo * pActionInfo = new CActionInfo();
+        /*CActionInfo * pActionInfo = new CActionInfo();
         pActionInfo->Init(param);
         pActionInfo->SetAppActor(pAppActor);
-        pActionInfoSet->Add(pActionInfo);
+        pActionInfoSet->Add(pActionInfo);*/
         return 0;
     }
     virtual int HandleProcess(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
@@ -100,7 +100,7 @@ int main(int argc, const char *argv[])
     param.protoType = PROTO_TYPE_UDP;
     //param.protoType = PROTO_TYPE_TCP;
     param.pAction = new CActionFirst();
-    param.gcMaxCount=1;
+    param.gcMaxCount=0;
 
     int ret = srv.Init(param);
     if (ret != 0)
