@@ -73,19 +73,28 @@ public:
 
     virtual int OnFiniOver()=0;
 
-    virtual int OnWaitRecv() {return 0;}
+    virtual int OnWaitRecv() {
+        SetEvent(EPOLLIN|EPOLLHUP|EPOLLERR);
+        return 0;
+    }
 
     virtual int OnRecv()=0;
 
     virtual int OnRecvOver()=0;
 
-    virtual int OnWaitSend() {return 0;}
+    virtual int OnWaitSend() {
+        SetEvent(EPOLLOUT|EPOLLHUP|EPOLLERR);
+        return 0;
+    }
 
     virtual int OnSend()=0;
 
     virtual int OnSendOver()=0;
 
-    virtual int OnWaitClose() {return 0;}
+    virtual int OnWaitClose() {
+        SetEvent(EPOLLHUP|EPOLLERR);
+        return 0;
+    }
 
     virtual int OnClose()=0;
 

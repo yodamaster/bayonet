@@ -143,10 +143,10 @@ public:
         param2.actionType = ACTIONTYPE_SENDRECV;
         param2.timeout_ms = 500;
 
-        CActionInfo * pActionInfo2 = new CActionInfo();
+        /*CActionInfo * pActionInfo2 = new CActionInfo();
         pActionInfo2->Init(param2);
 
-        pActionInfoSet->Add(pActionInfo2);
+        pActionInfoSet->Add(pActionInfo2);*/
         return 0;
     }
     virtual int HandleProcess(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
@@ -156,8 +156,8 @@ public:
         {
             trace_log("id:%d,error no:%d,timecost:%u ms",(*it)->GetID(),(*it)->GetErrno(),(*it)->GetTimeCost());
         }
-        //return APP_FSM_RSP;//代表要回复客户端啦
-        return APP_FSM_LOGIC2;//代表要回复客户端啦
+        return APP_FSM_RSP;//代表要回复客户端啦
+        //return APP_FSM_LOGIC2;//代表要回复客户端啦
     }
     virtual int HandleExit(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
     {
