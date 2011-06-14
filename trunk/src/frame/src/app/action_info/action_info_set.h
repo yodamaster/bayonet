@@ -23,7 +23,9 @@ class CActionInfoSet
 public:
     CActionInfoSet() {
     }
-    virtual ~CActionInfoSet() {}
+    virtual ~CActionInfoSet() {
+        Clear();
+    }
     virtual void SetAppActor(CActorBase* pActor)
     {
         if (pActor)
