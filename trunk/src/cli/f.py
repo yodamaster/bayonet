@@ -13,5 +13,5 @@
 '''
 import os
 
-for i in range(0,100000):
+for i in range(0,600):
     print os.popen("./cli").read()
