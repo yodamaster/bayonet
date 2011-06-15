@@ -15,6 +15,7 @@
 #include "fl_log.h"
 #include "net_handler.h"
 #include "socketactor_base.h"
+#include "action.h"
 //=============================================================================
 class CSocketActorData:public CSocketActorBase
 {
@@ -25,6 +26,7 @@ public:
     virtual int Init(string ip,int port,int timeout_ms,int protoType);
     virtual int Init(int socketFd,int timeout_ms,int protoType);
 
+    //初始化接收缓冲区大小，包括一次接收的大小，和总共的初始化大小;<=0代表不修改
     virtual int ResizeRecvBuf(int singleBufSize, int initBufSize);
 
     virtual int OnInit();
@@ -39,6 +41,22 @@ public:
 protected:
     //清理接收/发送标记位等
     virtual int ResetStatusData();
+
+    //初始化数据
+    virtual int ActionHandleInit();
+
+    // 为发送打包
+    virtual int ActionHandleEncodeSendBuf(
+            string & strSendBuf,
+            int &len);
+
+    // 收到包完整性检查,<0出错，=0继续接收，>0收到的长度
+    virtual int ActionHandleInput(
+            const char *buf,
+            int len);
+
+    // 收到包解析
+    virtual int ActionHandleDecodeRecvBuf(const char *buf, int len);
 
 protected:
     CNetHandlerBase* m_pNetHandler;
