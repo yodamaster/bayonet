@@ -229,7 +229,7 @@ int main(int argc, const char *argv[])
     //param.protoType = PROTO_TYPE_UDP;
     param.protoType = PROTO_TYPE_TCP;
     param.pAction = new CActionFirst();
-    param.gcMaxCount = 10;
+    //param.gcMaxCount = 10;
     param.timeOutMs= 1000;
 
     int ret = srv.Init(param);
