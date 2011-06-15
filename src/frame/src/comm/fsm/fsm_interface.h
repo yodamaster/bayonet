@@ -21,14 +21,14 @@ using namespace std;
 class IFsm;
 class IActor;
 
-class IEvent : public IObject
+class IEvent
 {
 public:
     virtual ~IEvent () {}
 };
 
 
-class IFrame : public IObject
+class IFrame
 {
 public:
     virtual ~IFrame () {}
