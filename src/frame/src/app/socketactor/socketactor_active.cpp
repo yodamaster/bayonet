@@ -72,7 +72,7 @@ CSocketActorActiveSendOnly::~CSocketActorActiveSendOnly () {}
 int CSocketActorActiveSendOnly::OnCloseOver()
 {
     int count = m_vecFsmNodes.size();
-    if (!(count > 3 && m_vecFsmNodes[count-3].fsm->GetStateID() == SOCKET_FSM_SENDOVER))
+    if (!(count >= 3 && m_vecFsmNodes[count-3].fsm->GetStateID() == SOCKET_FSM_SENDOVER))
     {
         //非正常关闭
         SetDealOver(ESocketHangup);
@@ -96,7 +96,7 @@ CSocketActorActiveSendRecv::~CSocketActorActiveSendRecv () {}
 int CSocketActorActiveSendRecv::OnCloseOver()
 {
     int count = m_vecFsmNodes.size();
-    if (!(count > 3 && m_vecFsmNodes[count-3].fsm->GetStateID() == SOCKET_FSM_RECVOVER))
+    if (!(count >= 3 && m_vecFsmNodes[count-3].fsm->GetStateID() == SOCKET_FSM_RECVOVER))
     {
         //非正常关闭
         SetDealOver(ESocketHangup);

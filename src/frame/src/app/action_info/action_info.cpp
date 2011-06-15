@@ -26,6 +26,10 @@ int CActionInfo::GetID()
 
 void CActionInfo::SetDealOver(int err_no,int timecost_ms)
 {
+    if (m_bDealOver)
+    {
+        return;
+    }
     m_bDealOver = true;
     m_err_no = err_no;
     m_timecost_ms = timecost_ms;
