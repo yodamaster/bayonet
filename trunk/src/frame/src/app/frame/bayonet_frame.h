@@ -70,7 +70,7 @@ typedef struct _StFrameParam
         infoDir = "./";
 
         iLogLevel = LM_TRACE;
-        logFileName = "log";
+        logFileName = "bayonet";
         iLogMaxSize = LOG_DEFAULT_SIZE;
 
         statFileName = "stat_file";
