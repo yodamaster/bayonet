@@ -168,6 +168,13 @@ int CSocketActorBase::OnWaitClose() {
     return 0;
 }
 
+int CSocketActorBase::OnFini()
+{
+    //标记为GC
+    SetGCMark();
+    return SOCKET_FSM_ALLOVER;
+}
+
 CEPoller* CSocketActorBase::GetEpoller()
 {
     IFrame* pFrame = GetFrame();

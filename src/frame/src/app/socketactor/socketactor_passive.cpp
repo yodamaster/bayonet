@@ -18,17 +18,6 @@ int CSocketActorPassive::OnWaitRecv()
     ClearFsmNodes();
     return CSocketActorData::OnWaitRecv();
 }
-int CSocketActorPassive::OnFiniOver()
-{
-    if (m_pAppActorProxy.true_ptr())
-    {
-        CAppActorBase* pAppActor = (CAppActorBase*)m_pAppActorProxy.true_ptr();
-        pAppActor->ChangeState(APP_FSM_FINI);
-        pAppActor->DetachCommu();
-    }
-
-    return SOCKET_FSM_ALLOVER;
-}
 int CSocketActorPassive::OnSendOver()
 {
     NotifyAppActor();//通知上层状态机可以FINI了

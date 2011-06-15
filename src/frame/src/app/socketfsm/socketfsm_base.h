@@ -71,18 +71,6 @@ public:
         return pSocketActor->OnFini();
     }
 };
-class CSocketFsmFiniOver: public CSocketFsmBase
-{
-public:
-    CSocketFsmFiniOver () {}
-    virtual ~CSocketFsmFiniOver () {}
-
-    virtual int HandleProcess(IActor* pActor)
-    {
-        CSocketActorBase* pSocketActor = (CSocketActorBase*)pActor;
-        return pSocketActor->OnFiniOver();
-    }
-};
 //=============================================================================
 class CSocketFsmWaitSend : public CSocketFsmBase
 {

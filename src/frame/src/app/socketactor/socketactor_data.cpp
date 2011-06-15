@@ -101,15 +101,6 @@ int CSocketActorData::OnInit()
     }
     return SOCKET_FSM_INITOVER;
 }
-int CSocketActorData::OnFini()
-{
-    SetGCMark();//标记位可以回收
-    return SOCKET_FSM_FINIOVER;
-}
-int CSocketActorData::OnFiniOver()
-{
-    return SOCKET_FSM_ALLOVER;
-}
 int CSocketActorData::OnRecv()
 {
     int ret = 0;

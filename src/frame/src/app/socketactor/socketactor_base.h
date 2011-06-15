@@ -67,9 +67,7 @@ public:
 
     virtual int OnInitOver()=0;
 
-    virtual int OnFini()=0;
-
-    virtual int OnFiniOver()=0;
+    virtual int OnFini();
 
     virtual int OnWaitRecv();
 
