@@ -33,17 +33,13 @@ public:
 
     virtual int OnFiniOver();
 
-    virtual int OnWaitRecv()
-    {
-        ClearFsmNodes();
-        return CSocketActorBase::OnWaitRecv();
-    }
+    virtual int OnWaitRecv();
 
     virtual int OnRecv();
 
     virtual int OnRecvOver();
 
-    virtual int OnWaitSend() {return SOCKET_FSM_WAITRECV;}
+    virtual int OnWaitSend();
 
     virtual int OnSend();
 

@@ -36,6 +36,8 @@ public:
     virtual int Init(string ip,int port,int timeout_ms,int protoType);
     virtual int Init(int socketFd,int timeout_ms,int protoType);
 
+    virtual int ResizeRecvBuf(int singleBufSize, int initBufSize);
+
     virtual int OnInit();
     virtual int OnInitOver()=0;
     virtual int OnFini();
@@ -46,8 +48,6 @@ public:
     virtual int OnRecvOver()=0;
     virtual int OnClose();
     virtual int OnCloseOver();
-
-    virtual int ResizeRecvBuf(int singleBufSize, int initBufSize);
 
 protected:
     //清理接收/发送标记位等

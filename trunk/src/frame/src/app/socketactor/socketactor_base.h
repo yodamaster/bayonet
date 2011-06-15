@@ -57,6 +57,9 @@ public:
 
     virtual void SetKeepcnt(bool bKeepcnt);
 
+    //初始化接收缓冲区大小，包括一次接收的大小，和总共的初始化大小;<=0代表不修改
+    virtual int ResizeRecvBuf(int singleBufSize, int initBufSize);
+
     virtual int CheckTimeOut(struct timeval& now_time);
 
     virtual bool IsTimeOut(struct timeval& now_time);
@@ -75,38 +78,27 @@ public:
 
     virtual int OnFiniOver()=0;
 
-    virtual int OnWaitRecv() {
-        SetEvent(EPOLLIN|EPOLLHUP|EPOLLERR);
-        return 0;
-    }
+    virtual int OnWaitRecv();
 
     virtual int OnRecv()=0;
 
     virtual int OnRecvOver()=0;
 
-    virtual int OnWaitSend() {
-        SetEvent(EPOLLOUT|EPOLLHUP|EPOLLERR);
-        return 0;
-    }
+    virtual int OnWaitSend();
 
     virtual int OnSend()=0;
 
     virtual int OnSendOver()=0;
 
-    virtual int OnWaitClose() {
-        SetEvent(EPOLLHUP|EPOLLERR);
-        return 0;
-    }
+    virtual int OnWaitClose();
 
     virtual int OnClose()=0;
 
     virtual int OnCloseOver()=0;
 
-    //初始化接收缓冲区大小，包括一次接收的大小，和总共的初始化大小;<=0代表不修改
-    virtual int ResizeRecvBuf(int singleBufSize, int initBufSize) {return 0;}
-
 protected:
     virtual CEPoller* GetEpoller();
+
     int DetachFromEpoller();
 
     //初始化数据

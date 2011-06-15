@@ -68,13 +68,11 @@ int CSocketActorListenUdp::OnInit()
 
     return SOCKET_FSM_INITOVER;
 }
-int CSocketActorListenUdp::OnRecvOver()
+int CSocketActorListenUdp::OnInitOver()
 {
-    CreatePassiveActor();
-    //清空标志，要不然会有内存泄漏
-    ResetStatusData();
     return SOCKET_FSM_WAITRECV;
 }
+
 int CSocketActorListenUdp::OnWaitSend()
 {
     CSocketActorPassiveUdp* pSocketActorAccept = CreatePassiveActor();
@@ -87,11 +85,31 @@ int CSocketActorListenUdp::OnWaitSend()
     return SOCKET_FSM_WAITRECV;
 }
 
+int CSocketActorListenUdp::OnSendOver()
+{
+    return SOCKET_FSM_WAITRECV;
+}
+
+int CSocketActorListenUdp::OnWaitRecv()
+{
+    ClearFsmNodes();
+    return CSocketActorData::OnWaitRecv();
+}
+
+int CSocketActorListenUdp::OnRecvOver()
+{
+    CreatePassiveActor();
+    //清空标志，要不然会有内存泄漏
+    ResetStatusData();
+    return SOCKET_FSM_WAITRECV;
+}
+
 bool CSocketActorListenUdp::IsTimeOut(struct timeval& now_time)
 {
     //永不超时
     return false;
 }
+
 CSocketActorPassiveUdp* CSocketActorListenUdp::CreatePassiveActor()
 {
     if (m_pNetHandler->GetClientIp().size()>0 && m_pNetHandler->GetClientPort()>0)
