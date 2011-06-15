@@ -100,7 +100,7 @@ int main(int argc, const char *argv[])
     param.protoType = PROTO_TYPE_UDP;
     //param.protoType = PROTO_TYPE_TCP;
     param.pAction = new CActionFirst();
-    param.gcMaxCount=0;
+    param.gcMaxCount=1000;
 
     int ret = srv.Init(param);
     if (ret != 0)

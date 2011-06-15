@@ -18,9 +18,6 @@
 #include "socketactor_base.h"
 using namespace std;
 
-#define EPOLL_DFT_MAXSIZE   102400
-#define NET_ERRMSG_SIZE     1024
-#define EPOLL_FD_MAX        10240
 
 class CSocketActorBase;
 class CEPoller
@@ -40,9 +37,9 @@ public:
     int  LoopForEvent();
     char * GetErrMsg();
 protected:
-    char            m_szErrMsg[NET_ERRMSG_SIZE];
+    char            m_szErrMsg[1024];
     int             m_epollFd;              //epoll的句柄
-    epoll_event     m_events[EPOLL_FD_MAX];  //epoll_wait的返回的事件
+    epoll_event     m_events[EPOLL_EVENTS_MAXSIZE];  //epoll_wait的返回的事件
 
     int             m_epollSize;
     int             m_waittimeMs;

@@ -33,13 +33,39 @@
 #include <map>
 using namespace std;
 
+//socket相关
 //recv一次的buf大小
-#define RECV_SINGLE_BUFSIZE     1024
+#define RECV_SINGLE_BUFSIZE             1024
 //recv的所有的数据的大小，避免不停的申请内存
-#define RECV_INIT_BUFSIZE       2048
+#define RECV_INIT_BUFSIZE               2048
 
 //tcp listen默认的backlog大小
-#define TCP_BACKLOG_SIZE            10240
+#define TCP_BACKLOG_SIZE                10240
+
+
+//epoll相关
+//epoll管理的最大大小
+#define EPOLL_FD_MAXSIZE                102400
+//epoll一次返回事件的大小
+#define EPOLL_EVENTS_MAXSIZE            10240
+//epollwait的超时时间 ms
+#define EPOLL_WAIT_TIMEMS               10
+//epoll检查socket超时的时间间隔 ms
+#define CHECK_INTERVAL_MS               100
+
+
+//GC相关
+//GC需要的最大个数
+#define GC_MAX_COUNT                    1024
+
+
+//统计,log相关
+//基础目录
+#define BAYONET_INFO_DIR                "./"
+//统计文件名字
+#define BAYONET_STATFILE_NAME           "stat_file"
+//log文件名
+#define BAYONET_LOGFILE_NAME            "bayonet"
 
 //Frame的AddActor方法的actorType的值
 enum PROTOTYPE
