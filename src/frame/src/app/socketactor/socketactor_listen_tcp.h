@@ -16,10 +16,8 @@
 class CSocketActorListenTcp:public CSocketActorBase
 {
 public:
-    CSocketActorListenTcp() {
-        m_BackLog = 10240;
-    }
-    virtual ~CSocketActorListenTcp() {}
+    CSocketActorListenTcp();
+    virtual ~CSocketActorListenTcp();
 
     void SetBackLog(int backlog);
 

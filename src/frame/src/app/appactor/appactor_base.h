@@ -29,16 +29,9 @@ public:
 
     virtual ~CAppActorBase ();
 
-    CActionInfoSet* GetActionInfoSet()
-    {
-        return m_pActionInfoSet;
-    }
-    int OnFini()
-    {
-        SetGCMark();
-        DetachCommu();
-        return APP_FSM_ALLOVER;
-    }
+    CActionInfoSet* GetActionInfoSet();
+
+    int OnFini();
 
     int AttachCommu(CActorBase* pActor);
 

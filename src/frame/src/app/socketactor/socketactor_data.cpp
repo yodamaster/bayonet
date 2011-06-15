@@ -9,6 +9,19 @@
 =============================================================================*/
 #include "socketactor_data.h"
 #include "bayonet_frame.h"
+CSocketActorData::CSocketActorData () {
+    m_pNetHandler = NULL;
+    //m_strSingleRecvBuf.resize(1024);
+    //m_strRecvBuf.resize(2048);
+    ResetStatusData();
+}
+CSocketActorData::~CSocketActorData () {
+    if (m_pNetHandler)
+    {
+        delete m_pNetHandler;
+        m_pNetHandler = NULL;
+    }
+}
 
 int CSocketActorData::Init(string ip,int port,int timeout_ms,int protoType)
 {
@@ -162,10 +175,10 @@ int CSocketActorData::OnRecv()
         return SOCKET_FSM_CLOSING;
     }
 
-//Mod-Begin by dantezhu in 2011-06-12 18:58:48
-//FROM
+    //Mod-Begin by dantezhu in 2011-06-12 18:58:48
+    //FROM
     /*return SOCKET_FSM_RECVOVER;*/
-//TO
+    //TO
     //这里的主要是考虑，appactor可能直接就返回
     if (!m_vecFsmNodes.empty() && m_vecFsmNodes.back().fsm->GetStateID() == SOCKET_FSM_RECVING)
     {
@@ -175,7 +188,7 @@ int CSocketActorData::OnRecv()
     {
         return 0;
     }
-//Mod-End
+    //Mod-End
 }
 int CSocketActorData::OnSend()
 {

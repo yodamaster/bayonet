@@ -23,22 +23,13 @@ class CActionInfo;
 class CActionInfoSet
 {
 public:
-    CActionInfoSet() {
-    }
-    virtual ~CActionInfoSet() {
-        Clear();
-    }
-    virtual void SetAppActor(CActorBase* pActor)
-    {
-        if (pActor)
-        {
-            m_pAppActorProxy = pActor->get_ptr_proxy();
-        }
-    }
-    virtual CActorBase* GetActor()
-    {
-        return m_pAppActorProxy.true_ptr();
-    }
+    CActionInfoSet();
+    virtual ~CActionInfoSet();
+
+    virtual void SetAppActor(CActorBase* pActor);
+
+    virtual CActorBase* GetActor();
+
     /**
      * @brief   添加一个pActionInfo
      *
@@ -63,10 +54,7 @@ public:
 
     int Clear();
 
-    set<CActionInfo*>& GetActionSet()
-    {
-        return m_setActionInfos;
-    }
+    set<CActionInfo*>& GetActionSet();
 private:
     set<CActionInfo*> m_setActionInfos;
     ptr_proxy<CActorBase> m_pAppActorProxy;

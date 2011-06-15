@@ -33,15 +33,8 @@ class CEPoller;
 class CSocketActorBase:public CActorBase
 {
 public:
-    CSocketActorBase () {
-        m_SocketFd = -1;
-        m_Port = 0;
-        m_TimeoutMs = -1;
-        m_ProtoType = 0;
-        m_pAction = NULL;
-        m_bKeepcnt = false;
-    }
-    virtual ~CSocketActorBase () {}
+    CSocketActorBase ();
+    virtual ~CSocketActorBase ();
 
     virtual int HandleEvent(IEvent* pEvent);
 

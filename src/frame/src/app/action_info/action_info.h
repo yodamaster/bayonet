@@ -39,12 +39,7 @@ typedef struct _StActionInfoParam
 class CActionInfo:public IPtrProxy<CActionInfo>
 {
 public:
-    CActionInfo () {
-        m_err_no = 0;
-        m_timecost_ms= 0;
-        m_bDealOver = false;
-    }
-    virtual ~CActionInfo () {}
+    CActionInfo ();
 
     /**
      * @brief   初始化
@@ -60,10 +55,7 @@ public:
      *
      * @return  id
      */
-    int GetID()
-    {
-        return m_stActionTypeParam.id;
-    }
+    int GetID();
 
     /**
      * @brief   socket处理完成时标记结束
@@ -71,25 +63,9 @@ public:
      * @param   err_no
      * @param   timecost_ms
      */
-    void SetDealOver(int err_no,int timecost_ms)
-    {
-        m_bDealOver = true;
-        m_err_no = err_no;
-        m_timecost_ms = timecost_ms;
+    void SetDealOver(int err_no,int timecost_ms);
 
-//Del-Begin by dantezhu in 2011-06-14 01:36:26
-//这里不直接去执行ProcessState的原因是，因为这个函数可能会导致this指针失效
-        /*if (m_pAppActorProxy.true_ptr())
-        {
-            m_pAppActorProxy.true_ptr()->ProcessState();
-        }*/
-//Del-End
-    }
-
-    bool IsDealOver()
-    {
-        return m_bDealOver;
-    }
+    bool IsDealOver();
 
     /**
      * 获取错误码，插件在处理动作执行结果时可以调用此方法获取错误码，0为处理成功。
@@ -112,33 +88,21 @@ public:
      *
      * @param err_no 错误码
      */
-    int GetErrno()
-    {
-        return m_err_no;
-    }
+    int GetErrno();
 
     /**
      * 获取动作处理时间消耗，单位：ms
      *
      * @param cost
      */
-    inline int GetTimeCost()
-    {
-        return m_timecost_ms;
-    }
+    int GetTimeCost();
 
     /**
      * @brief   设置AppActor指针
      *
      * @param   pActor
      */
-    void SetAppActor(CActorBase* pActor)
-    {
-        if (pActor)
-        {
-            m_pAppActorProxy = pActor->get_ptr_proxy();
-        }
-    }
+    void SetAppActor(CActorBase* pActor);
 
     /**
      * 以下方法，插件禁止调用

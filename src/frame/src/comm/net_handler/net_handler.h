@@ -22,11 +22,7 @@ using namespace std;
 class CNetHandlerBase
 {
 public:
-    CNetHandlerBase () {
-        m_Port = 0;
-        m_SocketFd = -1;
-        m_ClientPort = 0;
-    }
+    CNetHandlerBase ();
     virtual ~CNetHandlerBase ();
 
     int Init(string ip,int port);
@@ -59,8 +55,6 @@ protected:
 class CNetHandlerTcp : public CNetHandlerBase
 {
 public:
-    CNetHandlerTcp () {}
-    virtual ~CNetHandlerTcp () {}
     virtual int Create();
     virtual int Send(char* pBuf,int bufLen);
     virtual int Recv(char* pBuf,int bufSize);
@@ -71,8 +65,6 @@ protected:
 class CNetHandlerUdp : public CNetHandlerBase
 {
 public:
-    CNetHandlerUdp () {}
-    virtual ~CNetHandlerUdp () {}
     virtual int Create();
     virtual int Send(char* pBuf,int bufLen);
     virtual int Recv(char* pBuf,int bufSize);

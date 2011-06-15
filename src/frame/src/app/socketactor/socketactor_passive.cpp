@@ -10,6 +10,9 @@
 #include "socketactor_passive.h"
 #include "appactor_base.h"
 
+CSocketActorPassive::~CSocketActorPassive ()
+{}
+
 int CSocketActorPassive::OnWaitRecv()
 {
     ClearFsmNodes();
