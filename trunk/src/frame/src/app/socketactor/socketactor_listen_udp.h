@@ -10,7 +10,7 @@
 #ifndef _SOCKETACTOR_LISTEN_UDP_H_
 #define _SOCKETACTOR_LISTEN_UDP_H_
 #include "socketactor_data.h"
-#include "socketactor_passive_udp.h"
+#include "socketactor_passive.h"
 class CSocketActorListenUdp : public CSocketActorData
 {
 public:

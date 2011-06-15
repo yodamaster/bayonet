@@ -8,7 +8,7 @@
 #  History:         
 =============================================================================*/
 #include "socketactor_listen_tcp.h"
-#include "socketactor_passive_tcp.h"
+#include "socketactor_passive.h"
 #include "appactor_base.h"
 CSocketActorListenTcp::CSocketActorListenTcp() 
 {
