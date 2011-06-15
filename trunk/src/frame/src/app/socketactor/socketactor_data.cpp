@@ -259,4 +259,45 @@ int CSocketActorData::ResizeRecvBuf(int singleBufSize, int initBufSize)
     }
     return 0;   
 }
+
+int CSocketActorData::ActionHandleInit()
+{
+    if (m_pAction == NULL)
+    {
+        error_log("m_pAction is null");
+        return -1;
+    }
+    return m_pAction->HandleInit(this,(CAppActorBase*)m_pAppActorProxy.true_ptr());
+}
+int CSocketActorData::ActionHandleEncodeSendBuf(
+        string & strSendBuf,
+        int &len)
+{
+    if (m_pAction == NULL)
+    {
+        error_log("m_pAction is null");
+        return -1;
+    }
+    return m_pAction->HandleEncodeSendBuf(this,(CAppActorBase*)m_pAppActorProxy.true_ptr(),strSendBuf,len);
+}
+int CSocketActorData::ActionHandleInput(
+        const char *buf,
+        int len)
+{
+    if (m_pAction == NULL)
+    {
+        error_log("m_pAction is null");
+        return -1;
+    }
+    return m_pAction->HandleInput(this,(CAppActorBase*)m_pAppActorProxy.true_ptr(),buf,len);
+}
+int CSocketActorData::ActionHandleDecodeRecvBuf(const char *buf, int len)
+{
+    if (m_pAction == NULL)
+    {
+        error_log("m_pAction is null");
+        return -1;
+    }
+    return m_pAction->HandleDecodeRecvBuf(this,(CAppActorBase*)m_pAppActorProxy.true_ptr(),buf,len);
+}
 //=============================================================================

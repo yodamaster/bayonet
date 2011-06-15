@@ -67,13 +67,6 @@ int CSocketActorListenTcp::OnInit()
     }
     pEpoller->AttachSocket(this);//加入到epoll中
 
-    int ret = ActionHandleInit();
-    if (ret != 0)
-    {
-        error_log("m_pAction HandleInit fail,ret:%d",ret);
-        return SOCKET_FSM_CLOSING;
-    }
-
     return SOCKET_FSM_INITOVER;
 }
 int CSocketActorListenTcp::OnInitOver()

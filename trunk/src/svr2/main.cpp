@@ -24,14 +24,13 @@ class CActionFirst : public IAction
 {
 public:
     int HandleInit(
-            CSocketActorBase* pSocketActor,
+            CSocketActorData* pSocketActor,
             CAppActorBase* pAppActor)
     {
         return 0;
     }
-    // 为发送打包
     int HandleEncodeSendBuf(
-            CSocketActorBase* pSocketActor,
+            CSocketActorData* pSocketActor,
             CAppActorBase* pAppActor,
             string & strSendBuf,
             int &len)
@@ -42,9 +41,8 @@ public:
         return 0;
     }
 
-    // 回应包完整性检查
     int HandleInput(
-            CSocketActorBase* pSocketActor,
+            CSocketActorData* pSocketActor,
             CAppActorBase* pAppActor,
             const char *buf,
             int len)
@@ -52,9 +50,8 @@ public:
         return len;
     }
 
-    // 回应包解析
     int HandleDecodeRecvBuf(
-            CSocketActorBase* pSocketActor,
+            CSocketActorData* pSocketActor,
             CAppActorBase* pAppActor,
             const char *buf, 
             int len)
@@ -71,14 +68,13 @@ class CActionGetData: public IAction
 {
 public:
     int HandleInit(
-            CSocketActorBase* pSocketActor,
+            CSocketActorData* pSocketActor,
             CAppActorBase* pAppActor)
     {
         return 0;
     }
-    // 为发送打包
     int HandleEncodeSendBuf(
-            CSocketActorBase* pSocketActor,
+            CSocketActorData* pSocketActor,
             CAppActorBase* pAppActor,
             string & strSendBuf,
             int &len)
@@ -89,9 +85,8 @@ public:
         return 0;
     }
 
-    // 回应包完整性检查
     int HandleInput(
-            CSocketActorBase* pSocketActor,
+            CSocketActorData* pSocketActor,
             CAppActorBase* pAppActor,
             const char *buf,
             int len)
@@ -99,9 +94,8 @@ public:
         return len;
     }
 
-    // 回应包解析
     int HandleDecodeRecvBuf(
-            CSocketActorBase* pSocketActor,
+            CSocketActorData* pSocketActor,
             CAppActorBase* pAppActor,
             const char *buf, 
             int len)
