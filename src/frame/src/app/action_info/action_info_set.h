@@ -39,15 +39,6 @@ public:
      */
     virtual int Add(CActionInfo* pActionInfo);
 
-    /**
-     * @brief   删除一个pActionInfo
-     *
-     * @param   pActionInfo
-     *
-     * @return  0
-     */
-    virtual int Del(CActionInfo* pActionInfo);
-
     bool IsDealOver();
 
     int Start();
@@ -55,8 +46,16 @@ public:
     int Clear();
 
     set<CActionInfo*>& GetActionSet();
+
+    /**
+     * @brief   在析构的时候，清理掉所有存储的actioninfo
+     */
+    void FreeAllHistoryActionInfos();
 private:
     set<CActionInfo*> m_setActionInfos;
+
+    //为了避免actioninfo在changestate过程中被删除
+    set<CActionInfo*> m_setHistorActionInfos;
     ptr_proxy<CActorBase> m_pAppActorProxy;
 };
 #endif

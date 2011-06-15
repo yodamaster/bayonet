@@ -56,10 +56,13 @@ void CSocketActorActive::SetDealOver(int err_no)
     {
         m_pActionInfoProxy.true_ptr()->SetDealOver(err_no, GetAliveTimeMs());
     }
-    if (m_pAppActorProxy.true_ptr())
+//Del-Begin by dantezhu in 2011-06-15 12:28:53
+//SetDealOver 内部已经做了转化状态，外面就不用关心了
+    /*if (m_pAppActorProxy.true_ptr())
     {
         m_pAppActorProxy.true_ptr()->ProcessState();
-    }
+    }*/
+//Del-End
 }
 //=============================================================================
 CSocketActorActiveSendOnly::CSocketActorActiveSendOnly () {

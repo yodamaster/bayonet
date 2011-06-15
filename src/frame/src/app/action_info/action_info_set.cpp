@@ -18,7 +18,7 @@
 CActionInfoSet::CActionInfoSet() {
 }
 CActionInfoSet::~CActionInfoSet() {
-    Clear();
+    FreeAllHistoryActionInfos();
 }
 void CActionInfoSet::SetAppActor(CActorBase* pActor)
 {
@@ -35,14 +35,11 @@ int CActionInfoSet::Add(CActionInfo* pActionInfo)
 {
     pActionInfo->SetAppActor(m_pAppActorProxy.true_ptr());
     m_setActionInfos.insert(pActionInfo);
+
+    m_setHistorActionInfos.insert(pActionInfo);
     return 0;
 }
 
-int CActionInfoSet::Del(CActionInfo* pActionInfo)
-{
-    m_setActionInfos.erase(pActionInfo);
-    return 0;
-}
 bool CActionInfoSet::IsDealOver()
 {
     for(set<CActionInfo*>::iterator it = m_setActionInfos.begin(); it != m_setActionInfos.end(); ++it)
@@ -70,17 +67,21 @@ int CActionInfoSet::Start()
 }
 int CActionInfoSet::Clear()
 {
-    for(set<CActionInfo*>::iterator it = m_setActionInfos.begin(); it != m_setActionInfos.end(); ++it)
-    {
-        if (*it)
-        {
-            delete (*it);
-        }
-    }
     m_setActionInfos.clear();
     return 0;
 }
 set<CActionInfo*>& CActionInfoSet::GetActionSet()
 {
     return m_setActionInfos;
+}
+
+void CActionInfoSet::FreeAllHistoryActionInfos()
+{
+    for(set<CActionInfo*>::iterator it = m_setHistorActionInfos.begin(); it != m_setHistorActionInfos.end(); ++it)
+    {
+        if (*it)
+        {
+            delete (*it);
+        }
+    }
 }
