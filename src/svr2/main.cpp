@@ -128,7 +128,7 @@ public:
         param.pAction = &actionGetData;
         //param.actionType = ACTIONTYPE_SENDONLY;
         param.actionType = ACTIONTYPE_SENDRECV;
-        param.timeout_ms = 200;
+        param.timeout_ms = 500;
 
         CActionInfo * pActionInfo = new CActionInfo();
         pActionInfo->Init(param);
@@ -230,6 +230,7 @@ int main(int argc, const char *argv[])
     param.protoType = PROTO_TYPE_TCP;
     param.pAction = new CActionFirst();
     param.gcMaxCount = 10;
+    param.timeOutMs= 1000;
 
     int ret = srv.Init(param);
     if (ret != 0)
