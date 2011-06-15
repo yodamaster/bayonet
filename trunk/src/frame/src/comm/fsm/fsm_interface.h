@@ -93,12 +93,11 @@ public:
     virtual int RegFsm(int state, IFsm* fsm)=0;
 
     /**
-     * @brief   
-     * @brief   改变某个fsm的统计
+     * @brief   当状态切换时，进行统计。包括actor在这个状态停留的时长等
      *
-     * @param   fsm
-     * @param   pActor
-     * @param   strFsmFunc
+     * @param   fsm                 状态指针
+     * @param   pActor              actor指针
+     * @param   strFsmFunc          HandleEntry、HandleProcess、HandleExit
      */
     virtual void StatChangeFsm(IFsm *fsm, IActor* pActor, const string &strFsmFunc)=0;
 
