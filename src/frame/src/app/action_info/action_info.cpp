@@ -8,8 +8,6 @@
 #  History:         
 =============================================================================*/
 #include "action_info.h"
-#include "socketactor_active_sendrecv.h"
-#include "socketactor_active_sendonly.h"
 #include "socketactor_active.h"
 CActionInfo::CActionInfo () {
     m_err_no = 0;

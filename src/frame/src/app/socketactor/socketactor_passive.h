@@ -28,4 +28,18 @@ public:
 protected:
     void NotifyAppActor();
 };
+class CSocketActorPassiveTcp : public CSocketActorPassive
+{
+public:
+    virtual ~CSocketActorPassiveTcp ();
+    virtual int OnInitOver();
+    virtual int OnRecvOver();
+};
+class CSocketActorPassiveUdp : public CSocketActorPassive
+{
+public:
+    virtual ~CSocketActorPassiveUdp ();
+    virtual int OnInitOver();
+    virtual int OnRecvOver();
+};
 #endif

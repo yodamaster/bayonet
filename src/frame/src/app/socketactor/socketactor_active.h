@@ -15,55 +15,43 @@
 class CSocketActorActive : public CSocketActorData
 {
 public:
-    CSocketActorActive () {
-    }
-    virtual ~CSocketActorActive () {}
+    CSocketActorActive ();
+    virtual ~CSocketActorActive ();
 
-    void SetActionInfoPtr(CActionInfo *pActionInfo)
-    {
-        if (pActionInfo)
-        {
-            m_pActionInfoProxy = pActionInfo->get_ptr_proxy();
-        }
-    }
+    void SetActionInfoPtr(CActionInfo *pActionInfo);
 
-    virtual int OnTimeout()
-    {
-        SetDealOver(ESocketTimeout);
-        return SOCKET_FSM_CLOSING;
-    }
+    virtual int OnTimeout();
 
-    virtual int OnError()
-    {
-        SetDealOver(ESocketError);
-        return SOCKET_FSM_CLOSING;
-    }
+    virtual int OnError();
 
-protected:
-    virtual int OnInitOver()
-    {
-        return SOCKET_FSM_WAITSEND;
-    }
-    virtual int OnSendOver()
-    {
-        return SOCKET_FSM_WAITRECV;
-    }
-    virtual int OnRecvOver()
-    {
-        return SOCKET_FSM_CLOSING;
-    }
-    virtual void SetDealOver(int err_no)
-    {
-        if (m_pActionInfoProxy.true_ptr())
-        {
-            m_pActionInfoProxy.true_ptr()->SetDealOver(err_no, GetAliveTimeMs());
-        }
-        if (m_pAppActorProxy.true_ptr())
-        {
-            m_pAppActorProxy.true_ptr()->ProcessState();
-        }
-    }
+    virtual int OnInitOver();
+    virtual int OnSendOver();
+    virtual int OnRecvOver();
+
+    virtual void SetDealOver(int err_no);
 protected:
     ptr_proxy<CActionInfo> m_pActionInfoProxy;
+};
+
+class CSocketActorActiveSendOnly : public CSocketActorActive
+{
+public:
+    CSocketActorActiveSendOnly ();
+    virtual ~CSocketActorActiveSendOnly ();
+
+    virtual int OnCloseOver();
+    virtual int OnSendOver();
+    virtual int OnRecvOver();
+};
+
+class CSocketActorActiveSendRecv : public CSocketActorActive
+{
+public:
+    CSocketActorActiveSendRecv ();
+    virtual ~CSocketActorActiveSendRecv ();
+
+    virtual int OnCloseOver();
+    virtual int OnSendOver();
+    virtual int OnRecvOver();
 };
 #endif

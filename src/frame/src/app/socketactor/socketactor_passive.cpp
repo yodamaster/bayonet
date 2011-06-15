@@ -59,3 +59,28 @@ int CSocketActorPassive::OnCloseOver()
     NotifyAppActor();//通知上层状态机可以FINI了
     return CSocketActorData::OnCloseOver();
 }
+//=============================================================================
+CSocketActorPassiveTcp::~CSocketActorPassiveTcp () {}
+int CSocketActorPassiveTcp::OnInitOver()
+{
+    return SOCKET_FSM_WAITRECV;
+}
+int CSocketActorPassiveTcp::OnRecvOver()
+{
+    //TODO
+    //这个时候,应该是要等数据处理的阶段
+    return SOCKET_FSM_WAITCLOSE;
+}
+//=============================================================================
+CSocketActorPassiveUdp::~CSocketActorPassiveUdp () {}
+int CSocketActorPassiveUdp::OnInitOver()
+{
+    //按理说应该是返回close，等待上层唤醒
+    //return SOCKET_FSM_WAITSEND;
+    return SOCKET_FSM_WAITCLOSE;
+}
+int CSocketActorPassiveUdp::OnRecvOver()
+{
+    //不会走到这一步
+    return SOCKET_FSM_WAITSEND;
+}
