@@ -10,6 +10,11 @@
 #include "socketactor_passive.h"
 #include "appactor_base.h"
 
+int CSocketActorPassive::OnWaitRecv()
+{
+    ClearFsmNodes();
+    return CSocketActorData::OnWaitRecv();
+}
 int CSocketActorPassive::OnFiniOver()
 {
     if (m_pAppActorProxy.true_ptr())

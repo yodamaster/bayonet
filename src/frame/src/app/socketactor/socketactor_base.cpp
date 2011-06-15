@@ -89,6 +89,12 @@ void CSocketActorBase::SetKeepcnt(bool bKeepcnt)
 {
     m_bKeepcnt = bKeepcnt;
 }
+
+int CSocketActorBase::ResizeRecvBuf(int singleBufSize, int initBufSize) 
+{
+    return 0;
+}
+
 int CSocketActorBase::CheckTimeOut(struct timeval& now_time)
 {
     if (GetGCMark())
@@ -127,6 +133,31 @@ bool CSocketActorBase::IsTimeOut(struct timeval& now_time)
         return false;
     }
 }
+int CSocketActorBase::OnTimeout()
+{
+    return SOCKET_FSM_CLOSING;
+}
+
+int CSocketActorBase::OnError()
+{
+    return SOCKET_FSM_CLOSING;
+}
+
+int CSocketActorBase::OnWaitRecv() {
+    SetEvent(EPOLLIN|EPOLLHUP|EPOLLERR);
+    return 0;
+}
+
+int CSocketActorBase::OnWaitSend() {
+    SetEvent(EPOLLOUT|EPOLLHUP|EPOLLERR);
+    return 0;
+}
+
+int CSocketActorBase::OnWaitClose() {
+    SetEvent(EPOLLHUP|EPOLLERR);
+    return 0;
+}
+
 CEPoller* CSocketActorBase::GetEpoller()
 {
     IFrame* pFrame = GetFrame();
@@ -148,15 +179,7 @@ int CSocketActorBase::DetachFromEpoller()
     }
     return 1;
 }
-int CSocketActorBase::OnTimeout()
-{
-    return SOCKET_FSM_CLOSING;
-}
 
-int CSocketActorBase::OnError()
-{
-    return SOCKET_FSM_CLOSING;
-}
 int CSocketActorBase::ActionHandleInit()
 {
     if (m_pAction == NULL)

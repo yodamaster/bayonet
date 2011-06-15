@@ -83,6 +83,11 @@ int CSocketActorListenTcp::OnFiniOver()
 {
     return SOCKET_FSM_ALLOVER;
 }
+int CSocketActorListenTcp::OnWaitRecv()
+{
+    ClearFsmNodes();
+    return CSocketActorBase::OnWaitRecv();
+}
 int CSocketActorListenTcp::OnRecv()
 {
     struct sockaddr_in addr;
@@ -124,6 +129,10 @@ int CSocketActorListenTcp::OnRecv()
     return SOCKET_FSM_RECVOVER;
 }
 int CSocketActorListenTcp::OnRecvOver()
+{
+    return SOCKET_FSM_WAITRECV;
+}
+int CSocketActorListenTcp::OnWaitSend() 
 {
     return SOCKET_FSM_WAITRECV;
 }
