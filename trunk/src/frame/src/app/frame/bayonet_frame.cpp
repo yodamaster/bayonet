@@ -97,7 +97,6 @@ void CBayonetFrame::RegDefaultSocketFsms()
     RegFsm(SOCKET_FSM_INIT, new CSocketFsmInit());
     RegFsm(SOCKET_FSM_INITOVER, new CSocketFsmInitOver());
     RegFsm(SOCKET_FSM_FINI, new CSocketFsmFini());
-    RegFsm(SOCKET_FSM_FINIOVER, new CSocketFsmFiniOver());
     RegFsm(SOCKET_FSM_WAITSEND, new CSocketFsmWaitSend());
     RegFsm(SOCKET_FSM_SENDING, new CSocketFsmSending());
     RegFsm(SOCKET_FSM_SENDOVER, new CSocketFsmSendOver());

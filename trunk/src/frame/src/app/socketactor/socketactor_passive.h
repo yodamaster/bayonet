@@ -20,7 +20,6 @@ public:
 
     virtual int OnRecvOver()=0;
 
-    virtual int OnFiniOver();
     virtual int OnSendOver();
 
     virtual int OnCloseOver();

@@ -17,12 +17,11 @@ int CSocketActorListenUdp::OnInit()
     if (m_SocketFd <= 0)
     {
         int optval;
-        int listen_fd;
-        listen_fd = socket(AF_INET,SOCK_DGRAM,0);
-        if(listen_fd < 0)
+        m_SocketFd = socket(AF_INET,SOCK_DGRAM,0);
+        if(m_SocketFd < 0)
         {   
             error_log("[class:%s]Create socket error:%s\n",Name().c_str(),strerror(errno));
-            return SOCKET_FSM_FINI; 
+            return SOCKET_FSM_CLOSING; 
         }   
         struct sockaddr_in myaddr;
         myaddr.sin_family = AF_INET;
@@ -30,15 +29,15 @@ int CSocketActorListenUdp::OnInit()
         myaddr.sin_addr.s_addr = inet_addr(m_IP.c_str());
 
         optval = 1;
-        setsockopt(listen_fd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
-        if(bind(listen_fd,(struct sockaddr*)&myaddr,sizeof(struct sockaddr)) < 0)
+        setsockopt(m_SocketFd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
+        if(bind(m_SocketFd,(struct sockaddr*)&myaddr,sizeof(struct sockaddr)) < 0)
         {   
-            close(listen_fd);
+            //close(listen_fd);
+            //到CLOSING状态会帮你关闭掉
             error_log("[class:%s]CreateListen bind ip:%s port:%d sock:%d err:%s\n",
-                    Name().c_str(),m_IP.c_str(),m_Port,listen_fd,strerror(errno));
-            return SOCKET_FSM_FINI; 
+                    Name().c_str(),m_IP.c_str(),m_Port,m_SocketFd,strerror(errno));
+            return SOCKET_FSM_CLOSING; 
         }
-        m_SocketFd = listen_fd;
         int ret = m_pNetHandler->Init(m_SocketFd);
         if (ret)
         {

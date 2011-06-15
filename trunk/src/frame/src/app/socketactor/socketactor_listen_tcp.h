@@ -27,10 +27,6 @@ public:
 
     virtual int OnInitOver();
 
-    virtual int OnFini();
-
-    virtual int OnFiniOver();
-
     virtual int OnWaitRecv();
 
     virtual int OnRecv();

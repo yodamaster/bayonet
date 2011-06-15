@@ -29,8 +29,6 @@ public:
 
     virtual int OnInit();
     virtual int OnInitOver()=0;
-    virtual int OnFini();
-    virtual int OnFiniOver();
     virtual int OnSend();
     virtual int OnSendOver()=0;
     virtual int OnRecv();
