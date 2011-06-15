@@ -49,6 +49,8 @@ public:
 
     virtual void SetKeepcnt(bool bKeepcnt);
 
+    virtual void SetTimeOutMs(int timeout_ms);
+
     virtual int CheckTimeOut(struct timeval& now_time);
 
     virtual bool IsTimeOut(struct timeval& now_time);
