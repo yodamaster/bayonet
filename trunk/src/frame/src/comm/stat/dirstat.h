@@ -85,8 +85,6 @@ public:
 
 public:
     CDirStat() {
-        m_statDir = "./";
-        m_fileName = "stat_file";
     }
     virtual ~CDirStat() {}
 

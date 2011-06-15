@@ -54,26 +54,26 @@ typedef struct _StFrameParam
     _StFrameParam()
     {
         port = 0;
-        protoType = 0;
-        backlog = 10240;
+        protoType = PROTO_TYPE_TCP;
+        backlog = TCP_BACKLOG_SIZE;
         bKeepcnt = false;
-        timeOutMs = 500;
+        timeOutMs = -1;//默认就是收到链接之后就不超时
 
         pAction = NULL;
 
-        epollSize = EPOLL_DFT_MAXSIZE;
-        epollWaitTimeMs = 10;
-        epollCheckTimeMs = 10;
+        epollSize = EPOLL_FD_MAXSIZE;
+        epollWaitTimeMs = EPOLL_WAIT_TIMEMS;
+        epollCheckTimeMs = CHECK_INTERVAL_MS;
 
-        gcMaxCount = 1024;
+        gcMaxCount = GC_MAX_COUNT;
 
-        infoDir = "./";
+        infoDir = BAYONET_INFO_DIR;
 
         iLogLevel = LM_TRACE;
-        logFileName = "bayonet";
+        logFileName = BAYONET_LOGFILE_NAME;
         iLogMaxSize = LOG_DEFAULT_SIZE;
 
-        statFileName = "stat_file";
+        statFileName = BAYONET_STATFILE_NAME;
     }
 } StFrameParam;
 

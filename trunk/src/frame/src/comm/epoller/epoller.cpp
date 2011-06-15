@@ -4,10 +4,10 @@ CEPoller::CEPoller()
 {
     m_epollFd = -1;
     m_pFrame = NULL;
-    m_epollSize = EPOLL_DFT_MAXSIZE;
-    m_waittimeMs = 10;
-    m_checkTimeMs = 500;
-    m_gcMaxCount = 1000;
+    m_epollSize = EPOLL_FD_MAXSIZE;
+    m_waittimeMs = EPOLL_WAIT_TIMEMS;
+    m_checkTimeMs = CHECK_INTERVAL_MS;
+    m_gcMaxCount = GC_MAX_COUNT;
 }
 
 CEPoller::~CEPoller()
@@ -28,7 +28,7 @@ int CEPoller::Init(int epoll_size,int waittime_ms,int checktime_ms,int gc_maxcou
     m_epollFd = epoll_create(m_epollSize);
     if ( m_epollFd <= 0 )
     {
-        snprintf(m_szErrMsg,NET_ERRMSG_SIZE,"epoller init error,size:%d,error:%s\n",m_epollSize,strerror(errno));
+        snprintf(m_szErrMsg,sizeof(m_szErrMsg),"epoller init error,size:%d,error:%s\n",m_epollSize,strerror(errno));
         return -1;
     }
 
@@ -77,14 +77,14 @@ int CEPoller::LoopForEvent()
 
     for(;;)
     {
-        nfds = epoll_wait(m_epollFd, m_events, EPOLL_FD_MAX, m_waittimeMs);
+        nfds = epoll_wait(m_epollFd, m_events, EPOLL_EVENTS_MAXSIZE, m_waittimeMs);
 
         if (nfds < 0)
         {
             if ( errno == EINTR )
                 continue;
 
-            snprintf(m_szErrMsg,NET_ERRMSG_SIZE,"epoll-wait rtn:%d error:%s\n",nfds,strerror(errno));
+            snprintf(m_szErrMsg,sizeof(m_szErrMsg),"epoll-wait rtn:%d error:%s\n",nfds,strerror(errno));
             return -1;
         }
 
@@ -145,7 +145,7 @@ int CEPoller::SetEpollIO(int fd,unsigned flag)
     {
         if ( epoll_ctl(m_epollFd, EPOLL_CTL_ADD , fd, &ev) < 0 )
         {
-            snprintf(m_szErrMsg,NET_ERRMSG_SIZE,"epoll_ctl fd:%d err:%s\n",fd,strerror(errno));
+            snprintf(m_szErrMsg,sizeof(m_szErrMsg),"epoll_ctl fd:%d err:%s\n",fd,strerror(errno));
             return -1;
         }
     }
