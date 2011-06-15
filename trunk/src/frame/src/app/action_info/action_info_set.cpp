@@ -15,6 +15,22 @@
 =============================================================================*/
 #include "action_info_set.h"
 
+CActionInfoSet::CActionInfoSet() {
+}
+CActionInfoSet::~CActionInfoSet() {
+    Clear();
+}
+void CActionInfoSet::SetAppActor(CActorBase* pActor)
+{
+    if (pActor)
+    {
+        m_pAppActorProxy = pActor->get_ptr_proxy();
+    }
+}
+CActorBase* CActionInfoSet::GetActor()
+{
+    return m_pAppActorProxy.true_ptr();
+}
 int CActionInfoSet::Add(CActionInfo* pActionInfo)
 {
     pActionInfo->SetAppActor(m_pAppActorProxy.true_ptr());
@@ -63,4 +79,8 @@ int CActionInfoSet::Clear()
     }
     m_setActionInfos.clear();
     return 0;
+}
+set<CActionInfo*>& CActionInfoSet::GetActionSet()
+{
+    return m_setActionInfos;
 }

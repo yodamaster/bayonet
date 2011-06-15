@@ -9,6 +9,16 @@
 =============================================================================*/
 #include "socketactor_base.h"
 #include "bayonet_frame.h"
+CSocketActorBase::CSocketActorBase () 
+{
+    m_SocketFd = -1;
+    m_Port = 0;
+    m_TimeoutMs = -1;
+    m_ProtoType = 0;
+    m_pAction = NULL;
+    m_bKeepcnt = false;
+}
+CSocketActorBase::~CSocketActorBase () {}
 
 int CSocketActorBase::HandleEvent(IEvent* pEvent)
 {

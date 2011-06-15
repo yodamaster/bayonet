@@ -11,11 +11,59 @@
 #include "socketactor_active_sendrecv.h"
 #include "socketactor_active_sendonly.h"
 #include "socketactor_active.h"
+CActionInfo::CActionInfo () {
+    m_err_no = 0;
+    m_timecost_ms= 0;
+    m_bDealOver = false;
+}
 int CActionInfo::Init(StActionInfoParam param)
 {
     m_stActionTypeParam = param;
     return 0;
 }
+int CActionInfo::GetID()
+{
+    return m_stActionTypeParam.id;
+}
+
+void CActionInfo::SetDealOver(int err_no,int timecost_ms)
+{
+    m_bDealOver = true;
+    m_err_no = err_no;
+    m_timecost_ms = timecost_ms;
+
+    //Del-Begin by dantezhu in 2011-06-14 01:36:26
+    //这里不直接去执行ProcessState的原因是，因为这个函数可能会导致this指针失效
+    /*if (m_pAppActorProxy.true_ptr())
+      {
+      m_pAppActorProxy.true_ptr()->ProcessState();
+      }*/
+    //Del-End
+}
+
+bool CActionInfo::IsDealOver()
+{
+    return m_bDealOver;
+}
+
+int CActionInfo::GetErrno()
+{
+    return m_err_no;
+}
+
+int CActionInfo::GetTimeCost()
+{
+    return m_timecost_ms;
+}
+
+void CActionInfo::SetAppActor(CActorBase* pActor)
+{
+    if (pActor)
+    {
+        m_pAppActorProxy = pActor->get_ptr_proxy();
+    }
+}
+
 int CActionInfo::HandleStart()
 {
     switch (m_stActionTypeParam.actionType)

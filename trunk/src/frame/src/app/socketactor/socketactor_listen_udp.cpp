@@ -9,6 +9,8 @@
 =============================================================================*/
 #include "socketactor_listen_udp.h"
 #include "appactor_base.h"
+CSocketActorListenUdp::~CSocketActorListenUdp() 
+{}
 
 int CSocketActorListenUdp::OnInit()
 {

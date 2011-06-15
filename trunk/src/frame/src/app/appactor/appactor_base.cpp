@@ -23,6 +23,16 @@ CAppActorBase::~CAppActorBase () {
         m_pActionInfoSet = NULL;
     }
 }
+CActionInfoSet* CAppActorBase::GetActionInfoSet()
+{
+    return m_pActionInfoSet;
+}
+int CAppActorBase::OnFini()
+{
+    SetGCMark();
+    DetachCommu();
+    return APP_FSM_ALLOVER;
+}
 
 int CAppActorBase::AttachCommu(CActorBase* pActor)
 {

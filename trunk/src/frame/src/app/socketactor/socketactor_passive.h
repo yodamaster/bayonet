@@ -13,7 +13,7 @@
 class CSocketActorPassive : public CSocketActorData
 {
 public:
-    virtual ~CSocketActorPassive () {}
+    virtual ~CSocketActorPassive ();
     virtual int OnInitOver()=0;
 
     virtual int OnWaitRecv();

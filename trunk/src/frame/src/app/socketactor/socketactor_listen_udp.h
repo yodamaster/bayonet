@@ -14,7 +14,8 @@
 class CSocketActorListenUdp : public CSocketActorData
 {
 public:
-    virtual ~CSocketActorListenUdp () {}
+    virtual ~CSocketActorListenUdp();
+
     virtual int OnInit();
 
     virtual int OnInitOver();

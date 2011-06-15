@@ -19,19 +19,8 @@
 class CSocketActorData:public CSocketActorBase
 {
 public:
-    CSocketActorData () {
-        m_pNetHandler = NULL;
-        //m_strSingleRecvBuf.resize(1024);
-        //m_strRecvBuf.resize(2048);
-        ResetStatusData();
-    }
-    virtual ~CSocketActorData () {
-        if (m_pNetHandler)
-        {
-            delete m_pNetHandler;
-            m_pNetHandler = NULL;
-        }
-    }
+    CSocketActorData ();
+    virtual ~CSocketActorData ();
 
     virtual int Init(string ip,int port,int timeout_ms,int protoType);
     virtual int Init(int socketFd,int timeout_ms,int protoType);

@@ -38,6 +38,9 @@ using namespace std;
 //recv的所有的数据的大小，避免不停的申请内存
 #define RECV_INIT_BUFSIZE       2048
 
+//tcp listen默认的backlog大小
+#define TCP_BACKLOG_SIZE            10240
+
 //Frame的AddActor方法的actorType的值
 enum PROTOTYPE
 {

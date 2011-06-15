@@ -8,6 +8,11 @@
 #  History:
 =============================================================================*/
 #include "net_handler.h"
+CNetHandlerBase::CNetHandlerBase () {
+    m_Port = 0;
+    m_SocketFd = -1;
+    m_ClientPort = 0;
+}
 CNetHandlerBase::~CNetHandlerBase ()
 {
     Close();

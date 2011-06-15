@@ -10,6 +10,13 @@
 #include "socketactor_listen_tcp.h"
 #include "socketactor_passive_tcp.h"
 #include "appactor_base.h"
+CSocketActorListenTcp::CSocketActorListenTcp() 
+{
+    m_BackLog = TCP_BACKLOG_SIZE;
+}
+CSocketActorListenTcp::~CSocketActorListenTcp() 
+{}
+
 void CSocketActorListenTcp::SetBackLog(int backlog)
 {
     m_BackLog = backlog;
