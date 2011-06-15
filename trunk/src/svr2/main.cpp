@@ -128,7 +128,7 @@ public:
         param.pAction = &actionGetData;
         //param.actionType = ACTIONTYPE_SENDONLY;
         param.actionType = ACTIONTYPE_SENDRECV;
-        param.timeout_ms = 500;
+        param.timeout_ms = 200;
 
         CActionInfo * pActionInfo = new CActionInfo();
         pActionInfo->Init(param);
@@ -153,7 +153,6 @@ public:
     }
     virtual int HandleProcess(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
     {
-        printf("%s,%d\n",__func__,__LINE__);
         set<CActionInfo*> &setAction = pActionInfoSet->GetActionSet();
         for(set<CActionInfo*>::iterator it = setAction.begin(); it != setAction.end(); ++it)
         {
