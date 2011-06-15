@@ -100,6 +100,11 @@ void CSocketActorBase::SetKeepcnt(bool bKeepcnt)
     m_bKeepcnt = bKeepcnt;
 }
 
+void CSocketActorBase::SetTimeOutMs(int timeout_ms)
+{
+    m_TimeoutMs = timeout_ms;
+}
+
 int CSocketActorBase::CheckTimeOut(struct timeval& now_time)
 {
     if (GetGCMark())
