@@ -68,6 +68,7 @@ int CBayonetFrame::Process()
             pSocketActorListenTcp->AttachFrame(this);
             pSocketActorListenTcp->Init(m_StFrameParam.ip,m_StFrameParam.port,m_StFrameParam.timeOutMs,m_StFrameParam.protoType);
             pSocketActorListenTcp->SetBackLog(m_StFrameParam.backlog);
+            pSocketActorListenTcp->SetAttachedSocketMaxSize(m_StFrameParam.attachedSocketMaxSize);
             pSocketActorListenTcp->SetKeepcnt(m_StFrameParam.bKeepcnt);
             pSocketActorListenTcp->SetIActionPtr(m_StFrameParam.pAction);
             pSocketActorListenTcp->ChangeState(SOCKET_FSM_INIT);
@@ -76,6 +77,7 @@ int CBayonetFrame::Process()
             pSocketActorListenUdp = new CSocketActorListenUdp();
             pSocketActorListenUdp->AttachFrame(this);
             pSocketActorListenUdp->Init(m_StFrameParam.ip,m_StFrameParam.port,m_StFrameParam.timeOutMs,m_StFrameParam.protoType);
+            pSocketActorListenUdp->SetAttachedSocketMaxSize(m_StFrameParam.attachedSocketMaxSize);
             pSocketActorListenUdp->SetIActionPtr(m_StFrameParam.pAction);
             pSocketActorListenUdp->ChangeState(SOCKET_FSM_INIT);
             break;
