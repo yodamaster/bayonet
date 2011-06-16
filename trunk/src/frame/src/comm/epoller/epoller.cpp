@@ -7,6 +7,7 @@ CEPoller::CEPoller()
     m_epollSize = EPOLL_FD_MAXSIZE;
     m_waittimeMs = EPOLL_WAIT_TIMEMS;
     m_checkTimeMs = CHECK_INTERVAL_MS;
+    m_attachedSocketCount = 0;
     m_gcMaxCount = GC_MAX_COUNT;
 }
 
@@ -43,7 +44,10 @@ void CEPoller::AttachSocket(CSocketActorBase* pSocketActor)
     }
     int fd = pSocketActor->GetSocketFd();
     if ( fd > 0 )
+    {
         m_mapSocketActorProxy[fd]=pSocketActor->get_ptr_proxy();
+        ++m_attachedSocketCount;
+    }
 
     return ;
 }
@@ -59,9 +63,15 @@ void CEPoller::DetachSocket(CSocketActorBase* pSocketActor)
     {
         DelEpollIO(fd);
         m_mapSocketActorProxy.erase(fd);
+        --m_attachedSocketCount;
     }
 
     return ;
+}
+
+int CEPoller::GetAttachedSocketCount()
+{
+    return m_attachedSocketCount;
 }
 
 int CEPoller::LoopForEvent()

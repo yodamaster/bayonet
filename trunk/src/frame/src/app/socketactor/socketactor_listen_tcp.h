@@ -23,6 +23,10 @@ public:
 
     int GetBackLog();
 
+    void SetAttachedSocketMaxSize(int attachedSocketMaxSize);
+
+    int GetAttachedSocketMaxSize();
+
     virtual int OnInit();
 
     virtual int OnInitOver();
@@ -47,5 +51,7 @@ public:
 
 protected:
     int m_BackLog;
+
+    int m_attachedSocketMaxSize;
 };
 #endif

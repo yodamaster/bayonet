@@ -53,6 +53,9 @@ using namespace std;
 //epoll检查socket超时的时间间隔 ms
 #define CHECK_INTERVAL_MS               100
 
+// 最大能够attached的socket个数，如果达到，会在listen socekt中进行拒绝
+#define ATTACHED_SOCKET_MAXSIZE         10240
+
 
 //GC相关
 //GC需要的最大个数

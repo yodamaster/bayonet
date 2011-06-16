@@ -9,8 +9,22 @@
 =============================================================================*/
 #include "socketactor_listen_udp.h"
 #include "appactor_base.h"
+CSocketActorListenUdp::CSocketActorListenUdp()
+{
+    m_attachedSocketMaxSize = ATTACHED_SOCKET_MAXSIZE;
+}
 CSocketActorListenUdp::~CSocketActorListenUdp() 
 {}
+
+void CSocketActorListenUdp::SetAttachedSocketMaxSize(int attachedSocketMaxSize)
+{
+    m_attachedSocketMaxSize = attachedSocketMaxSize;
+}
+
+int CSocketActorListenUdp::GetAttachedSocketMaxSize()
+{
+    return m_attachedSocketMaxSize;
+}
 
 int CSocketActorListenUdp::OnInit()
 {
@@ -95,6 +109,22 @@ int CSocketActorListenUdp::OnWaitRecv()
 {
     ClearFsmNodes();
     return CSocketActorData::OnWaitRecv();
+}
+
+int CSocketActorListenUdp::OnRecv()
+{
+    CEPoller* pEpoller = GetEpoller();
+    if (pEpoller)
+    {
+        if (pEpoller->GetAttachedSocketCount() > m_attachedSocketMaxSize)
+        {
+            error_log("attachedSocketCount has reach the max:%d/%d",
+                      pEpoller->GetAttachedSocketCount(),m_attachedSocketMaxSize);
+            return SOCKET_FSM_WAITRECV;
+        }
+    }
+
+    return CSocketActorData::OnRecv();
 }
 
 int CSocketActorListenUdp::OnRecvOver()

@@ -34,6 +34,7 @@ public:
     int DelEpollIO(int fd);
     void AttachSocket(CSocketActorBase* sock);
     void DetachSocket(CSocketActorBase* sock);
+    int GetAttachedSocketCount();
     int  LoopForEvent();
     char * GetErrMsg();
 protected:
@@ -45,6 +46,8 @@ protected:
     int             m_waittimeMs;
     int             m_checkTimeMs;
     int             m_gcMaxCount;
+
+    int             m_attachedSocketCount; //被放到map中的socket的个数
 
     IFrame* m_pFrame;
 
