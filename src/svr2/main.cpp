@@ -120,9 +120,9 @@ public:
         param.protoType = PROTO_TYPE_UDP;
         //param.protoType = PROTO_TYPE_TCP;
         param.pAction = &actionGetData;
-        //param.actionType = ACTIONTYPE_SENDONLY;
-        param.actionType = ACTIONTYPE_SENDRECV;
-        param.timeout_ms = 500;
+        param.actionType = ACTIONTYPE_SENDONLY;
+        //param.actionType = ACTIONTYPE_SENDRECV;
+        param.timeout_ms = 100;
 
         CActionInfo * pActionInfo = new CActionInfo();
         pActionInfo->Init(param);
@@ -212,8 +212,14 @@ public:
         return 0;
     }
 };
+static void sighandler( int sig_no )
+{
+    exit(0);
+}
 int main(int argc, const char *argv[])
 {
+    signal( SIGUSR1, sighandler );
+
     CBayonetFrame srv;
     StFrameParam param;
     param.infoDir="bayonet";
@@ -225,6 +231,9 @@ int main(int argc, const char *argv[])
     param.pAction = new CActionFirst();
     //param.gcMaxCount = 10;
     param.timeOutMs= 1000;
+    param.epollWaitTimeMs= 10;
+    param.epollCheckTimeMs= 10000000;
+    param.attachedSocketMaxSize = 8000;
 
     int ret = srv.Init(param);
     if (ret != 0)
