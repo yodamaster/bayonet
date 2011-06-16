@@ -9,7 +9,6 @@
 using namespace std;
 
 #define APP_FSM_PROXY 2000
-#define APP_FSM_LOGIC2 2001
 
 /**
  * @brief   获取ContentLen的数字的起始和长度
@@ -100,7 +99,6 @@ public:
     string m_rsp;
 };
 
-class CAppFsmProxy;
 class CActionFirst : public IAction
 {
 public:
