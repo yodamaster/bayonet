@@ -42,14 +42,12 @@ void CEPoller::AttachSocket(CSocketActorBase* pSocketActor)
     {
         return;
     }
+
     int fd = pSocketActor->GetSocketFd();
     if ( fd > 0 )
     {
         m_mapSocketActorProxy[fd]=pSocketActor->get_ptr_proxy();
-        ++m_attachedSocketCount;
     }
-
-    return ;
 }
 
 void CEPoller::DetachSocket(CSocketActorBase* pSocketActor)
@@ -62,11 +60,7 @@ void CEPoller::DetachSocket(CSocketActorBase* pSocketActor)
     if ( fd > 0 )
     {
         DelEpollIO(fd);
-        m_mapSocketActorProxy.erase(fd);
-        --m_attachedSocketCount;
     }
-
-    return ;
 }
 
 int CEPoller::GetAttachedSocketCount()
@@ -123,9 +117,10 @@ int CEPoller::LoopForEvent()
                 it++;
 
                 CSocketActorBase* pActor = (CSocketActorBase*)(tempIt->second.true_ptr());
-                if (pActor == NULL)
+                if (pActor == NULL || pActor->GetGCMark() || pActor->GetSocketFd()<=0) //已经被删除，或者已经被标记为GC
                 {
                     m_mapSocketActorProxy.erase(tempIt);
+                    continue;
                 }
                 pActor->CheckTimeOut(next_tm);
             }
@@ -146,14 +141,9 @@ char * CEPoller::GetErrMsg()
 
 int CEPoller::SetEpollIO(int fd,unsigned flag)
 {
-    epoll_event ev;
-    memset((void*)&ev,0,sizeof(epoll_event));
-    ev.data.fd = fd;
-    ev.events = flag|EPOLLHUP|EPOLLERR;
-
-    if ( epoll_ctl(m_epollFd, EPOLL_CTL_MOD , fd, &ev) < 0 )    
+    if ( ModEpollIO(fd, flag) < 0 )    
     {
-        if ( epoll_ctl(m_epollFd, EPOLL_CTL_ADD , fd, &ev) < 0 )
+        if ( AddEpollIO(fd, flag) < 0 )
         {
             snprintf(m_szErrMsg,sizeof(m_szErrMsg),"epoll_ctl fd:%d err:%s\n",fd,strerror(errno));
             return -1;
@@ -171,8 +161,11 @@ int CEPoller::AddEpollIO(int fd,unsigned flag)
     ev.events = flag;
 
     if ( epoll_ctl(m_epollFd, EPOLL_CTL_ADD , fd, &ev) < 0 )
+    {
         return -1;
+    }
 
+    ++m_attachedSocketCount;
     return 0;
 }
 
@@ -198,7 +191,10 @@ int CEPoller::DelEpollIO(int fd)
     ev.data.fd = fd;
     ev.events = 0;
     if ( epoll_ctl(m_epollFd, EPOLL_CTL_DEL, fd, &ev) < 0 )
+    {
         return -1;
+    }
 
+    --m_attachedSocketCount;
     return 0;
 }
