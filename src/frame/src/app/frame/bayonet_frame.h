@@ -69,7 +69,7 @@ typedef struct _StFrameParam
 
         infoDir = BAYONET_INFO_DIR;
 
-        iLogLevel = LM_TRACE;
+        iLogLevel = LM_ERROR;
         logFileName = BAYONET_LOGFILE_NAME;
         iLogMaxSize = LOG_DEFAULT_SIZE;
 
