@@ -27,29 +27,31 @@ using namespace std;
 
 typedef struct _StFrameParam
 {
-    string ip;          //ip
-    int port;           //端口
-    int protoType;      //协议类型
-    int backlog;        //backlog
-    bool bKeepcnt;      //是否长链接(仅TCP协议有效)
-    int timeOutMs;      //accept后的socket接收超时要断掉(tcp)，逻辑处理超时也要断掉,-1代表永不超时
+    string ip;                  // ip
+    int port;                   // 端口
+    int protoType;              // 协议类型
+    int backlog;                // backlog
+    bool bKeepcnt;              // 是否长链接(仅TCP协议有效)
+    int timeOutMs;              // accept后的socket接收超时要断掉(tcp)，逻辑处理超时也要断掉,-1代表永不超时
 
-    IAction* pAction;   //最开始的Action
+    IAction* pAction;           // 最开始的Action
 
 
-    int epollSize;      //epoll监听的队列大小
-    int epollWaitTimeMs; //epoll wait time(毫秒)
-    int epollCheckTimeMs; //epoll 检查超时的时间
+    int epollSize;              // epoll监听的队列大小
+    int epollWaitTimeMs;        // epoll wait time(毫秒)
+    int epollCheckTimeMs;       // epoll 检查超时的时间
 
-    int gcMaxCount;     //actorGC回收的最大值
+    int attachedSocketMaxSize;  // 最大能够attached的socket个数，如果达到，会在listen socekt中进行拒绝
 
-    string infoDir;      //信息存放目录,包括 stat, log
+    int gcMaxCount;             // actorGC回收的最大值
 
-    LogLevel iLogLevel; //log等级(LM_ALL,LM_TRACE,LM_DEBUG,LM_WARNING,LM_ERROR,LM_FATAL,LM_NONE)
-    string logFileName; //log文件名
-    int iLogMaxSize;    //log文件最大大小
+    string infoDir;             // 信息存放目录,包括 stat, log
 
-    string statFileName; //统计文件名字
+    LogLevel iLogLevel;         // log等级(LM_ALL,LM_TRACE,LM_DEBUG,LM_WARNING,LM_ERROR,LM_FATAL,LM_NONE)
+    string logFileName;         // log文件名
+    int iLogMaxSize;            // log文件最大大小
+
+    string statFileName;        // 统计文件名字
 
     _StFrameParam()
     {
@@ -57,13 +59,15 @@ typedef struct _StFrameParam
         protoType = PROTO_TYPE_TCP;
         backlog = TCP_BACKLOG_SIZE;
         bKeepcnt = false;
-        timeOutMs = -1;//默认就是收到链接之后就不超时
+        timeOutMs = -1;         // 默认就是收到链接之后就不超时
 
         pAction = NULL;
 
         epollSize = EPOLL_FD_MAXSIZE;
         epollWaitTimeMs = EPOLL_WAIT_TIMEMS;
         epollCheckTimeMs = CHECK_INTERVAL_MS;
+
+        attachedSocketMaxSize = ATTACHED_SOCKET_MAXSIZE;
 
         gcMaxCount = GC_MAX_COUNT;
 

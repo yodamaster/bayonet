@@ -14,7 +14,12 @@
 class CSocketActorListenUdp : public CSocketActorData
 {
 public:
+    CSocketActorListenUdp();
     virtual ~CSocketActorListenUdp();
+
+    void SetAttachedSocketMaxSize(int attachedSocketMaxSize);
+
+    int GetAttachedSocketMaxSize();
 
     virtual int OnInit();
 
@@ -26,11 +31,15 @@ public:
 
     virtual int OnWaitRecv();
 
+    virtual int OnRecv();
+
     virtual int OnRecvOver();
 
     virtual bool IsTimeOut(struct timeval& now_time);
 
 protected:
     CSocketActorPassiveUdp* CreatePassiveActor();
+
+    int m_attachedSocketMaxSize;
 };
 #endif

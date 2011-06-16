@@ -13,6 +13,7 @@
 CSocketActorListenTcp::CSocketActorListenTcp() 
 {
     m_BackLog = TCP_BACKLOG_SIZE;
+    m_attachedSocketMaxSize = ATTACHED_SOCKET_MAXSIZE;
 }
 CSocketActorListenTcp::~CSocketActorListenTcp() 
 {}
@@ -24,6 +25,15 @@ void CSocketActorListenTcp::SetBackLog(int backlog)
 int CSocketActorListenTcp::GetBackLog()
 {
     return m_BackLog;
+}
+void CSocketActorListenTcp::SetAttachedSocketMaxSize(int attachedSocketMaxSize)
+{
+    m_attachedSocketMaxSize = attachedSocketMaxSize;
+}
+
+int CSocketActorListenTcp::GetAttachedSocketMaxSize()
+{
+    return m_attachedSocketMaxSize;
 }
 
 int CSocketActorListenTcp::OnInit()
@@ -80,6 +90,17 @@ int CSocketActorListenTcp::OnWaitRecv()
 }
 int CSocketActorListenTcp::OnRecv()
 {
+    CEPoller* pEpoller = GetEpoller();
+    if (pEpoller)
+    {
+        if (pEpoller->GetAttachedSocketCount() > m_attachedSocketMaxSize)
+        {
+            error_log("attachedSocketCount has reach the max:%d/%d",
+                      pEpoller->GetAttachedSocketCount(),m_attachedSocketMaxSize);
+            return SOCKET_FSM_WAITRECV;
+        }
+    }
+
     struct sockaddr_in addr;
     int length = sizeof(struct sockaddr_in);
     int clientfd = accept(m_SocketFd,(struct sockaddr *)&addr,(socklen_t*)&length);
