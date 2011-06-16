@@ -219,7 +219,7 @@ int main(int argc, const char *argv[])
     param.infoDir="bayonet";
     param.ip="0.0.0.0";
     param.port = 10001;
-    //param.bKeepcnt= true;
+    param.bKeepcnt= true;
     //param.protoType = PROTO_TYPE_UDP;
     param.protoType = PROTO_TYPE_TCP;
     param.pAction = new CActionFirst();
