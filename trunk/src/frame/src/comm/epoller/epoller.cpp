@@ -92,6 +92,8 @@ int CEPoller::LoopForEvent()
             return -1;
         }
 
+        next_tm = CRecordTime::Ins()->record_time();
+
         for( int i=0;i<nfds;i++ )
         {
             fd = m_events[i].data.fd;
@@ -105,7 +107,6 @@ int CEPoller::LoopForEvent()
             pSocketActor->HandleEvent(&t_event);
         }
 
-        gettimeofday(&next_tm,NULL);
         use_time_usec = (next_tm.tv_sec - prev_tm.tv_sec)*1000000 +
             (next_tm.tv_usec - prev_tm.tv_usec);
         if ( use_time_usec > (m_checkTimeMs*1000))
