@@ -232,7 +232,7 @@ int main(int argc, const char *argv[])
     //param.gcMaxCount = 10;
     param.timeOutMs= 1000;
     param.epollWaitTimeMs= 10;
-    param.epollCheckTimeMs= 10000000;
+    param.epollCheckTimeMs= 100;
     param.attachedSocketMaxSize = 8000;
 
     int ret = srv.Init(param);
