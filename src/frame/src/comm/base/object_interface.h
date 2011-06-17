@@ -30,7 +30,7 @@ public:
      *
      * @return  名字
      */
-    virtual const string Name()
+    virtual string Name()
     {
         const char * name = typeid(*this).name();
 
