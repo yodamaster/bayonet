@@ -38,13 +38,13 @@ typedef struct _StFsmNode
 
     _StFsmNode()
     {
-        gettimeofday(&m_Start_TV, NULL);
+        m_Start_TV = CRecordTime::Ins()->get_time();
         fsm = NULL;
     }
 
     int Stop()
     {
-        gettimeofday(&m_Stop_TV, NULL);
+        m_Stop_TV = CRecordTime::Ins()->get_time();
         return 0;
     }
     int GetPastTime()
