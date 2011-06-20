@@ -27,6 +27,8 @@ using namespace std;
 
 typedef struct _StFrameParam
 {
+    int workerNum;              // 启动的子进程数目
+
     string ip;                  // ip
     int port;                   // 端口
     int protoType;              // 协议类型
@@ -55,6 +57,8 @@ typedef struct _StFrameParam
 
     _StFrameParam()
     {
+        workerNum = 1;
+
         port = 0;
         protoType = PROTO_TYPE_TCP;
         backlog = TCP_BACKLOG_SIZE;
@@ -99,8 +103,23 @@ protected:
 
     void RegDefaultSocketFsms();
 
+    /**
+     * @brief               子进程需要做的事情
+     *
+     * @return              0       succ
+     */
+    int ChildWork();
+
+    /**
+     * @brief               父进程调用fork
+     *
+     * @return              0       succ
+     */
+    int ForkWork();
+
 protected:
     StFrameParam m_StFrameParam;
     CEPoller m_epoller;
+    CSocketActorBase* m_pSocketActorListen;
 };
 #endif
