@@ -12,6 +12,7 @@
 #include "socketactor_listen_udp.h"
 CBayonetFrame::CBayonetFrame()
 {
+    m_pSocketActorListen = NULL;
     RegDefaultSocketFsms();
     RegDefaultAppFsms();
 }
@@ -48,7 +49,6 @@ int CBayonetFrame::Init(StFrameParam param)
         return -1;
     }
 
-    m_epoller.Init(m_StFrameParam.epollSize,m_StFrameParam.epollWaitTimeMs,m_StFrameParam.epollCheckTimeMs,m_StFrameParam.gcMaxCount);
     m_epoller.SetFrame(this);
     return 0;
 }
@@ -71,7 +71,8 @@ int CBayonetFrame::Process()
             pSocketActorListenTcp->SetAttachedSocketMaxSize(m_StFrameParam.attachedSocketMaxSize);
             pSocketActorListenTcp->SetKeepcnt(m_StFrameParam.bKeepcnt);
             pSocketActorListenTcp->SetIActionPtr(m_StFrameParam.pAction);
-            pSocketActorListenTcp->ChangeState(SOCKET_FSM_INIT);
+            m_pSocketActorListen = pSocketActorListenTcp;
+            //pSocketActorListenTcp->ChangeState(SOCKET_FSM_INIT);
             break;
         case PROTO_TYPE_UDP:
             pSocketActorListenUdp = new CSocketActorListenUdp();
@@ -79,13 +80,31 @@ int CBayonetFrame::Process()
             pSocketActorListenUdp->Init(m_StFrameParam.ip,m_StFrameParam.port,m_StFrameParam.timeOutMs,m_StFrameParam.protoType);
             pSocketActorListenUdp->SetAttachedSocketMaxSize(m_StFrameParam.attachedSocketMaxSize);
             pSocketActorListenUdp->SetIActionPtr(m_StFrameParam.pAction);
-            pSocketActorListenUdp->ChangeState(SOCKET_FSM_INIT);
+            m_pSocketActorListen = pSocketActorListenUdp;
+            //pSocketActorListenUdp->ChangeState(SOCKET_FSM_INIT);
             break;
         default:
             return -1;
     }
 
-    m_epoller.LoopForEvent();
+    for(int i=0;i<m_StFrameParam.workerNum;++i)
+    {
+        ForkWork();
+    }
+
+    pid_t pid;
+    for(;;)
+    {
+        //会阻塞在这里，等待有子进程退出
+        pid = waitpid(-1,NULL,0);
+        if ( pid < 0 )
+        {
+            sleep(1);
+            continue;
+        }
+        ForkWork();
+    }
+
 
     return 0;
 }
@@ -110,4 +129,58 @@ void CBayonetFrame::RegDefaultSocketFsms()
     RegFsm(SOCKET_FSM_CLOSEOVER, new CSocketFsmCloseOver());
     RegFsm(SOCKET_FSM_ERROR, new CSocketFsmError());
     RegFsm(SOCKET_FSM_TIMEOUT, new CSocketFsmTimeout());
+}
+int CBayonetFrame::ChildWork()
+{
+    int ret;
+    //epoll的fd和select一样，不能被fork
+    ret = m_epoller.Init(m_StFrameParam.epollSize,m_StFrameParam.epollWaitTimeMs,m_StFrameParam.epollCheckTimeMs,m_StFrameParam.gcMaxCount);
+    if (ret != 0)
+    {
+        error_log("epoller init fail:%d",ret);
+        return -2;
+    }
+
+    //socket转化状态
+    if (m_pSocketActorListen)
+    {
+        m_pSocketActorListen->ChangeState(SOCKET_FSM_INIT);
+    }
+    else
+    {
+        error_log("m_pSocketActorListen is NULL");
+        return -1;
+    }
+
+    ret = m_epoller.LoopForEvent();
+    if (ret != 0)
+    {
+        error_log("epoller LoopForEvent fail:%d",ret);
+        return -2;
+    }
+    return 0;
+}
+int CBayonetFrame::ForkWork()
+{
+    pid_t pid=0;
+    pid=fork();
+    if(pid==-1)
+        return -1;//err
+    else if(pid==0)//child
+    {
+        //执行
+        trace_log("i am child");
+        int ret = ChildWork();
+        if (ret != 0)
+        {
+            error_log("child error, ret: %d",ret);
+            return ret;
+        }
+        return 0;
+    }
+    else
+    {
+        error_log("i am farther,child is %d",pid);
+    }
+    return 0;
 }

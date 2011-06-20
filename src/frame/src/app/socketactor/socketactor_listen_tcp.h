@@ -19,6 +19,8 @@ public:
     CSocketActorListenTcp();
     virtual ~CSocketActorListenTcp();
 
+    virtual int Init(string ip,int port,int timeout_ms,int protoType);
+
     void SetBackLog(int backlog);
 
     int GetBackLog();

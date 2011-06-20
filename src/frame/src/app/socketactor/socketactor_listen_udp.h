@@ -17,11 +17,11 @@ public:
     CSocketActorListenUdp();
     virtual ~CSocketActorListenUdp();
 
+    virtual int Init(string ip,int port,int timeout_ms,int protoType);
+
     void SetAttachedSocketMaxSize(int attachedSocketMaxSize);
 
     int GetAttachedSocketMaxSize();
-
-    virtual int OnInit();
 
     virtual int OnInitOver();
 

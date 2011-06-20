@@ -18,6 +18,38 @@ CSocketActorListenTcp::CSocketActorListenTcp()
 CSocketActorListenTcp::~CSocketActorListenTcp() 
 {}
 
+int CSocketActorListenTcp::Init(string ip,int port,int timeout_ms,int protoType)
+{
+    int ret = CSocketActorBase::Init(ip, port, timeout_ms, protoType);
+    if (ret != 0)
+    {
+        return ret;
+    }
+    int optval;
+    m_SocketFd = socket(AF_INET,SOCK_STREAM,0);
+    if(m_SocketFd < 0)
+    {   
+        error_log("[class:%s]Create socket error:%s\n",Name().c_str(), strerror(errno));
+        return -1; 
+    }   
+    struct sockaddr_in myaddr;
+    myaddr.sin_family = AF_INET;
+    myaddr.sin_port = htons(m_Port);
+    myaddr.sin_addr.s_addr = inet_addr(m_IP.c_str());
+
+    optval = 1;
+    setsockopt(m_SocketFd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
+    if(bind(m_SocketFd,(struct sockaddr*)&myaddr,sizeof(struct sockaddr)) < 0)
+    {   
+        //close(listen_fd);
+        //到CLOSING状态会帮你关闭掉
+        error_log("[class:%s]CreateListen bind ip:%s port:%d sock:%d err:%s\n",
+                Name().c_str(), m_IP.c_str(),m_Port,m_SocketFd,strerror(errno));
+        return -2; 
+    }
+    return 0;
+}
+
 void CSocketActorListenTcp::SetBackLog(int backlog)
 {
     m_BackLog = backlog;
@@ -38,31 +70,6 @@ int CSocketActorListenTcp::GetAttachedSocketMaxSize()
 
 int CSocketActorListenTcp::OnInit()
 {
-    if (m_SocketFd <= 0)
-    {
-        int optval;
-        m_SocketFd = socket(AF_INET,SOCK_STREAM,0);
-        if(m_SocketFd < 0)
-        {   
-            error_log("[class:%s]Create socket error:%s\n",Name().c_str(), strerror(errno));
-            return SOCKET_FSM_CLOSING; 
-        }   
-        struct sockaddr_in myaddr;
-        myaddr.sin_family = AF_INET;
-        myaddr.sin_port = htons(m_Port);
-        myaddr.sin_addr.s_addr = inet_addr(m_IP.c_str());
-
-        optval = 1;
-        setsockopt(m_SocketFd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
-        if(bind(m_SocketFd,(struct sockaddr*)&myaddr,sizeof(struct sockaddr)) < 0)
-        {   
-            //close(listen_fd);
-            //到CLOSING状态会帮你关闭掉
-            error_log("[class:%s]CreateListen bind ip:%s port:%d sock:%d err:%s\n",
-                    Name().c_str(), m_IP.c_str(),m_Port,m_SocketFd,strerror(errno));
-            return SOCKET_FSM_CLOSING; 
-        }
-    }
     if(listen(m_SocketFd, m_BackLog)<0)
     {
         error_log("[class:%s]CreateListen listen fd:%d err:%s\n",
