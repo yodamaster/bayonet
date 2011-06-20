@@ -59,6 +59,8 @@ CEPoller* CBayonetFrame::GetEpoller()
 }
 int CBayonetFrame::Process()
 {
+    int ret = 0;
+
     CSocketActorListenTcp* pSocketActorListenTcp = NULL;
     CSocketActorListenUdp* pSocketActorListenUdp = NULL;
     switch(m_StFrameParam.protoType)
@@ -66,7 +68,12 @@ int CBayonetFrame::Process()
         case PROTO_TYPE_TCP:
             pSocketActorListenTcp = new CSocketActorListenTcp();
             pSocketActorListenTcp->AttachFrame(this);
-            pSocketActorListenTcp->Init(m_StFrameParam.ip,m_StFrameParam.port,m_StFrameParam.timeOutMs,m_StFrameParam.protoType);
+            ret = pSocketActorListenTcp->Init(m_StFrameParam.ip,m_StFrameParam.port,m_StFrameParam.timeOutMs,m_StFrameParam.protoType);
+            if (ret)
+            {
+                error_log("pSocketActorListenTcp init fail:%d",ret);
+                return ret;
+            }
             pSocketActorListenTcp->SetBackLog(m_StFrameParam.backlog);
             pSocketActorListenTcp->SetAttachedSocketMaxSize(m_StFrameParam.attachedSocketMaxSize);
             pSocketActorListenTcp->SetKeepcnt(m_StFrameParam.bKeepcnt);
@@ -77,7 +84,12 @@ int CBayonetFrame::Process()
         case PROTO_TYPE_UDP:
             pSocketActorListenUdp = new CSocketActorListenUdp();
             pSocketActorListenUdp->AttachFrame(this);
-            pSocketActorListenUdp->Init(m_StFrameParam.ip,m_StFrameParam.port,m_StFrameParam.timeOutMs,m_StFrameParam.protoType);
+            ret = pSocketActorListenUdp->Init(m_StFrameParam.ip,m_StFrameParam.port,m_StFrameParam.timeOutMs,m_StFrameParam.protoType);
+            if (ret)
+            {
+                error_log("pSocketActorListenUdp init fail:%d",ret);
+                return ret;
+            }
             pSocketActorListenUdp->SetAttachedSocketMaxSize(m_StFrameParam.attachedSocketMaxSize);
             pSocketActorListenUdp->SetIActionPtr(m_StFrameParam.pAction);
             m_pSocketActorListen = pSocketActorListenUdp;
