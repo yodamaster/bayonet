@@ -28,6 +28,7 @@
 #include <set>
 #include <map>
 #include <iomanip> 
+#include <sys/time.h>
 
 #include "dir_func.h"
 #include "stat.h"
@@ -46,6 +47,8 @@ using namespace std;
     tmp++; \
     if (tmp != container.end())
 #endif
+
+#define KEY_JOIN_STR        "*"
 
 class CDirStat
 {
@@ -138,20 +141,25 @@ public:
     int ResetStat(vector<string>& vecKey1, vector<string>& vecKey2)
     {
         map<string, map<string, CStatInfo* > > mapTmp;
-        foreach(m_mapStat, it1)
+        foreach(m_mapStat, it)
         {
-            if (!vecKey1.empty() && find(vecKey1.begin(), vecKey1.end(), it1->first) == vecKey1.end())
+            vector<string> vecRes;
+            CDirStat::SplitString(it->first,KEY_JOIN_STR,vecRes);
+
+            if (vecRes.size()!=2)
             {
                 continue;
             }
-            foreach(it1->second, it2)
+
+            if (!vecKey1.empty() && find(vecKey1.begin(), vecKey1.end(), vecRes[0]) == vecKey1.end())
             {
-                if (!vecKey2.empty() && find(vecKey2.begin(), vecKey2.end(), it2->first) == vecKey2.end())
-                {
-                    continue;
-                }
-                mapTmp[it1->first][it2->first] = it2->second;
+                continue;
             }
+            if (!vecKey2.empty() && find(vecKey2.begin(), vecKey2.end(), vecRes[1]) == vecKey2.end())
+            {
+                continue;
+            }
+            mapTmp[vecRes[0]][vecRes[1]] = it->second;
         }
 
         foreach(mapTmp, it1)
@@ -170,20 +178,25 @@ public:
     string GetStatInfo(vector<string>& vecKey1, vector<string>& vecKey2)
     {
         map<string, map<string, CStatInfo* > > mapTmp;
-        foreach(m_mapStat, it1)
+        foreach(m_mapStat, it)
         {
-            if (!vecKey1.empty() && find(vecKey1.begin(), vecKey1.end(), it1->first) == vecKey1.end())
+            vector<string> vecRes;
+            CDirStat::SplitString(it->first,KEY_JOIN_STR,vecRes);
+
+            if (vecRes.size()!=2)
             {
                 continue;
             }
-            foreach(it1->second, it2)
+
+            if (!vecKey1.empty() && find(vecKey1.begin(), vecKey1.end(), vecRes[0]) == vecKey1.end())
             {
-                if (!vecKey2.empty() && find(vecKey2.begin(), vecKey2.end(), it2->first) == vecKey2.end())
-                {
-                    continue;
-                }
-                mapTmp[it1->first][it2->first] = it2->second;
+                continue;
             }
+            if (!vecKey2.empty() && find(vecKey2.begin(), vecKey2.end(), vecRes[1]) == vecKey2.end())
+            {
+                continue;
+            }
+            mapTmp[vecRes[0]][vecRes[1]] = it->second;
         }
 
         char szTmp[512]={0};
@@ -257,8 +270,15 @@ private:
 
     CStatInfo* getStatFile(const char* key1, const char* key2)
     {
+        struct timeval begin_tv,end_tv;
+        gettimeofday(&begin_tv,NULL);
         int ret;
-        CStatInfo*& pStat = m_mapStat[key1][key2];
+
+        string strMix(key1);
+        strMix.append(KEY_JOIN_STR);
+        strMix.append(key2);
+
+        CStatInfo*& pStat = m_mapStat[strMix.c_str()];
         if (pStat == NULL)
         {
             snprintf(m_szBuf,sizeof(m_szBuf),STATDIR_TPL,m_statDir.c_str(),key1,key2);
@@ -278,6 +298,10 @@ private:
             pStat = new CStatInfo();
             pStat->Init(m_szBuf, m_stat_desc, m_stat_num);
         }
+        gettimeofday(&end_tv,NULL);
+        long past_time  = 0;
+        past_time = ((end_tv.tv_sec  - begin_tv.tv_sec ) * 1000000 + (end_tv.tv_usec - begin_tv.tv_usec));
+        printf("pass_time_us:%ld\n",past_time);
 
         return pStat;
     }
@@ -325,7 +349,7 @@ private:
     string m_statDir;
     string m_fileName;
     char m_szBuf[1024];
-    map<string, map<string, CStatInfo* > > m_mapStat;
+    map<string, CStatInfo* > m_mapStat;
 
     const char * const * m_stat_desc;
     int         m_stat_num;
