@@ -99,12 +99,16 @@ int CBayonetFrame::Process()
             return -1;
     }
 
+    pid_t pid;
     for(int i=0;i<m_StFrameParam.workerNum;++i)
     {
-        ForkWork();
+        pid = ForkWork();
+        if (pid <= 0)//报错，或者是子进程
+        {
+            exit(-1);
+        }
     }
 
-    pid_t pid;
     for(;;)
     {
         //会阻塞在这里，等待有子进程退出
@@ -114,7 +118,11 @@ int CBayonetFrame::Process()
             sleep(1);
             continue;
         }
-        ForkWork();
+        pid = ForkWork();
+        if (pid == 0)//子进程自己结束了
+        {
+            exit(-2);
+        }
     }
 
 
@@ -175,9 +183,13 @@ int CBayonetFrame::ChildWork()
 int CBayonetFrame::ForkWork()
 {
     pid_t pid=0;
+
     pid=fork();
-    if(pid==-1)
-        return -1;//err
+
+    if(pid==-1)//err
+    {
+        error_log("fork error");
+    }
     else if(pid==0)//child
     {
         //执行
@@ -186,13 +198,11 @@ int CBayonetFrame::ForkWork()
         if (ret != 0)
         {
             error_log("child error, ret: %d",ret);
-            return ret;
         }
-        return 0;
     }
     else
     {
         error_log("i am farther,child is %d",pid);
     }
-    return 0;
+    return pid;
 }
