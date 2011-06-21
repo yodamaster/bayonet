@@ -29,10 +29,12 @@
 #include <map>
 #include <iomanip> 
 #include <sys/time.h>
+#include <tr1/unordered_map>
 
 #include "dir_func.h"
 #include "stat.h"
 using namespace std;
+#define hash_map std::tr1::unordered_map
 
 #define STATDIR_TPL "%s/%s/%s/"
 
@@ -49,6 +51,50 @@ using namespace std;
 #endif
 
 #define KEY_JOIN_STR        "*"
+
+struct StStrHash
+{
+    //php
+    /*size_t operator()(const string& v)const
+    {
+        char * key = (char*)v.c_str();
+        uint32_t length = v.size();
+
+        register uint32_t nr=1, nr2=4; 
+        while (length--) 
+        { 
+            nr^= (((nr & 63)+nr2)*((uint32_t) (uint8_t) toupper(*key++)))+ (nr << 8); 
+            nr2+=3; 
+        } 
+        return((uint) nr); 
+    }*/
+    //mysql 2
+    /*size_t operator()(const string& v)const
+    {
+        char* key = (char*)v.c_str();
+        int length = v.size();
+
+        register uint32_t nr=1, nr2=4; 
+        while (length--) 
+        { 
+            nr^= (((nr & 63)+nr2)*((uint32_t) (uint8_t) toupper(*key++)))+ (nr << 8); 
+            nr2+=3; 
+        } 
+        return((uint32_t) nr); 
+    }*/
+    //自己写的最简单的
+    size_t operator()(const string& v)const
+    {
+        uint32_t sum=0;
+        char * key = (char*)v.c_str();
+        uint32_t count = v.size();
+        for (uint32_t i = 0; i < count; i++)
+        {
+            sum += key[i];
+        }
+        return sum;
+    }
+};
 
 class CDirStat
 {
@@ -349,7 +395,7 @@ private:
     string m_statDir;
     string m_fileName;
     char m_szBuf[1024];
-    map<string, CStatInfo* > m_mapStat;
+    hash_map<string, CStatInfo* ,StStrHash> m_mapStat;
 
     const char * const * m_stat_desc;
     int         m_stat_num;
