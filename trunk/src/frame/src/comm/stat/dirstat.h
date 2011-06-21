@@ -221,7 +221,7 @@ public:
             }
             ss << "\t}";
 
-            isnotlast(m_mapStat, it1)
+            isnotlast(mapTmp, it1)
             {
                 ss << ",";
             }
