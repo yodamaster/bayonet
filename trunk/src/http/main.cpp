@@ -252,11 +252,11 @@ public:
     }
     virtual int HandleProcess(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
     {
-        set<CActionInfo*> &setAction = pActionInfoSet->GetActionSet();
+        /*set<CActionInfo*> &setAction = pActionInfoSet->GetActionSet();
         for(set<CActionInfo*>::iterator it = setAction.begin(); it != setAction.end(); ++it)
         {
             trace_log("id:%d,error no:%d,timecost:%u ms",(*it)->GetID(),(*it)->GetErrno(),(*it)->GetTimeCost());
-        }
+        }*/
         return APP_FSM_RSP;//代表要回复客户端啦
     }
     virtual int HandleExit(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)

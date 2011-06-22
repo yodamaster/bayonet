@@ -139,19 +139,18 @@ public:
         param2.actionType = ACTIONTYPE_SENDRECV;
         param2.timeout_ms = 100;
 
-        CActionInfo * pActionInfo2 = new CActionInfo();
+        /*CActionInfo * pActionInfo2 = new CActionInfo();
         pActionInfo2->Init(param2);
-
-        pActionInfoSet->Add(pActionInfo2);
+        pActionInfoSet->Add(pActionInfo2);*/
         return 0;
     }
     virtual int HandleProcess(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
     {
-        set<CActionInfo*> &setAction = pActionInfoSet->GetActionSet();
+        /*set<CActionInfo*> &setAction = pActionInfoSet->GetActionSet();
         for(set<CActionInfo*>::iterator it = setAction.begin(); it != setAction.end(); ++it)
         {
             trace_log("id:%d,error no:%d,timecost:%u ms",(*it)->GetID(),(*it)->GetErrno(),(*it)->GetTimeCost());
-        }
+        }*/
         //return APP_FSM_RSP;//代表要回复客户端啦
         return APP_FSM_LOGIC2;//代表要回复客户端啦
     }
@@ -192,19 +191,18 @@ public:
         param2.actionType = ACTIONTYPE_SENDRECV;
         param2.timeout_ms = 100;
 
-        CActionInfo * pActionInfo2 = new CActionInfo();
+        /*CActionInfo * pActionInfo2 = new CActionInfo();
         pActionInfo2->Init(param2);
-
-        pActionInfoSet->Add(pActionInfo2);
+        pActionInfoSet->Add(pActionInfo2);*/
         return 0;
     }
     virtual int HandleProcess(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
     {
-        set<CActionInfo*> &setAction = pActionInfoSet->GetActionSet();
+        /*set<CActionInfo*> &setAction = pActionInfoSet->GetActionSet();
         for(set<CActionInfo*>::iterator it = setAction.begin(); it != setAction.end(); ++it)
         {
             trace_log("id:%d,error no:%d,timecost:%u ms",(*it)->GetID(),(*it)->GetErrno(),(*it)->GetTimeCost());
-        }
+        }*/
         return APP_FSM_RSP;//代表要回复客户端啦
     }
     virtual int HandleExit(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
@@ -229,11 +227,12 @@ int main(int argc, const char *argv[])
     //param.protoType = PROTO_TYPE_UDP;
     param.protoType = PROTO_TYPE_TCP;
     param.pAction = new CActionFirst();
-    //param.gcMaxCount = 10;
+    param.gcMaxCount = 100000;
     param.timeOutMs= 1000;
     param.epollWaitTimeMs= 10;
-    param.epollCheckTimeMs= 100;
+    param.epollCheckTimeMs= 3000;
     param.attachedSocketMaxSize = 8000;
+    param.workerNum= 1;
 
     int ret = srv.Init(param);
     if (ret != 0)
