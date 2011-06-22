@@ -72,7 +72,7 @@ int CFrameBase::Init(const char* statDir, const char* statFileName)
 
 int CFrameBase::AddActor(IActor* pActor)
 {
-    m_listActors.push_front(pActor);
+    m_listActors.push_back(pActor);
     m_allActorCount++;
     StatAddCount("ALL","SELF",STAT_ALIVE);
     StatAddCount("ALL","SELF",STAT_TOTAL);
