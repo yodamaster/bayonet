@@ -3,8 +3,8 @@ CXX = g++
 
 MYFLAGS = -MMD -g -Wall -pthread
 
-INC += -I../../release/include
-LIB += -L../../release/lib -lbayonet
+INC += -I../../../release/include
+LIB += -L../../../release/lib -lbayonet
 
 TAR_DIR = ./
 SRC_DIR = ./
