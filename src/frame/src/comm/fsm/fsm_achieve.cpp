@@ -179,11 +179,19 @@ void CFrameBase::StatChangeFsm(IFsm *fsm, IActor* pActor, const string &strFsmFu
 
 int CFrameBase::StatAddCount(const char* key1, const char* key2, int index)
 {
+    /*if (!(strcmp(key1,"CSocketActorPassiveTcp") == 0 && strcmp(key2,"CSocketFsmRecving") == 0))
+    {
+        return 0;
+    }*/
     return m_dirStat.AddCount(key1,key2,index);
 }
 
 int CFrameBase::StatDecCount(const char* key1, const char* key2, int index)
 {
+    /*if (!(strcmp(key1,"CSocketActorPassiveTcp") == 0 && strcmp(key2,"CSocketFsmRecving") == 0))
+    {
+        return 0;
+    }*/
     return m_dirStat.DecCount(key1,key2,index);
 }
 
