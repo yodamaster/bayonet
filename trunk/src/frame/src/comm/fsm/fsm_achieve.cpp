@@ -57,16 +57,15 @@ CFrameBase::CFrameBase () {
 }
 CFrameBase::~CFrameBase () {}
 
-int CFrameBase::Init(const char* statDir, const char* statFileName)
+int CFrameBase::Init(const char* statPath)
 {
-    int ret = m_dirStat.Init(statDir, statFileName,stat_desc, STAT_OVER);
+    int ret = m_mapStat.Init(statPath);
     if (ret != 0)
     {
         return -1;
     }
 
-    vector<string> vecKey1,vecKey2;
-    m_dirStat.ResetStat(vecKey1,vecKey2);
+    m_mapStat.Reset();
     return 0;
 }
 
@@ -183,7 +182,10 @@ int CFrameBase::StatAddCount(const char* key1, const char* key2, int index)
     {
         return 0;
     }*/
-    return m_dirStat.AddCount(key1,key2,index);
+    string str(key1);
+    str.append("*");
+    str.append(key2);
+    return m_mapStat.AddCount(str.c_str(),index);
 }
 
 int CFrameBase::StatDecCount(const char* key1, const char* key2, int index)
@@ -192,7 +194,10 @@ int CFrameBase::StatDecCount(const char* key1, const char* key2, int index)
     {
         return 0;
     }*/
-    return m_dirStat.DecCount(key1,key2,index);
+    string str(key1);
+    str.append("*");
+    str.append(key2);
+    return m_mapStat.DecCount(str.c_str(),index);
 }
 
 list<IActor*>::iterator CFrameBase::eraseActor(list<IActor*>::iterator it)

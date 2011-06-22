@@ -25,6 +25,7 @@
 #include "stat_def.h"
 #include "timer.h"
 #include "ptr_proxy.h"
+#include "map_stat.h"
 using namespace std;
 
 /**
@@ -64,12 +65,11 @@ public:
     /**
      * @brief   初始化
      *
-     * @param   statDir             统计文件目录
-     * @param   statFileName        统计文件名
+     * @param   statPath            文件路径
      *
      * @return  0                   succ
      */
-    int Init(const char* statDir, const char* statFileName);
+    int Init(const char* statPath);
 
     int AddActor(IActor* pActor);
 
@@ -114,7 +114,7 @@ protected:
     string m_statDir;
 
     //统计
-    CDirStat m_dirStat;
+    CMapStat m_mapStat;
 };
 
 class CActorBase : public IActor, public IPtrProxy<CActorBase>
