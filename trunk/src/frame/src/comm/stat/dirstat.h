@@ -316,8 +316,8 @@ private:
 
     CStatInfo* getStatFile(const char* key1, const char* key2)
     {
-        struct timeval begin_tv,end_tv;
-        gettimeofday(&begin_tv,NULL);
+        /*struct timeval begin_tv,end_tv;
+        gettimeofday(&begin_tv,NULL);*/
         int ret;
 
         string strMix(key1);
@@ -344,10 +344,10 @@ private:
             pStat = new CStatInfo();
             pStat->Init(m_szBuf, m_stat_desc, m_stat_num);
         }
-        gettimeofday(&end_tv,NULL);
+        /*gettimeofday(&end_tv,NULL);
         long past_time  = 0;
         past_time = ((end_tv.tv_sec  - begin_tv.tv_sec ) * 1000000 + (end_tv.tv_usec - begin_tv.tv_usec));
-        printf("pass_time_us:%ld\n",past_time);
+        printf("pass_time_us:%ld\n",past_time);*/
 
         return pStat;
     }
