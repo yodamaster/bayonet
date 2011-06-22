@@ -74,11 +74,11 @@ public:
     virtual int HandleProcess(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
     {
         trace_log("HandleProcess");
-        set<CActionInfo*> &setAction = pActionInfoSet->GetActionSet();
+        /*set<CActionInfo*> &setAction = pActionInfoSet->GetActionSet();
         for(set<CActionInfo*>::iterator it = setAction.begin(); it != setAction.end(); ++it)
         {
             trace_log("error no:%d",(*it)->GetErrno());
-        }
+        }*/
         return APP_FSM_RSP;//代表要回复客户端啦
     }
     virtual int HandleExit(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
@@ -97,7 +97,8 @@ int main(int argc, const char *argv[])
     param.protoType = PROTO_TYPE_UDP;
     //param.protoType = PROTO_TYPE_TCP;
     param.pAction = new CActionFirst();
-    param.gcMaxCount=1000;
+    param.gcMaxCount=10000;
+    param.workerNum=2;
 
     int ret = srv.Init(param);
     if (ret != 0)

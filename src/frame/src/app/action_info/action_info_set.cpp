@@ -34,15 +34,15 @@ CActorBase* CActionInfoSet::GetActor()
 int CActionInfoSet::Add(CActionInfo* pActionInfo)
 {
     pActionInfo->SetAppActor(m_pAppActorProxy.true_ptr());
-    m_setActionInfos.insert(pActionInfo);
+    m_setActionInfos.push_back(pActionInfo);
 
-    m_setHistorActionInfos.insert(pActionInfo);
+    m_setHistorActionInfos.push_back(pActionInfo);
     return 0;
 }
 
 bool CActionInfoSet::IsDealOver()
 {
-    for(set<CActionInfo*>::iterator it = m_setActionInfos.begin(); it != m_setActionInfos.end(); ++it)
+    for(list<CActionInfo*>::iterator it = m_setActionInfos.begin(); it != m_setActionInfos.end(); ++it)
     {
         if (!(*it)->IsDealOver())
         {
@@ -54,7 +54,7 @@ bool CActionInfoSet::IsDealOver()
 int CActionInfoSet::Start()
 {
     int ret = 0;
-    for(set<CActionInfo*>::iterator it = m_setActionInfos.begin(); it != m_setActionInfos.end(); ++it)
+    for(list<CActionInfo*>::iterator it = m_setActionInfos.begin(); it != m_setActionInfos.end(); ++it)
     {
         ret = (*it)->HandleStart();
         if (ret)
@@ -70,14 +70,14 @@ int CActionInfoSet::Clear()
     m_setActionInfos.clear();
     return 0;
 }
-set<CActionInfo*>& CActionInfoSet::GetActionSet()
+list<CActionInfo*>& CActionInfoSet::GetActionSet()
 {
     return m_setActionInfos;
 }
 
 void CActionInfoSet::FreeAllHistoryActionInfos()
 {
-    for(set<CActionInfo*>::iterator it = m_setHistorActionInfos.begin(); it != m_setHistorActionInfos.end(); ++it)
+    for(list<CActionInfo*>::iterator it = m_setHistorActionInfos.begin(); it != m_setHistorActionInfos.end(); ++it)
     {
         if (*it)
         {

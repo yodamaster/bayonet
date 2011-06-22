@@ -14,6 +14,7 @@
 #include <vector>
 #include <set>
 #include <map>
+#include <list>
 
 #include "fsm_achieve.h"
 #include "action_info.h"
@@ -45,17 +46,17 @@ public:
 
     int Clear();
 
-    set<CActionInfo*>& GetActionSet();
+    list<CActionInfo*>& GetActionSet();
 
     /**
      * @brief   在析构的时候，清理掉所有存储的actioninfo
      */
     void FreeAllHistoryActionInfos();
 private:
-    set<CActionInfo*> m_setActionInfos;
+    list<CActionInfo*> m_setActionInfos;
 
     //为了避免actioninfo在changestate过程中被删除
-    set<CActionInfo*> m_setHistorActionInfos;
+    list<CActionInfo*> m_setHistorActionInfos;
     ptr_proxy<CActorBase> m_pAppActorProxy;
 };
 #endif
