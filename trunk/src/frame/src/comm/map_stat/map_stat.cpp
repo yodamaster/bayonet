@@ -124,7 +124,7 @@ int CMapStat::Init(const char* file_path, HASH_FUNC func)
 
     m_pStatPool = (StStatPool*)mmap(NULL, sizeof(StStatPool), PROT_READ | PROT_WRITE, MAP_SHARED, m_fd, 0);
 
-    if (m_pStatPool == NULL)
+    if (m_pStatPool == MAP_FAILED)
     {
         CleanUp();
         STAT_ERROR("mmap fail");
