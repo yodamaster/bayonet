@@ -180,7 +180,7 @@ int main(int argc,char** argv)
         printf("%s\n",GetRichStatInfo(_stat, stat_desc,STAT_OVER,vecKey1,vecKey2).c_str());
         if ( _clear_flag )
         {
-            _stat.Reset();
+            _stat.ResetStat();
         }
         printf("\n");
         printf(".............................................\n");

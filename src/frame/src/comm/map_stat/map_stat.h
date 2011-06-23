@@ -112,7 +112,14 @@ public:
      *
      * @return  0
      */
-    int Reset();
+    int Clear();
+
+    /**
+     * @brief   清空统计数值（但是统计项还在，避免出现server不停lock文件的情况）
+     *
+     * @return  
+     */
+    int ResetStat();
 
     int AddCount(const char* id, int index);
 

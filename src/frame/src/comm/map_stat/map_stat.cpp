@@ -314,9 +314,32 @@ int CMapStat::GetObj(const char* id, StStatObj*& pObj)
     return 0;
 }
 
-int CMapStat::Reset()
+int CMapStat::Clear()
 {
     return InitStatFile();
+}
+
+int CMapStat::ResetStat()
+{
+    STAT_CHECK_PSTATPOOL(m_pStatPool);
+
+    StStatObj* p = m_pStatPool->arr_objs;
+    if (p == NULL)
+    {
+        return -1;
+    }
+
+    int count = m_pStatPool->objs_used;
+
+    for (int i = 0; i < count; i++)
+    {
+        for (int j = 0; j < STAT_ARRVAL_MAX_SIZE; j++)
+        {
+            STATVAL_SET(p->arr_vals[j], 0);
+        }
+        ++p;
+    }
+    return 0;
 }
 
 int CMapStat::AddCount(const char* id, int index)
@@ -456,6 +479,11 @@ string CMapStat::GetStatInfo(const char * const stat_desc[], int stat_num)
     int num = stat_num <= STAT_ARRVAL_MAX_SIZE ? stat_num : STAT_ARRVAL_MAX_SIZE;
 
     StStatObj* p = m_pStatPool->arr_objs;
+    if (p == NULL)
+    {
+        return "";
+    }
+
     int count = m_pStatPool->objs_used;
 
     char buf[512];
