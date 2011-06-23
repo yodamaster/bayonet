@@ -54,6 +54,14 @@ using namespace std;
              __FILE__, __LINE__,__FUNCTION__, ##args)
 #endif
 
+#ifndef STAT_CHECK_PSTATPOOL
+#define STAT_CHECK_PSTATPOOL(pStatPool)\
+    if(pStatPool == NULL) {\
+        STAT_ERROR("pStatPool is NULL");\
+        return -1;\
+    }
+#endif
+
 typedef unsigned (*HASH_FUNC)(const char* id);
 
 
@@ -177,6 +185,11 @@ private:
      * @return  0
      */
     int InitStatFile();
+
+    /**
+     * @brief   清理所有数据，包括fd，m_pStatPool
+     */
+    void CleanUp();
 
 
 private:

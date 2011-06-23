@@ -40,7 +40,7 @@ inline unsigned hashid(const char* id) {
         hash ^= ((hash << 5) + id[i] + (hash >> 2));
     }
 
-    return hash % BUCKET_MAX_SIZE;
+    return hash;
 }
 
 class CLockProxy
@@ -85,7 +85,7 @@ CMapStat::CMapStat() {
 }
 CMapStat::~CMapStat()
 {
-    close(m_fd);
+    CleanUp();
 }
 
 int CMapStat::Init(const char* file_path, HASH_FUNC func)
@@ -117,7 +117,7 @@ int CMapStat::Init(const char* file_path, HASH_FUNC func)
     }
 
     if ((!fileexist && ftruncate(m_fd, sizeof(StStatPool)) < 0)) {
-        close(m_fd);
+        CleanUp();
         STAT_ERROR("ftruncate fail,file_path:%s",file_path);
         return -3;
     }
@@ -126,21 +126,31 @@ int CMapStat::Init(const char* file_path, HASH_FUNC func)
 
     if (m_pStatPool == NULL)
     {
+        CleanUp();
         STAT_ERROR("mmap fail");
         return -4;
     }
 
+    int ret;
     if (fileexist)
     {
-        return CheckStatFile();
+        ret = CheckStatFile();
     }
     else
     {
-        return InitStatFile();
+        ret = InitStatFile();
     }
+
+    if (ret != 0)
+    {
+        CleanUp();
+    }
+    return ret;
 }
 int CMapStat::CheckStatFile()
 {
+    STAT_CHECK_PSTATPOOL(m_pStatPool);
+
     if (m_pStatPool->magic != STAT_MAGICNUM)
     {
         STAT_ERROR("magic not match,should:%d,real:%lld",STAT_MAGICNUM,m_pStatPool->magic);
@@ -163,6 +173,8 @@ int CMapStat::CheckStatFile()
 
 int CMapStat::InitStatFile()
 {
+    STAT_CHECK_PSTATPOOL(m_pStatPool);
+
     memset(m_pStatPool, 0, sizeof(StStatPool));
     m_pStatPool->magic = STAT_MAGICNUM;
     m_pStatPool->objs_used= 0;
@@ -177,11 +189,29 @@ int CMapStat::InitStatFile()
 
     return 0;
 }
+
+void CMapStat::CleanUp()
+{
+    if (m_fd > 0)
+    {
+        close(m_fd);
+    }
+    m_fd = -1;
+
+    if (m_pStatPool)
+    {
+        munmap(m_pStatPool, sizeof(StStatPool));
+    }
+    m_pStatPool = NULL;
+}
+
 int CMapStat::FindObj(const char* id, StStatObj*& pObj)
 {
+    STAT_CHECK_PSTATPOOL(m_pStatPool);
+
     pObj = NULL;
 
-    int bucketid  = m_hashFunc(id);
+    int bucketid  = m_hashFunc(id) % BUCKET_MAX_SIZE;
 
     int next = m_pStatPool->arr_bucket[bucketid];
 
@@ -213,6 +243,8 @@ int CMapStat::FindObj(const char* id, StStatObj*& pObj)
 }
 int CMapStat::InsertObj(const char* id, StStatObj*& pObj)
 {
+    STAT_CHECK_PSTATPOOL(m_pStatPool);
+
     //lock
 
     CLockProxy tmp_lock(m_fd);
@@ -241,7 +273,7 @@ int CMapStat::InsertObj(const char* id, StStatObj*& pObj)
     }
 
 
-    int bucketid = m_hashFunc(id);
+    int bucketid = m_hashFunc(id) % BUCKET_MAX_SIZE;
     int next = m_pStatPool->arr_bucket[bucketid];
 
     int obj_idx = m_pStatPool->objs_used++;
@@ -257,6 +289,8 @@ int CMapStat::InsertObj(const char* id, StStatObj*& pObj)
 }
 int CMapStat::GetObj(const char* id, StStatObj*& pObj)
 {
+    STAT_CHECK_PSTATPOOL(m_pStatPool);
+
     int ret;
 
     ret = FindObj(id,pObj);
@@ -287,6 +321,8 @@ int CMapStat::Reset()
 
 int CMapStat::AddCount(const char* id, int index)
 {
+    STAT_CHECK_PSTATPOOL(m_pStatPool);
+
     if (index >= STAT_ARRVAL_MAX_SIZE)
     {
         STAT_ERROR("index is too large,%d/%d",index,STAT_ARRVAL_MAX_SIZE);
@@ -314,6 +350,8 @@ int CMapStat::AddCount(const char* id, int index)
 
 int CMapStat::DecCount(const char* id, int index)
 {
+    STAT_CHECK_PSTATPOOL(m_pStatPool);
+
     if (index >= STAT_ARRVAL_MAX_SIZE)
     {
         STAT_ERROR("index is too large,%d/%d",index,STAT_ARRVAL_MAX_SIZE);
@@ -340,6 +378,8 @@ int CMapStat::DecCount(const char* id, int index)
 }
 int CMapStat::SetCount(const char* id, int index, int val)
 {
+    STAT_CHECK_PSTATPOOL(m_pStatPool);
+
     if (index >= STAT_ARRVAL_MAX_SIZE)
     {
         STAT_ERROR("index is too large,%d/%d",index,STAT_ARRVAL_MAX_SIZE);
@@ -366,6 +406,8 @@ int CMapStat::SetCount(const char* id, int index, int val)
 }
 int CMapStat::GetCount(const char* id, int index, int& val)
 {
+    STAT_CHECK_PSTATPOOL(m_pStatPool);
+
     if (index >= STAT_ARRVAL_MAX_SIZE)
     {
         STAT_ERROR("index is too large,%d/%d",index,STAT_ARRVAL_MAX_SIZE);
@@ -392,6 +434,12 @@ int CMapStat::GetCount(const char* id, int index, int& val)
 }
 StStatObj* CMapStat::GetValidObjs(int& count)
 {
+    if (m_pStatPool == NULL)
+    {
+        STAT_ERROR("pStatPool is NULL");
+        return NULL;
+    }
+
     count = m_pStatPool->objs_used;
 
     return m_pStatPool->arr_objs;
@@ -399,6 +447,12 @@ StStatObj* CMapStat::GetValidObjs(int& count)
 
 string CMapStat::GetStatInfo(const char * const stat_desc[], int stat_num)
 {
+    if (m_pStatPool == NULL)
+    {
+        STAT_ERROR("pStatPool is NULL");
+        return "";
+    }
+
     int num = stat_num <= STAT_ARRVAL_MAX_SIZE ? stat_num : STAT_ARRVAL_MAX_SIZE;
 
     StStatObj* p = m_pStatPool->arr_objs;
