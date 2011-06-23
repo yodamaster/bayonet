@@ -38,10 +38,13 @@ void CSocketActorPassive::NotifyAppActor()
     {
         m_pAppActorProxy.true_ptr()->ChangeState(APP_FSM_FINI);
     }
+    /*
+    //这种情况是有可能的，当是长连接的时候
     else
     {
         error_log("[class:%s]m_pAppActor is NULL",Name().c_str());
     }
+    */
 }
 int CSocketActorPassive::OnCloseOver()
 {
