@@ -66,7 +66,7 @@ int CFrameBase::Init(const char* statPath)
         return -1;
     }
 
-    m_mapStat.Reset();
+    m_mapStat.Clear();
     return 0;
 }
 

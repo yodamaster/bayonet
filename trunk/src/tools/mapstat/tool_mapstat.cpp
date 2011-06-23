@@ -67,7 +67,7 @@ int main(int argc,char** argv)
         printf("%s\n",_stat.GetStatInfo(stat_desc,STAT_OVER).c_str());
         if ( _clear_flag )
         {
-            _stat.Reset();
+            _stat.ResetStat();
         }
         printf("\n");
         printf(".............................................\n");
