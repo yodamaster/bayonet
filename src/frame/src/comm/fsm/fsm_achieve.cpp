@@ -51,23 +51,6 @@ static int MapTime2StatIndex(int msec,int baseLine)
     return statTimeIndex;
 }
 
-/**
- * @brief   自己写的最简单的hash，可以降低计算hash值的cpu
- *
- * @param   id
- *
- * @return  
- */
-unsigned myhash(const char* id)
-{
-    uint32_t sum=0;
-    uint32_t count = strlen(id);
-    for (uint32_t i = 0; i < count; i++)
-    {
-        sum += id[i];
-    }
-    return sum;
-}
 //=============================================================================
 CFrameBase::CFrameBase () {
     m_needGCCount = 0;
@@ -77,7 +60,7 @@ CFrameBase::~CFrameBase () {}
 
 int CFrameBase::Init(const char* statPath)
 {
-    int ret = m_mapStat.Init(statPath,myhash);
+    int ret = m_mapStat.Init(statPath);
     if (ret != 0)
     {
         return -1;
