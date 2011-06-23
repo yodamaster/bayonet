@@ -50,6 +50,24 @@ static int MapTime2StatIndex(int msec,int baseLine)
         statTimeIndex = baseLine+10;
     return statTimeIndex;
 }
+
+/**
+ * @brief   自己写的最简单的hash，可以降低计算hash值的cpu
+ *
+ * @param   id
+ *
+ * @return  
+ */
+unsigned myhash(const char* id)
+{
+    uint32_t sum=0;
+    uint32_t count = strlen(id);
+    for (uint32_t i = 0; i < count; i++)
+    {
+        sum += id[i];
+    }
+    return sum;
+}
 //=============================================================================
 CFrameBase::CFrameBase () {
     m_needGCCount = 0;
@@ -59,7 +77,7 @@ CFrameBase::~CFrameBase () {}
 
 int CFrameBase::Init(const char* statPath)
 {
-    int ret = m_mapStat.Init(statPath);
+    int ret = m_mapStat.Init(statPath,myhash);
     if (ret != 0)
     {
         return -1;
@@ -182,10 +200,10 @@ int CFrameBase::StatAddCount(const char* key1, const char* key2, int index)
     {
         return 0;
     }*/
-    string str(key1);
-    str.append("*");
-    str.append(key2);
-    return m_mapStat.AddCount(str.c_str(),index);
+
+    static char szTmp[256];
+    snprintf(szTmp, sizeof(szTmp), "%s*%s", key1, key2);
+    return m_mapStat.AddCount(szTmp,index);
 }
 
 int CFrameBase::StatDecCount(const char* key1, const char* key2, int index)
@@ -194,10 +212,10 @@ int CFrameBase::StatDecCount(const char* key1, const char* key2, int index)
     {
         return 0;
     }*/
-    string str(key1);
-    str.append("*");
-    str.append(key2);
-    return m_mapStat.DecCount(str.c_str(),index);
+
+    static char szTmp[256];
+    snprintf(szTmp, sizeof(szTmp), "%s*%s", key1, key2);
+    return m_mapStat.DecCount(szTmp,index);
 }
 
 list<IActor*>::iterator CFrameBase::eraseActor(list<IActor*>::iterator it)
