@@ -232,7 +232,7 @@ int main(int argc, const char *argv[])
     param.epollWaitTimeMs= 10;
     param.epollCheckTimeMs= 3000;
     param.attachedSocketMaxSize = 8000;
-    param.workerNum= 1;
+    param.workerNum= 10;
 
     int ret = srv.Init(param);
     if (ret != 0)
