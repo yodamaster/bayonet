@@ -34,7 +34,10 @@ typedef struct _StFrameParam
     int protoType;              // 协议类型
     int backlog;                // backlog
     bool bKeepcnt;              // 是否长链接(仅TCP协议有效)
-    int timeOutMs;              // accept后的socket接收超时要断掉(tcp)，逻辑处理超时也要断掉,-1代表永不超时
+    int timeOutMs;              // 这里的超时有点意思:
+                                // 当是TCP短链接orUDP的时候，代表socketpasstive的存活时间，要注意比appactor的超时时间长，否则会出现请求超时但是无返回的情况
+                                // 当是TCP长链接的时候，代表没有收到请求的持续时间
+                                // -1代表永不超时
 
     IAction* pAction;           // 最开始的Action
 

@@ -53,9 +53,48 @@ int CSocketActorPassive::OnCloseOver()
 }
 //=============================================================================
 CSocketActorPassiveTcp::~CSocketActorPassiveTcp () {}
+bool CSocketActorPassiveTcp::IsTimeOut()
+{
+    if (m_bKeepcnt)
+    {
+        //只要收到数据，那就不算超时
+        if (m_recvFlag != 0)
+        {
+            return false;
+        }
+
+        if (m_TimeoutMs < 0)
+        {
+            //永不超时
+            return false;
+        }
+
+        //是说空闲时间的多少
+        int pastTime = m_idleTimer.GetPastTime();
+
+        if (pastTime > m_TimeoutMs)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }   
+    else
+    {
+        return CSocketActorPassive::IsTimeOut();
+    }
+}
 int CSocketActorPassiveTcp::OnInitOver()
 {
     return SOCKET_FSM_WAITRECV;
+}
+int CSocketActorPassiveTcp::OnWaitRecv()
+{
+    //空闲即时开始
+    m_idleTimer.Start();
+    return CSocketActorPassive::OnWaitRecv();
 }
 int CSocketActorPassiveTcp::OnRecvOver()
 {

@@ -126,11 +126,14 @@ bool CSocketActorBase::IsTimeOut()
         return false;
     }
 
+    /*
+    //这个只是针对passive，所以不需要写在这里了
     if (m_ProtoType == PROTO_TYPE_TCP && m_bKeepcnt)
     {
         //长连接
         return false;
     }
+    */
 
     int pastTime = m_aliveTimer.GetPastTime();
 

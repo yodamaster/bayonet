@@ -229,7 +229,7 @@ int main(int argc, const char *argv[])
     param.protoType = PROTO_TYPE_TCP;
     param.pAction = new CActionFirst();
     param.gcMaxCount = 100000;
-    param.timeOutMs= 1000;
+    param.timeOutMs= 4000;
     param.epollWaitTimeMs= 10;
     param.epollCheckTimeSockMs= 500;
     param.epollCheckTimeAppMs= 1000;
