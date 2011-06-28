@@ -57,6 +57,7 @@ public:
             int len)
     {
         CMyActor * app_actor = new CMyActor();
+        app_actor->SetTimeOutMs(100);
         app_actor->AttachFrame(pSocketActor->GetFrame());
         app_actor->AttachCommu(pSocketActor);
         app_actor->ChangeState(APP_FSM_LOGIC1);
@@ -146,11 +147,11 @@ public:
     }
     virtual int HandleProcess(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
     {
-        /*set<CActionInfo*> &setAction = pActionInfoSet->GetActionSet();
-        for(set<CActionInfo*>::iterator it = setAction.begin(); it != setAction.end(); ++it)
+        list<CActionInfo*> &setAction = pActionInfoSet->GetActionSet();
+        for(list<CActionInfo*>::iterator it = setAction.begin(); it != setAction.end(); ++it)
         {
             trace_log("id:%d,error no:%d,timecost:%u ms",(*it)->GetID(),(*it)->GetErrno(),(*it)->GetTimeCost());
-        }*/
+        }
         //return APP_FSM_RSP;//代表要回复客户端啦
         return APP_FSM_LOGIC2;//代表要回复客户端啦
     }
@@ -230,9 +231,11 @@ int main(int argc, const char *argv[])
     param.gcMaxCount = 100000;
     param.timeOutMs= 1000;
     param.epollWaitTimeMs= 10;
-    param.epollCheckTimeMs= 3000;
+    param.epollCheckTimeSockMs= 500;
+    param.epollCheckTimeAppMs= 1000;
     param.attachedSocketMaxSize = 8000;
     param.workerNum= 1;
+    //param.iLogLevel = LM_TRACE;
 
     int ret = srv.Init(param);
     if (ret != 0)
