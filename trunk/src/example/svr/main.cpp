@@ -98,7 +98,7 @@ int main(int argc, const char *argv[])
     //param.protoType = PROTO_TYPE_TCP;
     param.pAction = new CActionFirst();
     param.gcMaxCount=10000;
-    param.workerNum=10;
+    param.workerNum=1;
 
     int ret = srv.Init(param);
     if (ret != 0)
