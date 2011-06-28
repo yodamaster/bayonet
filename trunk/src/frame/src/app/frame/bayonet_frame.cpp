@@ -154,7 +154,11 @@ int CBayonetFrame::ChildWork()
 {
     int ret;
     //epoll的fd和select一样，不能被fork
-    ret = m_epoller.Init(m_StFrameParam.epollSize,m_StFrameParam.epollWaitTimeMs,m_StFrameParam.epollCheckTimeMs,m_StFrameParam.gcMaxCount);
+    ret = m_epoller.Init(m_StFrameParam.epollSize,
+                         m_StFrameParam.epollWaitTimeMs,
+                         m_StFrameParam.epollCheckTimeSockMs,
+                         m_StFrameParam.epollCheckTimeAppMs,
+                         m_StFrameParam.gcMaxCount);
     if (ret != 0)
     {
         error_log("epoller init fail:%d",ret);

@@ -60,10 +60,11 @@ public:
     /**
      * @brief   socket处理完成时标记结束
      *
-     * @param   err_no
-     * @param   timecost_ms
+     * @param   err_no                  错误码
+     * @param   timecost_ms             消耗时间
+     * @param   bProc                   appactor是否要ProcessState
      */
-    void SetDealOver(int err_no,int timecost_ms);
+    void SetDealOver(int err_no,int timecost_ms,bool bProc=true);
 
     bool IsDealOver();
 
@@ -83,7 +84,7 @@ public:
      *             EShutdown     = -10,   // 对端关闭连接
      *             EEncodeFail   = -11,   // 编码错误 
      *             EInvalidRouteType = -12,// 非法路由配置类型
-     *             EMsgTimeout       = -13,// Msg处理超时
+     *             EAppActorTimeout       = -13,// AppActor处理超时
      *        };
      *
      * @param err_no 错误码

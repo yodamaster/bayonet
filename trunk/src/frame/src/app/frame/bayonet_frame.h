@@ -41,7 +41,8 @@ typedef struct _StFrameParam
 
     int epollSize;              // epoll监听的队列大小
     int epollWaitTimeMs;        // epoll wait time(毫秒)
-    int epollCheckTimeMs;       // epoll 检查超时的时间
+    int epollCheckTimeSockMs;   // epoll 检查sock超时的时间
+    int epollCheckTimeAppMs;    // epoll 检查app超时的时间
 
     int attachedSocketMaxSize;  // 最大能够attached的socket个数，如果达到，会在listen socekt中进行拒绝
 
@@ -69,7 +70,8 @@ typedef struct _StFrameParam
 
         epollSize = EPOLL_FD_MAXSIZE;
         epollWaitTimeMs = EPOLL_WAIT_TIMEMS;
-        epollCheckTimeMs = CHECK_INTERVAL_MS;
+        epollCheckTimeSockMs = CHECK_INTERVAL_SOCK_MS;
+        epollCheckTimeAppMs = CHECK_INTERVAL_APP_MS;
 
         attachedSocketMaxSize = ATTACHED_SOCKET_MAXSIZE;
 

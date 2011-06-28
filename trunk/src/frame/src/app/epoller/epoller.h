@@ -26,7 +26,7 @@ public:
     CEPoller();
     ~CEPoller();
 
-    int Init(int epoll_size,int waittime_ms,int check_time,int gc_maxcount);
+    int Init(int epoll_size,int waittime_ms,int checktime_sock_ms,int checktime_app_ms,int gc_maxcount);
     int SetFrame(IFrame* pFrame);
     int AddEpollIO(int fd,unsigned flag);
     int ModEpollIO(int fd,unsigned flag);
@@ -37,6 +37,12 @@ public:
     int GetAttachedSocketCount();
     int  LoopForEvent();
     char * GetErrMsg();
+
+    void AttachAppActor(CActorBase* pAppActor);
+    void DetachAppActor(CActorBase* pAppActor);
+
+    void CheckTimeOutSocketActor();
+    void CheckTimeOutAppActor();
 protected:
     char            m_szErrMsg[1024];
     int             m_epollFd;              //epoll的句柄
@@ -44,7 +50,8 @@ protected:
 
     int             m_epollSize;
     int             m_waittimeMs;
-    int             m_checkTimeMs;
+    int             m_checkTimeSockMs;
+    int             m_checkTimeAppMs;
     int             m_gcMaxCount;
 
     int             m_attachedSocketCount; //被放到map中的socket的个数
@@ -53,6 +60,7 @@ protected:
 
     //map<int,CSocketActorBase*> m_mapSocketActor;
     map<int,ptr_proxy<CActorBase> > m_mapSocketActorProxy;
+    list<ptr_proxy<CActorBase> > m_listAppActorProxy;
 };
 
 #endif

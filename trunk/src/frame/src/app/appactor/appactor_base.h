@@ -31,6 +31,12 @@ public:
 
     CActionInfoSet* GetActionInfoSet();
 
+    void SetTimeOutMs(int timeout_ms);
+
+    int CheckTimeOut();
+
+    bool IsTimeOut();
+
     int OnFini();
 
     int AttachCommu(CActorBase* pActor);
@@ -39,8 +45,13 @@ public:
 
     int Send2Client();
 
+protected:
+    virtual CEPoller* GetEpoller();
+
 private:
     CActionInfoSet* m_pActionInfoSet;
     ptr_proxy<CActorBase> m_pCommuSocketActorProxy;
+
+    int m_TimeoutMs;//超时时间
 };
 #endif

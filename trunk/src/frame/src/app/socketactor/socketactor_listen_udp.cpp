@@ -117,7 +117,7 @@ int CSocketActorListenUdp::OnRecvOver()
     return SOCKET_FSM_WAITRECV;
 }
 
-bool CSocketActorListenUdp::IsTimeOut(struct timeval& now_time)
+bool CSocketActorListenUdp::IsTimeOut()
 {
     //永不超时
     return false;
