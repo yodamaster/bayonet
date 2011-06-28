@@ -51,9 +51,9 @@ public:
 
     virtual void SetTimeOutMs(int timeout_ms);
 
-    virtual int CheckTimeOut(struct timeval& now_time);
+    virtual int CheckTimeOut();
 
-    virtual bool IsTimeOut(struct timeval& now_time);
+    virtual bool IsTimeOut();
 
     virtual int SetEvent(unsigned event);
 

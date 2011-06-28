@@ -1,4 +1,5 @@
 #include "epoller.h"
+#include "appactor_base.h"
 
 CEPoller::CEPoller()
 {
@@ -6,7 +7,8 @@ CEPoller::CEPoller()
     m_pFrame = NULL;
     m_epollSize = EPOLL_FD_MAXSIZE;
     m_waittimeMs = EPOLL_WAIT_TIMEMS;
-    m_checkTimeMs = CHECK_INTERVAL_MS;
+    m_checkTimeSockMs = CHECK_INTERVAL_SOCK_MS;
+    m_checkTimeAppMs = CHECK_INTERVAL_APP_MS;
     m_attachedSocketCount = 0;
     m_gcMaxCount = GC_MAX_COUNT;
 }
@@ -19,11 +21,12 @@ int CEPoller::SetFrame(IFrame* pFrame)
     m_pFrame = pFrame;
     return 0;
 }
-int CEPoller::Init(int epoll_size,int waittime_ms,int checktime_ms,int gc_maxcount)
+int CEPoller::Init(int epoll_size,int waittime_ms,int checktime_sock_ms,int checktime_app_ms,int gc_maxcount)
 {
     m_epollSize = epoll_size;
     m_waittimeMs = waittime_ms;
-    m_checkTimeMs = checktime_ms;
+    m_checkTimeSockMs = checktime_sock_ms;
+    m_checkTimeAppMs = checktime_app_ms;
     m_gcMaxCount = gc_maxcount;
 
     m_epollFd = epoll_create(m_epollSize);
@@ -74,10 +77,11 @@ int CEPoller::LoopForEvent()
     int nfds;
     CSocketActorBase*  pSocketActor = NULL;
     CEpollEvent t_event;
-    struct timeval prev_tm;
+    struct timeval prev_tm_sock,prev_tm_app;
     struct timeval next_tm;
     long    use_time_usec;
-    gettimeofday(&prev_tm,NULL);
+    gettimeofday(&prev_tm_sock,NULL);
+    gettimeofday(&prev_tm_app,NULL);
 
     for(;;)
     {
@@ -107,26 +111,19 @@ int CEPoller::LoopForEvent()
             pSocketActor->HandleEvent(&t_event);
         }
 
-        use_time_usec = (next_tm.tv_sec - prev_tm.tv_sec)*1000000 +
-            (next_tm.tv_usec - prev_tm.tv_usec);
-        if ( use_time_usec > (m_checkTimeMs*1000))
+        use_time_usec = (next_tm.tv_sec - prev_tm_sock.tv_sec)*1000000 +
+            (next_tm.tv_usec - prev_tm_sock.tv_usec);
+        if ( use_time_usec > (m_checkTimeSockMs*1000))
         {
-            for(map<int, ptr_proxy<CActorBase> >::iterator it = m_mapSocketActorProxy.begin(); it != m_mapSocketActorProxy.end();)
-            {
-                //这样写，就可以自由的删掉自己了
-                map<int, ptr_proxy<CActorBase> >::iterator tempIt = it;
-                it++;
-
-                CSocketActorBase* pActor = (CSocketActorBase*)(tempIt->second.true_ptr());
-                if (pActor == NULL || pActor->GetGCMark() || pActor->GetSocketFd()<=0) //已经被删除，或者已经被标记为GC
-                {
-                    m_mapSocketActorProxy.erase(tempIt);
-                    continue;
-                }
-                pActor->CheckTimeOut(next_tm);
-            }
-            prev_tm = next_tm;
+            CheckTimeOutSocketActor();
+            prev_tm_sock = next_tm;
         }
+        if ( use_time_usec > (m_checkTimeAppMs*1000))
+        {
+            CheckTimeOutAppActor();
+            prev_tm_app = next_tm;
+        }
+
         //进行垃圾回收
         if (m_pFrame->GetNeedGCCount() > m_gcMaxCount)
         {
@@ -198,4 +195,48 @@ int CEPoller::DelEpollIO(int fd)
 
     --m_attachedSocketCount;
     return 0;
+}
+
+void CEPoller::AttachAppActor(CActorBase* pAppActor)
+{
+    if (pAppActor == NULL)
+    {
+        return;
+    }
+    m_listAppActorProxy.push_back(pAppActor->get_ptr_proxy());
+}
+void CEPoller::DetachAppActor(CActorBase* pAppActor)
+{
+    //啥也不做，否则会有查找效率
+}
+void CEPoller::CheckTimeOutSocketActor()
+{
+    for(map<int, ptr_proxy<CActorBase> >::iterator it = m_mapSocketActorProxy.begin(); it != m_mapSocketActorProxy.end();)
+    {
+        //这样写，就可以自由的删掉自己了
+        map<int, ptr_proxy<CActorBase> >::iterator tempIt = it;
+        it++;
+
+        CSocketActorBase* pActor = (CSocketActorBase*)(tempIt->second.true_ptr());
+        if (pActor == NULL || pActor->GetGCMark() || pActor->GetSocketFd()<=0) //已经被删除，或者已经被标记为GC
+        {
+            m_mapSocketActorProxy.erase(tempIt);
+            continue;
+        }
+        pActor->CheckTimeOut();
+    }
+}
+void CEPoller::CheckTimeOutAppActor()
+{
+    for(list<ptr_proxy<CActorBase> >::iterator it = m_listAppActorProxy.begin(); it != m_listAppActorProxy.end();)
+    {
+        CAppActorBase* pActor = (CAppActorBase*)(it->true_ptr());
+        if (pActor == NULL || pActor->GetGCMark()) //已经被删除，或者已经被标记为GC
+        {
+            it = m_listAppActorProxy.erase(it);
+            continue;
+        }
+        pActor->CheckTimeOut();
+        ++it;
+    }
 }

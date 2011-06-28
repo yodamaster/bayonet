@@ -24,7 +24,7 @@ int CActionInfo::GetID()
     return m_stActionTypeParam.id;
 }
 
-void CActionInfo::SetDealOver(int err_no,int timecost_ms)
+void CActionInfo::SetDealOver(int err_no,int timecost_ms, bool bProc)
 {
     if (m_bDealOver)
     {
@@ -42,7 +42,7 @@ void CActionInfo::SetDealOver(int err_no,int timecost_ms)
       }*/
     //Del-End
     //现在又可以这样写了，因为做了优化，actioninfo会保留下来，知道最后actor被析构才会释放
-    if (m_pAppActorProxy.true_ptr())
+    if (bProc && m_pAppActorProxy.true_ptr())
     {
         m_pAppActorProxy.true_ptr()->ProcessState();
     }

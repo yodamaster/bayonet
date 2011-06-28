@@ -176,7 +176,7 @@ int CSocketActorListenTcp::OnCloseOver()
 {
     return SOCKET_FSM_FINI;
 }
-bool CSocketActorListenTcp::IsTimeOut(struct timeval& now_time)
+bool CSocketActorListenTcp::IsTimeOut()
 {
     //永不超时
     return false;

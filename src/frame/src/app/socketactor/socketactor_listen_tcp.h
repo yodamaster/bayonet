@@ -49,7 +49,7 @@ public:
 
     virtual int OnCloseOver();
 
-    virtual bool IsTimeOut(struct timeval& now_time);
+    virtual bool IsTimeOut();
 
 protected:
     int m_BackLog;

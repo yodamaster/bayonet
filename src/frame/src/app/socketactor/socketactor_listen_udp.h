@@ -35,7 +35,7 @@ public:
 
     virtual int OnRecvOver();
 
-    virtual bool IsTimeOut(struct timeval& now_time);
+    virtual bool IsTimeOut();
 
 protected:
     CSocketActorPassiveUdp* CreatePassiveActor();

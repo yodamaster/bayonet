@@ -105,20 +105,20 @@ void CSocketActorBase::SetTimeOutMs(int timeout_ms)
     m_TimeoutMs = timeout_ms;
 }
 
-int CSocketActorBase::CheckTimeOut(struct timeval& now_time)
+int CSocketActorBase::CheckTimeOut()
 {
     if (GetGCMark())
     {
         return 0;
     }
     //默认是永不超时的
-    if (IsTimeOut(now_time))
+    if (IsTimeOut())
     {
         ChangeState(SOCKET_FSM_TIMEOUT);
     }
     return 0;
 }
-bool CSocketActorBase::IsTimeOut(struct timeval& now_time)
+bool CSocketActorBase::IsTimeOut()
 {
     if (m_TimeoutMs < 0)
     {
