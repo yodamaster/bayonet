@@ -31,8 +31,14 @@ class CSocketActorPassiveTcp : public CSocketActorPassive
 {
 public:
     virtual ~CSocketActorPassiveTcp ();
+    virtual bool IsTimeOut();
+
     virtual int OnInitOver();
+    virtual int OnWaitRecv();
     virtual int OnRecvOver();
+
+protected:
+    CTimer m_idleTimer; //没有收到任何请求的时间，在每个waitrecv时启动
 };
 class CSocketActorPassiveUdp : public CSocketActorPassive
 {
