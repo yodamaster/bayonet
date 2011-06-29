@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<data>
+
+    <!--与server相关参数-->
+    <server>
+        <!--ip-->
+        <ip>0.0.0.0</ip>
+
+        <!--端口-->
+        <port>20000</port>
+
+        <!--协议.tcp:1,udp:2 -->
+        <protoType>2</protoType>
+
+        <!--是否长连接-->
+        <bKeepcnt>0</bKeepcnt>
+
+        <!--最大完成连接队列长度-->
+        <backlog>10240</backlog>
+
+        <!--
+        超时(毫秒)
+        当是TCP短链接orUDP的时候，代表socketpasstive的存活时间，要注意比appactor的超时时间长，否则会出现请求超时但是无返回的情况
+        当是TCP长链接的时候，代表没有收到请求的持续时间
+        -->
+        <timeOutMs>500</timeOutMs>
+
+        <!--最大能够attached的socket个数，如果达到，会在listen socekt中进行拒绝-->
+        <attachedSocketMaxSize>6000</attachedSocketMaxSize>
+    </server>
+
+    <!--一些公共参数-->
+    <comm>
+        <!--启动的子进程数量-->
+        <workerNum>1</workerNum>
+
+        <!--log和stat等存放的基础目录，这个目录必须已经存在-->
+        <infoDir>./bayonet</infoDir>
+    </comm>
+
+    <!--epoll的相关参数-->
+    <epoll>
+        <!--epoll监听的队列大小-->
+        <epollSize>10240</epollSize>
+
+        <!--epoll wait time(毫秒)-->
+        <epollWaitTimeMs>10</epollWaitTimeMs>
+    </epoll>
+
+    <!--超时检测机制-->
+    <timeout_check>
+        <!--检查sock超时的时间间隔-->
+        <checkIntervalTimeSockMs>500</checkIntervalTimeSockMs>
+
+        <!--检查app超时的时间间隔-->
+        <checkIntervalTimeAppMs>500</checkIntervalTimeAppMs>
+    </timeout_check>
+
+    <!--资源回收机制-->
+    <gc>
+        <!--需要进行回收的阀值-->
+        <gcMaxCount>10240</gcMaxCount>
+    </gc>
+
+    <!--日志-->
+    <log>
+        <!--
+        LM_ALL          = 0,
+        LM_TRACE        = 1,
+        LM_DEBUG        = 2,
+        LM_WARNING      = 3,
+        LM_INFO         = 4,
+        LM_ERROR        = 5,
+        LM_FATAL        = 6,
+        LM_NONE         = 10
+        -->
+        <iLogLevel>5</iLogLevel>
+
+        <!--log文件名-->
+        <logFileName>bayonet</logFileName>
+
+        <!--log文件最大大小-->
+        <iLogMaxSize>10240000</iLogMaxSize>
+    </log>
+
+    <!--统计-->
+    <stat>
+        <!--统计文件名字-->
+        <statFileName>stat_file</statFileName>
+
+        <!--
+        EnumStatLevelNone  = 0,             //所有的统计都关闭
+        EnumStatLevelBrief = 1,             //统计所有的SELF和VALID
+        EnumStatLevelFull  = 2,             //所有统计
+        -->
+        <statLevel>1</statLevel>
+    </stat>
+
+</data>
