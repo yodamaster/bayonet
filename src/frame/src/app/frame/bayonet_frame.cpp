@@ -10,6 +10,24 @@
 #include "bayonet_frame.h"
 #include "socketactor_listen_tcp.h"
 #include "socketactor_listen_udp.h"
+#include "tinyxml.h"
+
+#define CONFVALUE2PARAM_STR(item_node, config_node, key_name)\
+        item_node = config_node->FirstChildElement(#key_name); \
+        if (item_node && item_node->GetText()) \
+        {\
+            fprintf(stdout,"init from config.[%s]:[%s]\n", #key_name, item_node->GetText());\
+            param.key_name = item_node->GetText();\
+        }
+
+#define CONFVALUE2PARAM_INT(item_node, config_node, key_name)\
+        item_node = config_node->FirstChildElement(#key_name); \
+        if (item_node && item_node->GetText()) \
+        {\
+            fprintf(stdout,"init from config.[%s]:[%s]\n", #key_name, item_node->GetText());\
+            param.key_name = atoi(item_node->GetText());\
+        }
+
 CBayonetFrame::CBayonetFrame()
 {
     m_pSocketActorListen = NULL;
@@ -18,7 +36,7 @@ CBayonetFrame::CBayonetFrame()
 }
 CBayonetFrame::~CBayonetFrame(){}
 
-int CBayonetFrame::Init(StFrameParam param)
+int CBayonetFrame::Init(const StFrameParam& param)
 {
     m_StFrameParam = param;
 
@@ -40,7 +58,7 @@ int CBayonetFrame::Init(StFrameParam param)
         return -1;
     }
 
-    log_init(m_StFrameParam.iLogLevel,logDir.c_str(),m_StFrameParam.logFileName.c_str(),m_StFrameParam.iLogMaxSize);
+    log_init((LogLevel)m_StFrameParam.iLogLevel,logDir.c_str(),m_StFrameParam.logFileName.c_str(),m_StFrameParam.iLogMaxSize);
 
     ret = CFrameBase::Init((statDir+param.statFileName).c_str(), param.statLevel);
     if (ret != 0)
@@ -51,6 +69,20 @@ int CBayonetFrame::Init(StFrameParam param)
 
     m_epoller.SetFrame(this);
     return 0;
+}
+int CBayonetFrame::Init(const char* conf_path, IAction* pAction)
+{
+    int ret;
+    StFrameParam param;
+    ret = ParseConf(conf_path, param);
+    if (ret)
+    {
+        fprintf(stderr,"ParseConf fail.ret:%d\n",ret);
+        return -1;
+    }
+    param.pAction = pAction;
+
+    return Init(param);
 }
 
 CEPoller* CBayonetFrame::GetEpoller()
@@ -128,6 +160,83 @@ int CBayonetFrame::Process()
 
     return 0;
 }
+
+
+int CBayonetFrame::ParseConf(const char* conf_path, StFrameParam& param)
+{
+    if (conf_path == NULL)
+    {
+        fprintf(stderr, "ParseConf fail.conf_path is NULL\n");
+        return -1;
+    }
+
+    TiXmlDocument* doc = new TiXmlDocument(conf_path);
+    //将会在函数结束时，自动释放
+    std::auto_ptr<TiXmlDocument> autoDeldoc(doc);
+    doc->LoadFile();
+
+    TiXmlElement* root_node = doc->RootElement();
+
+    TiXmlElement* config_node = NULL;
+    TiXmlElement* item_node = NULL;
+
+    config_node = root_node->FirstChildElement("server");
+    if (config_node)
+    {
+        CONFVALUE2PARAM_STR(item_node, config_node, ip);
+        CONFVALUE2PARAM_INT(item_node, config_node, port);
+        CONFVALUE2PARAM_INT(item_node, config_node, protoType);
+        CONFVALUE2PARAM_INT(item_node, config_node, bKeepcnt);
+        CONFVALUE2PARAM_INT(item_node, config_node, backlog);
+        CONFVALUE2PARAM_INT(item_node, config_node, timeOutMs);
+        CONFVALUE2PARAM_INT(item_node, config_node, attachedSocketMaxSize);
+    }
+
+    config_node = root_node->FirstChildElement("comm");
+    if (config_node)
+    {
+        CONFVALUE2PARAM_INT(item_node, config_node, workerNum);
+        CONFVALUE2PARAM_STR(item_node, config_node, infoDir);
+    }
+
+    config_node = root_node->FirstChildElement("epoll");
+    if (config_node)
+    {
+        CONFVALUE2PARAM_INT(item_node, config_node, epollSize);
+        CONFVALUE2PARAM_INT(item_node, config_node, epollWaitTimeMs);
+    }
+
+    config_node = root_node->FirstChildElement("timeout_check");
+    if (config_node)
+    {
+        CONFVALUE2PARAM_INT(item_node, config_node, checkIntervalTimeSockMs);
+        CONFVALUE2PARAM_INT(item_node, config_node, checkIntervalTimeAppMs);
+    }
+
+    config_node = root_node->FirstChildElement("gc");
+    if (config_node)
+    {
+        CONFVALUE2PARAM_INT(item_node, config_node, gcMaxCount);
+    }
+
+    config_node = root_node->FirstChildElement("log");
+    if (config_node)
+    {
+        CONFVALUE2PARAM_INT(item_node, config_node, iLogLevel);
+        CONFVALUE2PARAM_STR(item_node, config_node, logFileName);
+        CONFVALUE2PARAM_INT(item_node, config_node, iLogMaxSize);
+    }
+
+    config_node = root_node->FirstChildElement("stat");
+    if (config_node)
+    {
+        CONFVALUE2PARAM_STR(item_node, config_node, statFileName);
+        CONFVALUE2PARAM_INT(item_node, config_node, statLevel);
+    }
+
+    return 0;
+}
+
 void CBayonetFrame::RegDefaultAppFsms()
 {
     RegFsm(APP_FSM_RSP,new CAppFsmRsp());
@@ -156,8 +265,8 @@ int CBayonetFrame::ChildWork()
     //epoll的fd和select一样，不能被fork
     ret = m_epoller.Init(m_StFrameParam.epollSize,
                          m_StFrameParam.epollWaitTimeMs,
-                         m_StFrameParam.epollCheckTimeSockMs,
-                         m_StFrameParam.epollCheckTimeAppMs,
+                         m_StFrameParam.checkIntervalTimeSockMs,
+                         m_StFrameParam.checkIntervalTimeAppMs,
                          m_StFrameParam.gcMaxCount);
     if (ret != 0)
     {
