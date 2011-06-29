@@ -232,13 +232,15 @@ int main(int argc, const char *argv[])
     param.gcMaxCount = 10000;
     param.timeOutMs= 4000;
     param.epollWaitTimeMs= 10;
-    param.epollCheckTimeSockMs= 500;
-    param.epollCheckTimeAppMs= 200;
+    param.checkIntervalTimeSockMs= 500;
+    param.checkIntervalTimeAppMs= 200;
     param.attachedSocketMaxSize = 8000;
     param.workerNum= 1;
     //param.iLogLevel = LM_TRACE;
+    //param.statLevel= EnumStatLevelBrief;
 
-    int ret = srv.Init(param);
+    //int ret = srv.Init(param);
+    int ret = srv.Init("./bayonet.xml", new CActionFirst());
     if (ret != 0)
     {
         return -1;
