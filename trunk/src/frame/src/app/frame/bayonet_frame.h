@@ -38,23 +38,24 @@ typedef struct _StFrameParam
                                 // 当是TCP短链接orUDP的时候，代表socketpasstive的存活时间，要注意比appactor的超时时间长，否则会出现请求超时但是无返回的情况
                                 // 当是TCP长链接的时候，代表没有收到请求的持续时间
                                 // -1代表永不超时
+    int attachedSocketMaxSize;  // 最大能够attached的socket个数，如果达到，会在listen socekt中进行拒绝
+
 
     IAction* pAction;           // 最开始的Action
 
     int workerNum;              // 启动的子进程数目
 
+    string infoDir;             // 信息存放目录,包括 stat, log
+
     int epollSize;              // epoll监听的队列大小
     int epollWaitTimeMs;        // epoll wait time(毫秒)
-    int epollCheckTimeSockMs;   // epoll 检查sock超时的时间
-    int epollCheckTimeAppMs;    // epoll 检查app超时的时间
 
-    int attachedSocketMaxSize;  // 最大能够attached的socket个数，如果达到，会在listen socekt中进行拒绝
+    int checkIntervalTimeSockMs;// 检查sock超时的时间间隔
+    int checkIntervalTimeAppMs; // 检查app超时的时间间隔
 
     int gcMaxCount;             // actorGC回收的最大值
 
-    string infoDir;             // 信息存放目录,包括 stat, log
-
-    LogLevel iLogLevel;         // log等级(LM_ALL,LM_TRACE,LM_DEBUG,LM_WARNING,LM_ERROR,LM_FATAL,LM_NONE)
+    int iLogLevel;              // log等级(LM_ALL,LM_TRACE,LM_DEBUG,LM_WARNING,LM_ERROR,LM_FATAL,LM_NONE)
     string logFileName;         // log文件名
     int iLogMaxSize;            // log文件最大大小
 
@@ -76,8 +77,8 @@ typedef struct _StFrameParam
 
         epollSize = EPOLL_FD_MAXSIZE;
         epollWaitTimeMs = EPOLL_WAIT_TIMEMS;
-        epollCheckTimeSockMs = CHECK_INTERVAL_SOCK_MS;
-        epollCheckTimeAppMs = CHECK_INTERVAL_APP_MS;
+        checkIntervalTimeSockMs = CHECK_INTERVAL_SOCK_MS;
+        checkIntervalTimeAppMs = CHECK_INTERVAL_APP_MS;
 
         attachedSocketMaxSize = ATTACHED_SOCKET_MAXSIZE;
 
@@ -100,7 +101,9 @@ public:
     CBayonetFrame();
     virtual ~CBayonetFrame();
 
-    int Init(StFrameParam param);
+    int Init(const StFrameParam& param);
+
+    int Init(const char* conf_path, IAction* pAction);
 
     CEPoller* GetEpoller();
 
@@ -108,6 +111,8 @@ public:
     int Process();
 
 protected:
+    int ParseConf(const char* conf_path, StFrameParam& param);
+
     void RegDefaultAppFsms();
 
     void RegDefaultSocketFsms();
