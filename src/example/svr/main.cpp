@@ -100,7 +100,8 @@ int main(int argc, const char *argv[])
     param.gcMaxCount=10000;
     param.workerNum=1;
 
-    int ret = srv.Init(param);
+    //int ret = srv.Init(param);
+    int ret = srv.Init("./bayonet.xml", new CActionFirst());
     if (ret != 0)
     {
         return -1;
