@@ -36,7 +36,7 @@ public:
             int &len)
     {
         CMyActor* app_actor = (CMyActor*)pAppActor;
-        strSendBuf = app_actor->m_str+"_x_";
+        strSendBuf = app_actor->m_str+"|msg append by CActionFirst";
         len = strSendBuf.size();
         return 0;
     }
@@ -81,7 +81,7 @@ public:
             int &len)
     {
         CMyActor* app_actor = (CMyActor*)pAppActor;
-        strSendBuf=app_actor->m_str+string("_gaoshenma");
+        strSendBuf=app_actor->m_str+string("|msg append by CActionGetData");
         len = strSendBuf.size();
         return 0;
     }
@@ -102,7 +102,8 @@ public:
             int len)
     {
         CMyActor* app_actor = (CMyActor*)pAppActor;
-        app_actor->m_str+=string(buf);
+        app_actor->m_str.append("|");
+        app_actor->m_str.append(buf);
         return 0;
     }
 };
@@ -232,7 +233,7 @@ int main(int argc, const char *argv[])
     param.timeOutMs= 4000;
     param.epollWaitTimeMs= 10;
     param.epollCheckTimeSockMs= 500;
-    param.epollCheckTimeAppMs= 1000;
+    param.epollCheckTimeAppMs= 200;
     param.attachedSocketMaxSize = 8000;
     param.workerNum= 1;
     //param.iLogLevel = LM_TRACE;
