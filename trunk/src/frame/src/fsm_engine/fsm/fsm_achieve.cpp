@@ -59,11 +59,15 @@ CFrameBase::CFrameBase () {
 }
 CFrameBase::~CFrameBase () {}
 
-int CFrameBase::Init(const char* statPath, int statLevel)
+int CFrameBase::Init(const char* statPath, int statLevel, int timeAccuracy)
 {
+    int ret;
+
     m_statLevel = statLevel;
 
-    int ret = m_mapStat.Init(statPath);
+    CRecordTime::Ins()->set_accuracy(timeAccuracy);
+
+    ret = m_mapStat.Init(statPath);
     if (ret != 0)
     {
         return -1;

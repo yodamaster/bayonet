@@ -47,6 +47,10 @@ typedef struct _StFrameParam
 
     string infoDir;             // 信息存放目录,包括 stat, log
 
+    int timeAccuracy;           // 时间精度，0：低，1：高。
+                                // 低精度采用record_time一次时间，之后都用记录的这个时间
+                                // 高精度采用每个都真实取时间
+
     int epollSize;              // epoll监听的队列大小
     int epollWaitTimeMs;        // epoll wait time(毫秒)
 
@@ -70,21 +74,23 @@ typedef struct _StFrameParam
         backlog = TCP_BACKLOG_SIZE;
         bKeepcnt = false;
         timeOutMs = -1;         // 默认就是收到链接之后就不超时
+        attachedSocketMaxSize = ATTACHED_SOCKET_MAXSIZE;
 
         pAction = NULL;
 
         workerNum = 1;
 
+        infoDir = BAYONET_INFO_DIR;
+
+        timeAccuracy = 0; // 默认低精度
+
         epollSize = EPOLL_FD_MAXSIZE;
         epollWaitTimeMs = EPOLL_WAIT_TIMEMS;
+
         checkIntervalTimeSockMs = CHECK_INTERVAL_SOCK_MS;
         checkIntervalTimeAppMs = CHECK_INTERVAL_APP_MS;
 
-        attachedSocketMaxSize = ATTACHED_SOCKET_MAXSIZE;
-
         gcMaxCount = GC_MAX_COUNT;
-
-        infoDir = BAYONET_INFO_DIR;
 
         iLogLevel = LM_ERROR;
         logFileName = BAYONET_LOGFILE_NAME;

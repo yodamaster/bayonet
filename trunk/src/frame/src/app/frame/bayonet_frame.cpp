@@ -60,7 +60,7 @@ int CBayonetFrame::Init(const StFrameParam& param)
 
     log_init((LogLevel)m_StFrameParam.iLogLevel,logDir.c_str(),m_StFrameParam.logFileName.c_str(),m_StFrameParam.iLogMaxSize);
 
-    ret = CFrameBase::Init((statDir+param.statFileName).c_str(), param.statLevel);
+    ret = CFrameBase::Init((statDir+param.statFileName).c_str(), param.statLevel, param.timeAccuracy);
     if (ret != 0)
     {
         error_log("CFrameBase init fail,ret:%d",ret);
@@ -197,6 +197,7 @@ int CBayonetFrame::ParseConf(const char* conf_path, StFrameParam& param)
     {
         CONFVALUE2PARAM_INT(item_node, config_node, workerNum);
         CONFVALUE2PARAM_STR(item_node, config_node, infoDir);
+        CONFVALUE2PARAM_INT(item_node, config_node, timeAccuracy);
     }
 
     config_node = root_node->FirstChildElement("epoll");
