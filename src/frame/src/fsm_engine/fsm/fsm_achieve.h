@@ -68,10 +68,11 @@ public:
      *
      * @param   statPath            文件路径
      * @param   statLevel           统计等级
+     * @param   timeAccuracy        时间精度
      *
      * @return  0                   succ
      */
-    int Init(const char* statPath, int statLevel);
+    int Init(const char* statPath, int statLevel, int timeAccuracy);
 
     int AddActor(IActor* pActor);
 

@@ -37,6 +37,13 @@
 
         <!--log和stat等存放的基础目录，这个目录必须已经存在-->
         <infoDir>./</infoDir>
+
+        <!--
+        时间精度，0：低，1：高。
+        低精度采用record_time一次时间，之后都用记录的这个时间
+        高精度采用每个都真实取时间
+        -->
+        <timeAccuracy>0</timeAccuracy>
     </comm>
 
     <!--epoll的相关参数-->
