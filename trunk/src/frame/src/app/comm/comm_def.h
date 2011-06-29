@@ -9,29 +9,6 @@
 =============================================================================*/
 #ifndef _COMM_DEF_H_
 #define _COMM_DEF_H_
-#include <error.h>
-#include <errno.h>
-#include <sys/time.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
-#include <poll.h>
-#include <sys/epoll.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <fcntl.h>
-#include <strings.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
-#include <iostream>
-#include <memory>
-#include <string>
-#include <vector>
-#include <set>
-#include <map>
-using namespace std;
 
 //socket相关
 //recv一次的buf大小
