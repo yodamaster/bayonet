@@ -94,7 +94,7 @@
         EnumStatLevelBrief = 1,             //统计所有的SELF和VALID
         EnumStatLevelFull  = 2,             //所有统计
         -->
-        <statLevel>2</statLevel>
+        <statLevel>1</statLevel>
     </stat>
 
 </data>
