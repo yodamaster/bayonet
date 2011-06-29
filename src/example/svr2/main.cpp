@@ -229,7 +229,7 @@ int main(int argc, const char *argv[])
     //param.protoType = PROTO_TYPE_UDP;
     param.protoType = PROTO_TYPE_TCP;
     param.pAction = new CActionFirst();
-    param.gcMaxCount = 100000;
+    param.gcMaxCount = 10000;
     param.timeOutMs= 4000;
     param.epollWaitTimeMs= 10;
     param.epollCheckTimeSockMs= 500;
