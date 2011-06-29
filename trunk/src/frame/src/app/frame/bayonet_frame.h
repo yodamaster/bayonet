@@ -60,7 +60,7 @@ typedef struct _StFrameParam
     int iLogMaxSize;            // log文件最大大小
 
     string statFileName;        // 统计文件名字
-    int statLevel;              // 统计级别
+    int statLevel;              // 统计级别(EnumStatLevelNone,EnumStatLevelBrief,EnumStatLevelFull)
 
     _StFrameParam()
     {
