@@ -55,11 +55,14 @@ static int MapTime2StatIndex(int msec,int baseLine)
 CFrameBase::CFrameBase () {
     m_needGCCount = 0;
     m_allActorCount = 0;
+    m_statLevel = EnumStatLevelFull;
 }
 CFrameBase::~CFrameBase () {}
 
-int CFrameBase::Init(const char* statPath)
+int CFrameBase::Init(const char* statPath, int statLevel)
 {
+    m_statLevel = statLevel;
+
     int ret = m_mapStat.Init(statPath);
     if (ret != 0)
     {
@@ -183,6 +186,23 @@ int CFrameBase::StatAddCount(const char* key1, const char* key2, int index)
     {
         return 0;
     }*/
+    switch (m_statLevel)
+    {
+        case EnumStatLevelNone:
+            return 0;
+            break;
+        case EnumStatLevelBrief:
+            if (strcmp(key2,"SELF") && strcmp(key2,"VALID"))
+            {
+                return 0;
+            }
+            break;
+        case EnumStatLevelFull:
+            break;
+        
+        default:
+            break;
+    }
 
     static char szTmp[256];
     snprintf(szTmp, sizeof(szTmp), "%s*%s", key1, key2);
@@ -195,6 +215,23 @@ int CFrameBase::StatDecCount(const char* key1, const char* key2, int index)
     {
         return 0;
     }*/
+    switch (m_statLevel)
+    {
+        case EnumStatLevelNone:
+            return 0;
+            break;
+        case EnumStatLevelBrief:
+            if (strcmp(key2,"SELF") && strcmp(key2,"VALID"))
+            {
+                return 0;
+            }
+            break;
+        case EnumStatLevelFull:
+            break;
+        
+        default:
+            break;
+    }
 
     static char szTmp[256];
     snprintf(szTmp, sizeof(szTmp), "%s*%s", key1, key2);

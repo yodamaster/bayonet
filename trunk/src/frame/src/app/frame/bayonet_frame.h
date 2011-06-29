@@ -27,7 +27,6 @@ using namespace std;
 
 typedef struct _StFrameParam
 {
-    int workerNum;              // 启动的子进程数目
 
     string ip;                  // ip
     int port;                   // 端口
@@ -41,6 +40,7 @@ typedef struct _StFrameParam
 
     IAction* pAction;           // 最开始的Action
 
+    int workerNum;              // 启动的子进程数目
 
     int epollSize;              // epoll监听的队列大小
     int epollWaitTimeMs;        // epoll wait time(毫秒)
@@ -58,10 +58,10 @@ typedef struct _StFrameParam
     int iLogMaxSize;            // log文件最大大小
 
     string statFileName;        // 统计文件名字
+    int statLevel;              // 统计级别
 
     _StFrameParam()
     {
-        workerNum = 1;
 
         port = 0;
         protoType = PROTO_TYPE_TCP;
@@ -70,6 +70,8 @@ typedef struct _StFrameParam
         timeOutMs = -1;         // 默认就是收到链接之后就不超时
 
         pAction = NULL;
+
+        workerNum = 1;
 
         epollSize = EPOLL_FD_MAXSIZE;
         epollWaitTimeMs = EPOLL_WAIT_TIMEMS;
@@ -87,6 +89,7 @@ typedef struct _StFrameParam
         iLogMaxSize = LOG_DEFAULT_SIZE;
 
         statFileName = BAYONET_STATFILE_NAME;
+        statLevel = EnumStatLevelFull;
     }
 } StFrameParam;
 
