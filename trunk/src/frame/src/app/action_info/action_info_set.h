@@ -7,8 +7,9 @@
 #  LastChange:      2011-01-28 16:02:28
 #  History:         
 =============================================================================*/
-#ifndef _ACTION_INFO_SET_H_
-#define _ACTION_INFO_SET_H_
+#ifndef __ACTION_INFO_SET_H_20110630001532__
+#define __ACTION_INFO_SET_H_20110630001532__
+
 #include <iostream>
 #include <string>
 #include <vector>

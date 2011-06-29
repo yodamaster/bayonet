@@ -7,8 +7,9 @@
 #  LastChange:      2010-10-08 15:42:38
 #  History:
 =============================================================================*/
-#ifndef _STAT_DEF_H_
-#define _STAT_DEF_H_
+#ifndef __STAT_DEF_H_20110630001853__
+#define __STAT_DEF_H_20110630001853__
+
 typedef enum
 {
     STAT_TOTAL = 0,

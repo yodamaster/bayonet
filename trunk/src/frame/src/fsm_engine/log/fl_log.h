@@ -1,5 +1,21 @@
-#ifndef _FL_LOG_H_
-#define _FL_LOG_H_
+/*=============================================================================
+#
+#     FileName: fl_log.h
+#         Desc: ¥Ú”°log
+#
+#       Author: dantezhu
+#        Email: zny2008@gmail.com
+#     HomePage: http://www.vimer.cn
+#
+#      Created: 2011-06-30 00:19:34
+#      Version: 0.0.1
+#      History:
+#               0.0.1 | dantezhu | 2011-06-30 00:19:34 | initialization
+#
+=============================================================================*/
+
+#ifndef __FL_LOG_H_20110630001931__
+#define __FL_LOG_H_20110630001931__
 
 #include <string.h>
 #include <stdio.h>

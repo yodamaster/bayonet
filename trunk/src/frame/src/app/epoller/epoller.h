@@ -1,5 +1,21 @@
-#ifndef _EPOLLER_H_
-#define _EPOLLER_H_
+/*=============================================================================
+#
+#     FileName: epoller.h
+#         Desc: epoller监听，并触发时间
+#
+#       Author: dantezhu
+#        Email: zny2008@gmail.com
+#     HomePage: http://www.vimer.cn
+#
+#      Created: 2011-06-30 00:16:32
+#      Version: 0.0.1
+#      History:
+#               0.0.1 | dantezhu | 2011-06-30 00:16:32 | initialization
+#
+=============================================================================*/
+#ifndef __EPOLLER_H_20110630001647__
+#define __EPOLLER_H_20110630001647__
+
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>

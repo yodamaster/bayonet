@@ -7,8 +7,9 @@
 #  LastChange:      2011-01-27 23:51:50
 #  History:         
 =============================================================================*/
-#ifndef _SOCKETACTOR_LISTEN_TCP_H_
-#define _SOCKETACTOR_LISTEN_TCP_H_
+#ifndef __SOCKETACTOR_LISTEN_TCP_H_20110630001737__
+#define __SOCKETACTOR_LISTEN_TCP_H_20110630001737__
+
 #include "comm_def.h"
 #include "fsm_achieve.h"
 #include "socketactor_data.h"

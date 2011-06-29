@@ -7,8 +7,9 @@
 #  LastChange:      2011-01-27 23:24:32
 #  History:         
 =============================================================================*/
-#ifndef _SOCKETACTOR_DATA_H_
-#define _SOCKETACTOR_DATA_H_
+#ifndef __SOCKETACTOR_DATA_H_20110630001730__
+#define __SOCKETACTOR_DATA_H_20110630001730__
+
 #include "comm_def.h"
 #include "fsm_achieve.h"
 #include "epoller.h"

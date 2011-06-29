@@ -7,8 +7,9 @@
 #  LastChange:      2011-01-27 11:49:52
 #  History:         
 =============================================================================*/
-#ifndef _NET_HANDLER_H_
-#define _NET_HANDLER_H_
+#ifndef __NET_HANDLER_H_20110630001705__
+#define __NET_HANDLER_H_20110630001705__
+
 #include <iostream>
 #include <memory>
 #include <string>
