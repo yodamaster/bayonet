@@ -118,6 +118,9 @@ int CEPoller::LoopForEvent()
             CheckTimeOutSocketActor();
             prev_tm_sock = next_tm;
         }
+
+        use_time_usec = (next_tm.tv_sec - prev_tm_app.tv_sec)*1000000 +
+            (next_tm.tv_usec - prev_tm_app.tv_usec);
         if ( use_time_usec > (m_checkTimeAppMs*1000))
         {
             CheckTimeOutAppActor();
