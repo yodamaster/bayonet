@@ -7,8 +7,9 @@
 #  LastChange:      2011-01-28 15:43:20
 #  History:         
 =============================================================================*/
-#ifndef _ACTION_INFO_H_
-#define _ACTION_INFO_H_
+#ifndef __ACTION_INFO_H_20110630001523__
+#define __ACTION_INFO_H_20110630001523__
+
 #include "comm_def.h"
 #include "fl_log.h"
 #include "fsm_achieve.h"

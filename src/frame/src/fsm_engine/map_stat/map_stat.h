@@ -13,8 +13,9 @@
 #               0.0.1 | dantezhu | 2011-06-22 21:51:01 | initialization
 #
 =============================================================================*/
-#ifndef __MAP_STAT_H__
-#define __MAP_STAT_H__
+#ifndef __MAP_STAT_H_20110630001944__
+#define __MAP_STAT_H_20110630001944__
+
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>

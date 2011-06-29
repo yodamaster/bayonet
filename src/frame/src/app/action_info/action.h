@@ -13,8 +13,9 @@
 #               0.0.1 | dantezhu | 2011-06-15 02:02:39 | initialization
 #
 =============================================================================*/
-#ifndef __ACTION_H__
-#define __ACTION_H__
+#ifndef __ACTION_H_20110630001511__
+#define __ACTION_H_20110630001511__
+
 #include "socketactor_data.h"
 #include "appactor_base.h"
 

@@ -7,8 +7,9 @@
 #  LastChange:      2011-01-26 17:12:23
 #  History:         
 =============================================================================*/
-#ifndef _BAYONET_FRAME_H_
-#define _BAYONET_FRAME_H_
+#ifndef __BAYONET_FRAME_H_20110630001658__
+#define __BAYONET_FRAME_H_20110630001658__
+
 #include <iostream>
 #include <memory>
 #include <string>

@@ -7,8 +7,8 @@
 #  LastChange:      2011-01-24 23:19:55
 #  History:         
 =============================================================================*/
-#ifndef _COMM_DEF_H_
-#define _COMM_DEF_H_
+#ifndef __COMM_DEF_H_20110630001619__
+#define __COMM_DEF_H_20110630001619__
 
 //socket相关
 //recv一次的buf大小

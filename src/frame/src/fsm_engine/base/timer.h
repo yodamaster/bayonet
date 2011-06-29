@@ -7,8 +7,9 @@
 #  LastChange:      2011-01-30 13:41:16
 #  History:         
 =============================================================================*/
-#ifndef _TIMER_H_
-#define _TIMER_H_
+#ifndef __TIMER_H_20110630001901__
+#define __TIMER_H_20110630001901__
+
 #include "record_time.h"
 #include <sys/time.h>
 class CTimer

@@ -7,8 +7,9 @@
 #  LastChange:      2011-01-28 00:46:16
 #  History:         
 =============================================================================*/
-#ifndef _SOCKETACTOR_LISTEN_UDP_H_
-#define _SOCKETACTOR_LISTEN_UDP_H_
+#ifndef __SOCKETACTOR_LISTEN_UDP_H_20110630001746__
+#define __SOCKETACTOR_LISTEN_UDP_H_20110630001746__
+
 #include "socketactor_data.h"
 #include "socketactor_passive.h"
 class CSocketActorListenUdp : public CSocketActorData

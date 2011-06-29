@@ -4,11 +4,12 @@
 #  FileName:        fsm_interface.h
 #  Description:     公共接口
 #  Version:         1.0
-#  LastChange:      2011-01-24 19:36:15
+#  LastChange:      2011-06-30 00:19:23
 #  History:         
 =============================================================================*/
-#ifndef _INTERFACES_H_
-#define _INTERFACES_H_
+#ifndef __FSM_INTERFACE_H_20110630001921__
+#define __FSM_INTERFACE_H_20110630001921__
+
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>

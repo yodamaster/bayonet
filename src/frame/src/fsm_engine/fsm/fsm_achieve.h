@@ -1,14 +1,15 @@
 /*=============================================================================
 #  Author:          dantezhu - http://www.vimer.cn
 #  Email:           zny2008@gmail.com
-#  FileName:        fsm.h
+#  FileName:        fsm_achieve.h
 #  Description:     
 #  Version:         1.0
-#  LastChange:      2011-01-19 12:13:02
+#  LastChange:      2011-06-30 00:19:14
 #  History:         
 =============================================================================*/
-#ifndef _FSM_H_
-#define _FSM_H_
+#ifndef __FSM_ACHIEVE_H_20110630001913__
+#define __FSM_ACHIEVE_H_20110630001913__
+
 #include <iostream>
 #include <memory>
 #include <string>
