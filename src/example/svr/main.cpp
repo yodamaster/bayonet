@@ -20,7 +20,7 @@ public:
             int &len)
     {
         trace_log("send");
-        strSendBuf="woainizhende111111";
+        strSendBuf="msg from svr";
         len = strSendBuf.size();
         return 0;
     }
