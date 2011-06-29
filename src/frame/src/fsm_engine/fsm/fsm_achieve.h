@@ -25,6 +25,7 @@
 #include "timer.h"
 #include "ptr_proxy.h"
 #include "map_stat.h"
+#include "fsm_base_def.h"
 using namespace std;
 
 /**
@@ -65,10 +66,11 @@ public:
      * @brief   初始化
      *
      * @param   statPath            文件路径
+     * @param   statLevel           统计等级
      *
      * @return  0                   succ
      */
-    int Init(const char* statPath);
+    int Init(const char* statPath, int statLevel);
 
     int AddActor(IActor* pActor);
 
@@ -114,6 +116,7 @@ protected:
 
     //统计
     CMapStat m_mapStat;
+    int m_statLevel;
 };
 
 class CActorBase : public IActor, public IPtrProxy<CActorBase>

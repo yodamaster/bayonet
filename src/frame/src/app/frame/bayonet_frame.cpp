@@ -42,7 +42,7 @@ int CBayonetFrame::Init(StFrameParam param)
 
     log_init(m_StFrameParam.iLogLevel,logDir.c_str(),m_StFrameParam.logFileName.c_str(),m_StFrameParam.iLogMaxSize);
 
-    ret = CFrameBase::Init((statDir+param.statFileName).c_str());
+    ret = CFrameBase::Init((statDir+param.statFileName).c_str(), param.statLevel);
     if (ret != 0)
     {
         error_log("CFrameBase init fail,ret:%d",ret);
