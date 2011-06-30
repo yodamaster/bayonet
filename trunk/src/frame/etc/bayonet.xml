@@ -10,8 +10,8 @@
         <!--端口-->
         <port>10001</port>
 
-        <!--协议.tcp:1,udp:2 -->
-        <protoType>1</protoType>
+        <!--协议.tcp:0,udp:1 -->
+        <protoType>0</protoType>
 
         <!--是否长连接-->
         <bKeepcnt>1</bKeepcnt>

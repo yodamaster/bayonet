@@ -52,13 +52,13 @@
 //Frame的AddActor方法的actorType的值
 enum PROTOTYPE
 {
-    PROTO_TYPE_TCP=1,
+    PROTO_TYPE_TCP=0,
     PROTO_TYPE_UDP,
 };
 
 enum ACTIONTYPE
 {
-    ACTIONTYPE_SENDRECV=1,         // 一发一收
+    ACTIONTYPE_SENDRECV=0,         // 一发一收
     ACTIONTYPE_SENDONLY,           // 只发不收
 };
 
