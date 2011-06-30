@@ -63,6 +63,8 @@ void CEPoller::DetachSocket(CSocketActorBase* pSocketActor)
     if ( fd > 0 )
     {
         DelEpollIO(fd);
+        //这里加上性能会稍微好一点，处理量的波动也会小一些
+        m_mapSocketActorProxy.erase(fd);
     }
 }
 
