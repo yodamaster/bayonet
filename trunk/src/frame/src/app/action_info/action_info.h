@@ -7,8 +7,8 @@
 #  LastChange:      2011-01-28 15:43:20
 #  History:         
 =============================================================================*/
-#ifndef __ACTION_INFO_H_20110630001523__
-#define __ACTION_INFO_H_20110630001523__
+#ifndef _ACTION_INFO_H_20110630001523_
+#define _ACTION_INFO_H_20110630001523_
 
 #include "comm_def.h"
 #include "fl_log.h"

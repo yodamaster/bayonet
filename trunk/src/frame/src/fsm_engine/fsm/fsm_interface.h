@@ -7,8 +7,8 @@
 #  LastChange:      2011-06-30 00:19:23
 #  History:         
 =============================================================================*/
-#ifndef __FSM_INTERFACE_H_20110630001921__
-#define __FSM_INTERFACE_H_20110630001921__
+#ifndef _FSM_INTERFACE_H_20110630001921_
+#define _FSM_INTERFACE_H_20110630001921_
 
 #include <stdio.h>
 #include <string.h>

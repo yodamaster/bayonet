@@ -13,8 +13,8 @@
 #               0.0.1 | dantezhu | 2011-06-09 12:00:16 | initialization
 #
 =============================================================================*/
-#ifndef __DIR_FUNC_H_20110630001626__
-#define __DIR_FUNC_H_20110630001626__
+#ifndef _DIR_FUNC_H_20110630001626_
+#define _DIR_FUNC_H_20110630001626_
 
 #include <dirent.h>
 #include <iostream>

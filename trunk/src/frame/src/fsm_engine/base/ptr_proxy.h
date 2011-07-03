@@ -13,8 +13,8 @@
 #               0.0.1 | dantezhu | 2011-06-13 15:24:12 | initialization
 #
 =============================================================================*/
-#ifndef __PTR_PROXY_H_20110630001834__
-#define __PTR_PROXY_H_20110630001834__
+#ifndef _PTR_PROXY_H_20110630001834_
+#define _PTR_PROXY_H_20110630001834_
 
 #include <stdio.h>
 #include <string.h>

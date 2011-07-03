@@ -7,8 +7,8 @@
 #  LastChange:      2011-01-28 17:00:16
 #  History:         
 =============================================================================*/
-#ifndef __SOCKETACTOR_PASSIVE_H_20110630001756__
-#define __SOCKETACTOR_PASSIVE_H_20110630001756__
+#ifndef _SOCKETACTOR_PASSIVE_H_20110630001756_
+#define _SOCKETACTOR_PASSIVE_H_20110630001756_
 
 #include "socketactor_data.h"
 class CSocketActorPassive : public CSocketActorData

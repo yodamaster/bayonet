@@ -7,8 +7,8 @@
 #  LastChange:      2011-01-30 13:41:16
 #  History:         
 =============================================================================*/
-#ifndef __TIMER_H_20110630001901__
-#define __TIMER_H_20110630001901__
+#ifndef _TIMER_H_20110630001901_
+#define _TIMER_H_20110630001901_
 
 #include "record_time.h"
 #include <sys/time.h>

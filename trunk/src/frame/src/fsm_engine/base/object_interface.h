@@ -13,8 +13,8 @@
 #               0.0.1 | dantezhu | 2011-06-08 16:35:01 | initialization
 #
 =============================================================================*/
-#ifndef __OBJECT_INTERFACE_H_20110630001816__
-#define __OBJECT_INTERFACE_H_20110630001816__
+#ifndef _OBJECT_INTERFACE_H_20110630001816_
+#define _OBJECT_INTERFACE_H_20110630001816_
 
 #include <typeinfo>
 #include <iostream>
