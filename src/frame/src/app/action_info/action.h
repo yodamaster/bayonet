@@ -76,7 +76,9 @@ public:
             int len)=0;
 
     /**
-     * @brief   解包接收到的数据。如果是第一个action，pAppActor会为空，要负责创建CAppActorBase对象；如果是其他，则负责给pAppActor中的字段赋值，并切换到下一状态
+     * @brief   解包接收到的数据。
+     *          如果是第一个action，pAppActor会为空，要负责创建CAppActorBase对象；
+     *          如果是其他，则负责给pAppActor中的字段赋值，并切换到下一状态
      *
      * @param   pSocketActor            pSocketActor
      * @param   pAppActor               pAppActor
