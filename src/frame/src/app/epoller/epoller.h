@@ -13,8 +13,8 @@
 #               0.0.1 | dantezhu | 2011-06-30 00:16:32 | initialization
 #
 =============================================================================*/
-#ifndef __EPOLLER_H_20110630001647__
-#define __EPOLLER_H_20110630001647__
+#ifndef _EPOLLER_H_20110630001647_
+#define _EPOLLER_H_20110630001647_
 
 #include <stdio.h>
 #include <string.h>

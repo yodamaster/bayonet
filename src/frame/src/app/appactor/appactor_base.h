@@ -7,8 +7,8 @@
 #  LastChange:      2011-01-25 20:18:55
 #  History:         
 =============================================================================*/
-#ifndef __APPACTOR_BASE_H_20110630001540__
-#define __APPACTOR_BASE_H_20110630001540__
+#ifndef _APPACTOR_BASE_H_20110630001540_
+#define _APPACTOR_BASE_H_20110630001540_
 
 #include <iostream>
 #include <string>

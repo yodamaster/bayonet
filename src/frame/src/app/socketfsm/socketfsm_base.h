@@ -7,8 +7,8 @@
 #  LastChange:      2011-01-24 20:38:47
 #  History:         
 =============================================================================*/
-#ifndef __SOCKETFSM_BASE_H_20110630001803__
-#define __SOCKETFSM_BASE_H_20110630001803__
+#ifndef _SOCKETFSM_BASE_H_20110630001803_
+#define _SOCKETFSM_BASE_H_20110630001803_
 
 #include "comm_def.h"
 #include "fsm_interface.h"

@@ -7,8 +7,8 @@
 #  LastChange:      2011-01-28 11:34:59
 #  History:         
 =============================================================================*/
-#ifndef __SOCKETACTOR_ACTIVE_H_20110630001712__
-#define __SOCKETACTOR_ACTIVE_H_20110630001712__
+#ifndef _SOCKETACTOR_ACTIVE_H_20110630001712_
+#define _SOCKETACTOR_ACTIVE_H_20110630001712_
 
 #include "socketactor_data.h"
 #include "action_info.h"

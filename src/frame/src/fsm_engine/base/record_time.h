@@ -13,8 +13,8 @@
 #               0.0.1 | dantezhu | 2011-06-17 10:35:04 | initialization
 #
 =============================================================================*/
-#ifndef __RECORD_TIME_H_20110630001843__
-#define __RECORD_TIME_H_20110630001843__
+#ifndef _RECORD_TIME_H_20110630001843_
+#define _RECORD_TIME_H_20110630001843_
 
 #include <stdio.h>
 #include <string.h>

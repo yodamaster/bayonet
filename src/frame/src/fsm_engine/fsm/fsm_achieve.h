@@ -7,8 +7,8 @@
 #  LastChange:      2011-06-30 00:19:14
 #  History:         
 =============================================================================*/
-#ifndef __FSM_ACHIEVE_H_20110630001913__
-#define __FSM_ACHIEVE_H_20110630001913__
+#ifndef _FSM_ACHIEVE_H_20110630001913_
+#define _FSM_ACHIEVE_H_20110630001913_
 
 #include <iostream>
 #include <memory>

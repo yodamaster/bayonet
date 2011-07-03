@@ -13,8 +13,8 @@
 #               0.0.1 | dantezhu | 2011-06-29 23:56:52 | initialization
 #
 =============================================================================*/
-#ifndef __FSM_BASE_DEF_H_20110629235706__
-#define __FSM_BASE_DEF_H_20110629235706__
+#ifndef _FSM_BASE_DEF_H_20110629235706_
+#define _FSM_BASE_DEF_H_20110629235706_
 //统计等级，数字越大，性能越差
 //测试过，能让性能降低一半
 enum EnumStatLevel

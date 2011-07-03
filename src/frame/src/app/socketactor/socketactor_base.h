@@ -7,8 +7,8 @@
 #  LastChange:      2011-01-24 20:23:53
 #  History:         
 =============================================================================*/
-#ifndef __SOCKETACTOR_BASE_H_20110630001720__
-#define __SOCKETACTOR_BASE_H_20110630001720__
+#ifndef _SOCKETACTOR_BASE_H_20110630001720_
+#define _SOCKETACTOR_BASE_H_20110630001720_
 
 #include "comm_def.h"
 #include "fsm_achieve.h"

@@ -7,8 +7,8 @@
 #  LastChange:      2011-01-28 00:46:16
 #  History:         
 =============================================================================*/
-#ifndef __SOCKETACTOR_LISTEN_UDP_H_20110630001746__
-#define __SOCKETACTOR_LISTEN_UDP_H_20110630001746__
+#ifndef _SOCKETACTOR_LISTEN_UDP_H_20110630001746_
+#define _SOCKETACTOR_LISTEN_UDP_H_20110630001746_
 
 #include "socketactor_data.h"
 #include "socketactor_passive.h"

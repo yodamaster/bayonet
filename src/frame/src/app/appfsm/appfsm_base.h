@@ -7,8 +7,8 @@
 #  LastChange:      2011-01-24 20:06:27
 #  History:         
 =============================================================================*/
-#ifndef __APPFSM_BASE_H_20110630001608__
-#define __APPFSM_BASE_H_20110630001608__
+#ifndef _APPFSM_BASE_H_20110630001608_
+#define _APPFSM_BASE_H_20110630001608_
 
 #include "appactor_base.h"
 #include "action_info_set.h"
