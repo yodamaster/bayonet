@@ -41,7 +41,7 @@ typedef struct _StFrameParam
     int attached_socket_maxsize;     // 最大能够attached的socket个数，如果达到，会在listen socekt中进行拒绝
 
 
-    IAction* action;                // 最开始的Action
+    IAction* action;                 // 最开始的Action
 
     int worker_num;                  // 启动的子进程数目
 
