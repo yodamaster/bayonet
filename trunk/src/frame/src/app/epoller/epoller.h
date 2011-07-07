@@ -42,7 +42,7 @@ public:
     CEPoller();
     ~CEPoller();
 
-    int Init(int epoll_size,int waittime_ms,int checktime_sock_ms,int checktime_app_ms,int gc_maxcount);
+    int Init(int epoll_size,int waittime_ms,int check_sock_interval_time_ms,int check_app_interval_time_ms,int gc_maxcount);
     int SetFrame(IFrame* pFrame);
     int AddEpollIO(int fd,unsigned flag);
     int ModEpollIO(int fd,unsigned flag);
@@ -66,8 +66,8 @@ protected:
 
     int             m_epollSize;
     int             m_waittimeMs;
-    int             m_checkTimeSockMs;
-    int             m_checkTimeAppMs;
+    int             m_checkSockIntervalTimeMs;
+    int             m_checkAppIntervalTimeMs;
     int             m_gcMaxCount;
 
     int             m_attachedSocketCount; //被放到map中的socket的个数

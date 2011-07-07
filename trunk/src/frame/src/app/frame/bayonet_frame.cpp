@@ -210,8 +210,8 @@ int CBayonetFrame::ParseConf(const char* conf_path, StFrameParam& param)
     config_node = root_node->FirstChildElement("timeout_check");
     if (config_node)
     {
-        CONFVALUE2PARAM_INT(item_node, config_node, checkIntervalTimeSockMs);
-        CONFVALUE2PARAM_INT(item_node, config_node, checkIntervalTimeAppMs);
+        CONFVALUE2PARAM_INT(item_node, config_node, checkSockIntervalTimeMs);
+        CONFVALUE2PARAM_INT(item_node, config_node, checkAppIntervalTimeMs);
     }
 
     config_node = root_node->FirstChildElement("gc");
@@ -266,8 +266,8 @@ int CBayonetFrame::ChildWork()
     //epoll的fd和select一样，不能被fork
     ret = m_epoller.Init(m_StFrameParam.epollSize,
                          m_StFrameParam.epollWaitTimeMs,
-                         m_StFrameParam.checkIntervalTimeSockMs,
-                         m_StFrameParam.checkIntervalTimeAppMs,
+                         m_StFrameParam.checkSockIntervalTimeMs,
+                         m_StFrameParam.checkAppIntervalTimeMs,
                          m_StFrameParam.gcMaxCount);
     if (ret != 0)
     {

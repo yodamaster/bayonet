@@ -7,8 +7,8 @@ CEPoller::CEPoller()
     m_pFrame = NULL;
     m_epollSize = EPOLL_FD_MAXSIZE;
     m_waittimeMs = EPOLL_WAIT_TIMEMS;
-    m_checkTimeSockMs = CHECK_INTERVAL_SOCK_MS;
-    m_checkTimeAppMs = CHECK_INTERVAL_APP_MS;
+    m_checkSockIntervalTimeMs = CHECK_SOCK_INTERVAL_TIMEMS;
+    m_checkAppIntervalTimeMs = CHECK_APP_INTERVAL_TIMEMS;
     m_attachedSocketCount = 0;
     m_gcMaxCount = GC_MAX_COUNT;
 }
@@ -21,12 +21,12 @@ int CEPoller::SetFrame(IFrame* pFrame)
     m_pFrame = pFrame;
     return 0;
 }
-int CEPoller::Init(int epoll_size,int waittime_ms,int checktime_sock_ms,int checktime_app_ms,int gc_maxcount)
+int CEPoller::Init(int epoll_size,int waittime_ms,int check_sock_interval_time_ms,int check_app_interval_time_ms,int gc_maxcount)
 {
     m_epollSize = epoll_size;
     m_waittimeMs = waittime_ms;
-    m_checkTimeSockMs = checktime_sock_ms;
-    m_checkTimeAppMs = checktime_app_ms;
+    m_checkSockIntervalTimeMs = check_sock_interval_time_ms;
+    m_checkAppIntervalTimeMs = check_app_interval_time_ms;
     m_gcMaxCount = gc_maxcount;
 
     m_epollFd = epoll_create(m_epollSize);
@@ -115,7 +115,7 @@ int CEPoller::LoopForEvent()
 
         use_time_usec = (next_tm.tv_sec - prev_tm_sock.tv_sec)*1000000 +
             (next_tm.tv_usec - prev_tm_sock.tv_usec);
-        if ( use_time_usec > (m_checkTimeSockMs*1000))
+        if ( use_time_usec > (m_checkSockIntervalTimeMs*1000))
         {
             CheckTimeOutSocketActor();
             prev_tm_sock = next_tm;
@@ -123,7 +123,7 @@ int CEPoller::LoopForEvent()
 
         use_time_usec = (next_tm.tv_sec - prev_tm_app.tv_sec)*1000000 +
             (next_tm.tv_usec - prev_tm_app.tv_usec);
-        if ( use_time_usec > (m_checkTimeAppMs*1000))
+        if ( use_time_usec > (m_checkAppIntervalTimeMs*1000))
         {
             CheckTimeOutAppActor();
             prev_tm_app = next_tm;

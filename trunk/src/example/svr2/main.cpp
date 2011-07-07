@@ -232,8 +232,8 @@ int main(int argc, const char *argv[])
     param.gcMaxCount = 10000;
     param.timeOutMs= 4000;
     param.epollWaitTimeMs= 10;
-    param.checkIntervalTimeSockMs= 500;
-    param.checkIntervalTimeAppMs= 200;
+    param.checkSockIntervalTimeMs= 500;
+    param.checkAppIntervalTimeMs= 200;
     param.attachedSocketMaxSize = 8000;
     param.workerNum= 1;
     //param.iLogLevel = LM_TRACE;

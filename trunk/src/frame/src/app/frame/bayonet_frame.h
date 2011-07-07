@@ -54,8 +54,8 @@ typedef struct _StFrameParam
     int epollSize;              // epoll监听的队列大小
     int epollWaitTimeMs;        // epoll wait time(毫秒)
 
-    int checkIntervalTimeSockMs;// 检查sock超时的时间间隔
-    int checkIntervalTimeAppMs; // 检查app超时的时间间隔
+    int checkSockIntervalTimeMs;// 检查sock超时的时间间隔
+    int checkAppIntervalTimeMs; // 检查app超时的时间间隔
 
     int gcMaxCount;             // actorGC回收的最大值
 
@@ -87,8 +87,8 @@ typedef struct _StFrameParam
         epollSize = EPOLL_FD_MAXSIZE;
         epollWaitTimeMs = EPOLL_WAIT_TIMEMS;
 
-        checkIntervalTimeSockMs = CHECK_INTERVAL_SOCK_MS;
-        checkIntervalTimeAppMs = CHECK_INTERVAL_APP_MS;
+        checkSockIntervalTimeMs = CHECK_SOCK_INTERVAL_TIMEMS;
+        checkAppIntervalTimeMs = CHECK_APP_INTERVAL_TIMEMS;
 
         gcMaxCount = GC_MAX_COUNT;
 
