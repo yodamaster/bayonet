@@ -221,25 +221,6 @@ int main(int argc, const char *argv[])
     signal( SIGUSR1, sighandler );
 
     CBayonetFrame srv;
-    StFrameParam param;
-    param.infoDir="bayonet";
-    param.ip="0.0.0.0";
-    param.port = 10001;
-    param.bKeepcnt= true;
-    //param.protoType = PROTO_TYPE_UDP;
-    param.protoType = PROTO_TYPE_TCP;
-    param.pAction = new CActionFirst();
-    param.gcMaxCount = 10000;
-    param.timeOutMs= 4000;
-    param.epollWaitTimeMs= 10;
-    param.checkSockIntervalTimeMs= 500;
-    param.checkAppIntervalTimeMs= 200;
-    param.attachedSocketMaxSize = 8000;
-    param.workerNum= 1;
-    //param.iLogLevel = LM_TRACE;
-    //param.statLevel= EnumStatLevelBrief;
-
-    //int ret = srv.Init(param);
     int ret = srv.Init("./bayonet.xml", new CActionFirst());
     if (ret != 0)
     {

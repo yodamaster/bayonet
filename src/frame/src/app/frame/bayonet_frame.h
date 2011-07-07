@@ -31,73 +31,73 @@ typedef struct _StFrameParam
 
     string ip;                  // ip
     int port;                   // 端口
-    int protoType;              // 协议类型
+    int proto_type;              // 协议类型
     int backlog;                // backlog
-    bool bKeepcnt;              // 是否长链接(仅TCP协议有效)
-    int timeOutMs;              // 这里的超时有点意思:
+    bool keep_cnt;              // 是否长链接(仅TCP协议有效)
+    int timeout_ms;              // 这里的超时有点意思:
                                 // 当是TCP短链接orUDP的时候，代表socketpasstive的存活时间，要注意比appactor的超时时间长，否则会出现请求超时但是无返回的情况
                                 // 当是TCP长链接的时候，代表没有收到请求的持续时间
                                 // -1代表永不超时
-    int attachedSocketMaxSize;  // 最大能够attached的socket个数，如果达到，会在listen socekt中进行拒绝
+    int attached_socket_maxsize;  // 最大能够attached的socket个数，如果达到，会在listen socekt中进行拒绝
 
 
     IAction* pAction;           // 最开始的Action
 
-    int workerNum;              // 启动的子进程数目
+    int worker_num;              // 启动的子进程数目
 
-    string infoDir;             // 信息存放目录,包括 stat, log
+    string info_dir;             // 信息存放目录,包括 stat, log
 
-    int timeAccuracy;           // 时间精度，0：低，1：高。
+    int time_accuracy;           // 时间精度，0：低，1：高。
                                 // 低精度采用record_time一次时间，之后都用记录的这个时间
                                 // 高精度采用每个都真实取时间
 
-    int epollSize;              // epoll监听的队列大小
-    int epollWaitTimeMs;        // epoll wait time(毫秒)
+    int epoll_size;              // epoll监听的队列大小
+    int epoll_wait_time_ms;        // epoll wait time(毫秒)
 
-    int checkSockIntervalTimeMs;// 检查sock超时的时间间隔
-    int checkAppIntervalTimeMs; // 检查app超时的时间间隔
+    int check_sock_interval_time_ms;// 检查sock超时的时间间隔
+    int check_app_interval_time_ms; // 检查app超时的时间间隔
 
-    int gcMaxCount;             // actorGC回收的最大值
+    int gc_maxcount;             // actorGC回收的最大值
 
-    int iLogLevel;              // log等级(LM_ALL,LM_TRACE,LM_DEBUG,LM_WARNING,LM_ERROR,LM_FATAL,LM_NONE)
-    string logFileName;         // log文件名
-    int iLogMaxSize;            // log文件最大大小
+    int log_level;              // log等级(LM_ALL,LM_TRACE,LM_DEBUG,LM_WARNING,LM_ERROR,LM_FATAL,LM_NONE)
+    string log_filename;         // log文件名
+    int log_maxsize;            // log文件最大大小
 
-    string statFileName;        // 统计文件名字
-    int statLevel;              // 统计级别(EnumStatLevelNone,EnumStatLevelBrief,EnumStatLevelFull)
+    string stat_filename;        // 统计文件名字
+    int stat_level;              // 统计级别(EnumStatLevelNone,EnumStatLevelBrief,EnumStatLevelFull)
 
     _StFrameParam()
     {
 
         port = 0;
-        protoType = PROTO_TYPE_TCP;
+        proto_type = PROTO_TYPE_TCP;
         backlog = TCP_BACKLOG_SIZE;
-        bKeepcnt = false;
-        timeOutMs = -1;         // 默认就是收到链接之后就不超时
-        attachedSocketMaxSize = ATTACHED_SOCKET_MAXSIZE;
+        keep_cnt = false;
+        timeout_ms = -1;         // 默认就是收到链接之后就不超时
+        attached_socket_maxsize = ATTACHED_SOCKET_MAXSIZE;
 
         pAction = NULL;
 
-        workerNum = 1;
+        worker_num = 1;
 
-        infoDir = BAYONET_INFO_DIR;
+        info_dir = BAYONET_INFO_DIR;
 
-        timeAccuracy = 0; // 默认低精度
+        time_accuracy = 0; // 默认低精度
 
-        epollSize = EPOLL_FD_MAXSIZE;
-        epollWaitTimeMs = EPOLL_WAIT_TIMEMS;
+        epoll_size = EPOLL_FD_MAXSIZE;
+        epoll_wait_time_ms = EPOLL_WAIT_TIMEMS;
 
-        checkSockIntervalTimeMs = CHECK_SOCK_INTERVAL_TIMEMS;
-        checkAppIntervalTimeMs = CHECK_APP_INTERVAL_TIMEMS;
+        check_sock_interval_time_ms = CHECK_SOCK_INTERVAL_TIMEMS;
+        check_app_interval_time_ms = CHECK_APP_INTERVAL_TIMEMS;
 
-        gcMaxCount = GC_MAX_COUNT;
+        gc_maxcount = GC_MAX_COUNT;
 
-        iLogLevel = LM_ERROR;
-        logFileName = BAYONET_LOGFILE_NAME;
-        iLogMaxSize = LOG_DEFAULT_SIZE;
+        log_level = LM_ERROR;
+        log_filename = BAYONET_LOGFILE_NAME;
+        log_maxsize = LOG_DEFAULT_SIZE;
 
-        statFileName = BAYONET_STATFILE_NAME;
-        statLevel = EnumStatLevelFull;
+        stat_filename = BAYONET_STATFILE_NAME;
+        stat_level = EnumStatLevelFull;
     }
 } StFrameParam;
 

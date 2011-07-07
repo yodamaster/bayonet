@@ -42,8 +42,8 @@ int CBayonetFrame::Init(const StFrameParam& param)
 
     int ret;
 
-    string statDir = param.infoDir+string("/stat/");
-    string logDir = param.infoDir + string("/log/");
+    string statDir = param.info_dir+string("/stat/");
+    string logDir = param.info_dir + string("/log/");
 
     ret = mkdir(statDir.c_str(),0777);
     if (ret != 0 && errno != EEXIST)
@@ -58,9 +58,9 @@ int CBayonetFrame::Init(const StFrameParam& param)
         return -1;
     }
 
-    log_init((LogLevel)m_StFrameParam.iLogLevel,logDir.c_str(),m_StFrameParam.logFileName.c_str(),m_StFrameParam.iLogMaxSize);
+    log_init((LogLevel)m_StFrameParam.log_level,logDir.c_str(),m_StFrameParam.log_filename.c_str(),m_StFrameParam.log_maxsize);
 
-    ret = CFrameBase::Init((statDir+param.statFileName).c_str(), param.statLevel, param.timeAccuracy);
+    ret = CFrameBase::Init((statDir+param.stat_filename).c_str(), param.stat_level, param.time_accuracy);
     if (ret != 0)
     {
         error_log("CFrameBase init fail,ret:%d",ret);
@@ -95,20 +95,20 @@ int CBayonetFrame::Process()
 
     CSocketActorListenTcp* pSocketActorListenTcp = NULL;
     CSocketActorListenUdp* pSocketActorListenUdp = NULL;
-    switch(m_StFrameParam.protoType)
+    switch(m_StFrameParam.proto_type)
     {
         case PROTO_TYPE_TCP:
             pSocketActorListenTcp = new CSocketActorListenTcp();
             pSocketActorListenTcp->AttachFrame(this);
-            ret = pSocketActorListenTcp->Init(m_StFrameParam.ip,m_StFrameParam.port,m_StFrameParam.timeOutMs,m_StFrameParam.protoType);
+            ret = pSocketActorListenTcp->Init(m_StFrameParam.ip,m_StFrameParam.port,m_StFrameParam.timeout_ms,m_StFrameParam.proto_type);
             if (ret)
             {
                 error_log("pSocketActorListenTcp init fail:%d",ret);
                 return ret;
             }
             pSocketActorListenTcp->SetBackLog(m_StFrameParam.backlog);
-            pSocketActorListenTcp->SetAttachedSocketMaxSize(m_StFrameParam.attachedSocketMaxSize);
-            pSocketActorListenTcp->SetKeepcnt(m_StFrameParam.bKeepcnt);
+            pSocketActorListenTcp->SetAttachedSocketMaxSize(m_StFrameParam.attached_socket_maxsize);
+            pSocketActorListenTcp->SetKeepcnt(m_StFrameParam.keep_cnt);
             pSocketActorListenTcp->SetIActionPtr(m_StFrameParam.pAction);
             m_pSocketActorListen = pSocketActorListenTcp;
             //pSocketActorListenTcp->ChangeState(SOCKET_FSM_INIT);
@@ -116,13 +116,13 @@ int CBayonetFrame::Process()
         case PROTO_TYPE_UDP:
             pSocketActorListenUdp = new CSocketActorListenUdp();
             pSocketActorListenUdp->AttachFrame(this);
-            ret = pSocketActorListenUdp->Init(m_StFrameParam.ip,m_StFrameParam.port,m_StFrameParam.timeOutMs,m_StFrameParam.protoType);
+            ret = pSocketActorListenUdp->Init(m_StFrameParam.ip,m_StFrameParam.port,m_StFrameParam.timeout_ms,m_StFrameParam.proto_type);
             if (ret)
             {
                 error_log("pSocketActorListenUdp init fail:%d",ret);
                 return ret;
             }
-            pSocketActorListenUdp->SetAttachedSocketMaxSize(m_StFrameParam.attachedSocketMaxSize);
+            pSocketActorListenUdp->SetAttachedSocketMaxSize(m_StFrameParam.attached_socket_maxsize);
             pSocketActorListenUdp->SetIActionPtr(m_StFrameParam.pAction);
             m_pSocketActorListen = pSocketActorListenUdp;
             //pSocketActorListenUdp->ChangeState(SOCKET_FSM_INIT);
@@ -132,7 +132,7 @@ int CBayonetFrame::Process()
     }
 
     pid_t pid;
-    for(int i=0;i<m_StFrameParam.workerNum;++i)
+    for(int i=0;i<m_StFrameParam.worker_num;++i)
     {
         pid = ForkWork();
         if (pid <= 0)//报错，或者是子进程
@@ -185,54 +185,54 @@ int CBayonetFrame::ParseConf(const char* conf_path, StFrameParam& param)
     {
         CONFVALUE2PARAM_STR(item_node, config_node, ip);
         CONFVALUE2PARAM_INT(item_node, config_node, port);
-        CONFVALUE2PARAM_INT(item_node, config_node, protoType);
-        CONFVALUE2PARAM_INT(item_node, config_node, bKeepcnt);
+        CONFVALUE2PARAM_INT(item_node, config_node, proto_type);
+        CONFVALUE2PARAM_INT(item_node, config_node, keep_cnt);
         CONFVALUE2PARAM_INT(item_node, config_node, backlog);
-        CONFVALUE2PARAM_INT(item_node, config_node, timeOutMs);
-        CONFVALUE2PARAM_INT(item_node, config_node, attachedSocketMaxSize);
+        CONFVALUE2PARAM_INT(item_node, config_node, timeout_ms);
+        CONFVALUE2PARAM_INT(item_node, config_node, attached_socket_maxsize);
     }
 
     config_node = root_node->FirstChildElement("comm");
     if (config_node)
     {
-        CONFVALUE2PARAM_INT(item_node, config_node, workerNum);
-        CONFVALUE2PARAM_STR(item_node, config_node, infoDir);
-        CONFVALUE2PARAM_INT(item_node, config_node, timeAccuracy);
+        CONFVALUE2PARAM_INT(item_node, config_node, worker_num);
+        CONFVALUE2PARAM_STR(item_node, config_node, info_dir);
+        CONFVALUE2PARAM_INT(item_node, config_node, time_accuracy);
     }
 
     config_node = root_node->FirstChildElement("epoll");
     if (config_node)
     {
-        CONFVALUE2PARAM_INT(item_node, config_node, epollSize);
-        CONFVALUE2PARAM_INT(item_node, config_node, epollWaitTimeMs);
+        CONFVALUE2PARAM_INT(item_node, config_node, epoll_size);
+        CONFVALUE2PARAM_INT(item_node, config_node, epoll_wait_time_ms);
     }
 
     config_node = root_node->FirstChildElement("timeout_check");
     if (config_node)
     {
-        CONFVALUE2PARAM_INT(item_node, config_node, checkSockIntervalTimeMs);
-        CONFVALUE2PARAM_INT(item_node, config_node, checkAppIntervalTimeMs);
+        CONFVALUE2PARAM_INT(item_node, config_node, check_sock_interval_time_ms);
+        CONFVALUE2PARAM_INT(item_node, config_node, check_app_interval_time_ms);
     }
 
     config_node = root_node->FirstChildElement("gc");
     if (config_node)
     {
-        CONFVALUE2PARAM_INT(item_node, config_node, gcMaxCount);
+        CONFVALUE2PARAM_INT(item_node, config_node, gc_maxcount);
     }
 
     config_node = root_node->FirstChildElement("log");
     if (config_node)
     {
-        CONFVALUE2PARAM_INT(item_node, config_node, iLogLevel);
-        CONFVALUE2PARAM_STR(item_node, config_node, logFileName);
-        CONFVALUE2PARAM_INT(item_node, config_node, iLogMaxSize);
+        CONFVALUE2PARAM_INT(item_node, config_node, log_level);
+        CONFVALUE2PARAM_STR(item_node, config_node, log_filename);
+        CONFVALUE2PARAM_INT(item_node, config_node, log_maxsize);
     }
 
     config_node = root_node->FirstChildElement("stat");
     if (config_node)
     {
-        CONFVALUE2PARAM_STR(item_node, config_node, statFileName);
-        CONFVALUE2PARAM_INT(item_node, config_node, statLevel);
+        CONFVALUE2PARAM_STR(item_node, config_node, stat_filename);
+        CONFVALUE2PARAM_INT(item_node, config_node, stat_level);
     }
 
     return 0;
@@ -264,11 +264,11 @@ int CBayonetFrame::ChildWork()
 {
     int ret;
     //epoll的fd和select一样，不能被fork
-    ret = m_epoller.Init(m_StFrameParam.epollSize,
-                         m_StFrameParam.epollWaitTimeMs,
-                         m_StFrameParam.checkSockIntervalTimeMs,
-                         m_StFrameParam.checkAppIntervalTimeMs,
-                         m_StFrameParam.gcMaxCount);
+    ret = m_epoller.Init(m_StFrameParam.epoll_size,
+                         m_StFrameParam.epoll_wait_time_ms,
+                         m_StFrameParam.check_sock_interval_time_ms,
+                         m_StFrameParam.check_app_interval_time_ms,
+                         m_StFrameParam.gc_maxcount);
     if (ret != 0)
     {
         error_log("epoller init fail:%d",ret);

@@ -89,18 +89,6 @@ public:
 int main(int argc, const char *argv[])
 {
     CBayonetFrame srv;
-    StFrameParam param;
-    param.infoDir="bayonet";
-    param.ip="0.0.0.0";
-    param.port = 20000;
-    //param.bKeepcnt= true;
-    param.protoType = PROTO_TYPE_UDP;
-    //param.protoType = PROTO_TYPE_TCP;
-    param.pAction = new CActionFirst();
-    param.gcMaxCount=10000;
-    param.workerNum=1;
-
-    //int ret = srv.Init(param);
     int ret = srv.Init("./bayonet.xml", new CActionFirst());
     if (ret != 0)
     {
