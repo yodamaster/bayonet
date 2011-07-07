@@ -269,14 +269,15 @@ int main(int argc, const char *argv[])
 {
     CBayonetFrame srv;
     StFrameParam param;
-    param.infoDir="bayonet";
+    param.info_dir="bayonet";
     param.ip="0.0.0.0";
     param.port = 20001;
     //param.bKeepcnt= true;
     //param.protoType = PROTO_TYPE_UDP;
-    param.protoType = PROTO_TYPE_TCP;
+    param.proto_type = PROTO_TYPE_TCP;
+    param.gc_maxcount = 10;
+
     param.pAction = new CActionFirst();
-    param.gcMaxCount = 10;
 
     int ret = srv.Init(param);
     if (ret != 0)

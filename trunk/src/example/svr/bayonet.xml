@@ -11,10 +11,10 @@
         <port>20000</port>
 
         <!--协议.tcp:0,udp:1 -->
-        <protoType>1</protoType>
+        <proto_type>1</proto_type>
 
         <!--是否长连接-->
-        <bKeepcnt>0</bKeepcnt>
+        <keep_cnt>0</keep_cnt>
 
         <!--最大完成连接队列长度-->
         <backlog>10240</backlog>
@@ -24,50 +24,50 @@
         当是TCP短链接orUDP的时候，代表socketpasstive的存活时间，要注意比appactor的超时时间长，否则会出现请求超时但是无返回的情况
         当是TCP长链接的时候，代表没有收到请求的持续时间
         -->
-        <timeOutMs>500</timeOutMs>
+        <timeout_ms>500</timeout_ms>
 
         <!--最大能够attached的socket个数，如果达到，会在listen socekt中进行拒绝-->
-        <attachedSocketMaxSize>6000</attachedSocketMaxSize>
+        <attached_socket_maxsize>6000</attached_socket_maxsize>
     </server>
 
     <!--一些公共参数-->
     <comm>
         <!--启动的子进程数量-->
-        <workerNum>1</workerNum>
+        <worker_num>1</worker_num>
 
         <!--log和stat等存放的基础目录，这个目录必须已经存在-->
-        <infoDir>./bayonet</infoDir>
+        <info_dir>./</info_dir>
 
         <!--
         时间精度，0：低，1：高。
         低精度采用record_time一次时间，之后都用记录的这个时间
         高精度采用每个都真实取时间
         -->
-        <timeAccuracy>0</timeAccuracy>
+        <time_accuracy>0</time_accuracy>
     </comm>
 
     <!--epoll的相关参数-->
     <epoll>
         <!--epoll监听的队列大小-->
-        <epollSize>10240</epollSize>
+        <epoll_size>10240</epoll_size>
 
         <!--epoll wait time(毫秒)-->
-        <epollWaitTimeMs>10</epollWaitTimeMs>
+        <epoll_wait_time_ms>10</epoll_wait_time_ms>
     </epoll>
 
     <!--超时检测机制-->
     <timeout_check>
         <!--检查sock超时的时间间隔-->
-        <checkSockIntervalTimeMs>500</checkSockIntervalTimeMs>
+        <check_sock_interval_time_ms>500</check_sock_interval_time_ms>
 
         <!--检查app超时的时间间隔-->
-        <checkAppIntervalTimeMs>500</checkAppIntervalTimeMs>
+        <check_app_interval_time_ms>500</check_app_interval_time_ms>
     </timeout_check>
 
     <!--资源回收机制-->
     <gc>
         <!--需要进行回收的阀值-->
-        <gcMaxCount>10240</gcMaxCount>
+        <gc_maxcount>10240</gc_maxcount>
     </gc>
 
     <!--日志-->
@@ -82,26 +82,26 @@
         LM_FATAL        = 6,
         LM_NONE         = 10
         -->
-        <iLogLevel>5</iLogLevel>
+        <log_level>5</log_level>
 
         <!--log文件名-->
-        <logFileName>bayonet</logFileName>
+        <log_filename>bayonet</log_filename>
 
         <!--log文件最大大小-->
-        <iLogMaxSize>10240000</iLogMaxSize>
+        <log_maxsize>10240000</log_maxsize>
     </log>
 
     <!--统计-->
     <stat>
         <!--统计文件名字-->
-        <statFileName>stat_file</statFileName>
+        <stat_filename>stat_file</stat_filename>
 
         <!--
         EnumStatLevelNone  = 0,             //所有的统计都关闭
         EnumStatLevelBrief = 1,             //统计所有的SELF和VALID
         EnumStatLevelFull  = 2,             //所有统计
         -->
-        <statLevel>1</statLevel>
+        <stat_level>2</stat_level>
     </stat>
 
 </data>
