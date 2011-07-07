@@ -28,9 +28,9 @@
 //epollwait的超时时间 ms
 #define EPOLL_WAIT_TIMEMS               10
 //epoll检查socket超时的时间间隔 ms
-#define CHECK_INTERVAL_SOCK_MS          100
-//epoll检查socket超时的时间间隔 ms
-#define CHECK_INTERVAL_APP_MS           500
+#define CHECK_SOCK_INTERVAL_TIMEMS      100
+//epoll检查app超时的时间间隔 ms
+#define CHECK_APP_INTERVAL_TIMEMS       500
 
 // 最大能够attached的socket个数，如果达到，会在listen socekt中进行拒绝
 #define ATTACHED_SOCKET_MAXSIZE         10240

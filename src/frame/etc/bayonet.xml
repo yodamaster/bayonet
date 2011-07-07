@@ -58,10 +58,10 @@
     <!--超时检测机制-->
     <timeout_check>
         <!--检查sock超时的时间间隔-->
-        <checkIntervalTimeSockMs>500</checkIntervalTimeSockMs>
+        <checkSockIntervalTimeMs>500</checkSockIntervalTimeMs>
 
         <!--检查app超时的时间间隔-->
-        <checkIntervalTimeAppMs>500</checkIntervalTimeAppMs>
+        <checkAppIntervalTimeMs>500</checkAppIntervalTimeMs>
     </timeout_check>
 
     <!--资源回收机制-->
