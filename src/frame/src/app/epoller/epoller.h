@@ -42,7 +42,7 @@ public:
     CEPoller();
     ~CEPoller();
 
-    int Init(int epoll_size,int waittime_ms,int check_sock_interval_time_ms,int check_app_interval_time_ms,int gc_maxcount);
+    int Init(int epoll_size,int wait_time_ms,int check_sock_interval_time_ms,int check_app_interval_time_ms,int gc_maxcount);
     int SetFrame(IFrame* pFrame);
     int AddEpollIO(int fd,unsigned flag);
     int ModEpollIO(int fd,unsigned flag);
@@ -65,7 +65,7 @@ protected:
     epoll_event     m_events[EPOLL_EVENTS_MAXSIZE];  //epoll_wait的返回的事件
 
     int             m_epollSize;
-    int             m_waittimeMs;
+    int             m_waitTimeMs;
     int             m_checkSockIntervalTimeMs;
     int             m_checkAppIntervalTimeMs;
     int             m_gcMaxCount;

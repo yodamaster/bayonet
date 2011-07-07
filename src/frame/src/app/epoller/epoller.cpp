@@ -6,7 +6,7 @@ CEPoller::CEPoller()
     m_epollFd = -1;
     m_pFrame = NULL;
     m_epollSize = EPOLL_FD_MAXSIZE;
-    m_waittimeMs = EPOLL_WAIT_TIMEMS;
+    m_waitTimeMs = EPOLL_WAIT_TIMEMS;
     m_checkSockIntervalTimeMs = CHECK_SOCK_INTERVAL_TIMEMS;
     m_checkAppIntervalTimeMs = CHECK_APP_INTERVAL_TIMEMS;
     m_attachedSocketCount = 0;
@@ -21,10 +21,10 @@ int CEPoller::SetFrame(IFrame* pFrame)
     m_pFrame = pFrame;
     return 0;
 }
-int CEPoller::Init(int epoll_size,int waittime_ms,int check_sock_interval_time_ms,int check_app_interval_time_ms,int gc_maxcount)
+int CEPoller::Init(int epoll_size,int wait_time_ms,int check_sock_interval_time_ms,int check_app_interval_time_ms,int gc_maxcount)
 {
     m_epollSize = epoll_size;
-    m_waittimeMs = waittime_ms;
+    m_waitTimeMs = wait_time_ms;
     m_checkSockIntervalTimeMs = check_sock_interval_time_ms;
     m_checkAppIntervalTimeMs = check_app_interval_time_ms;
     m_gcMaxCount = gc_maxcount;
@@ -87,7 +87,7 @@ int CEPoller::LoopForEvent()
 
     for(;;)
     {
-        nfds = epoll_wait(m_epollFd, m_events, EPOLL_EVENTS_MAXSIZE, m_waittimeMs);
+        nfds = epoll_wait(m_epollFd, m_events, EPOLL_EVENTS_MAXSIZE, m_waitTimeMs);
 
         if (nfds < 0)
         {
