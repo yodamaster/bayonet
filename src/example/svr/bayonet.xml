@@ -36,7 +36,7 @@
         <worker_num>1</worker_num>
 
         <!--log和stat等存放的基础目录，这个目录必须已经存在-->
-        <info_dir>./</info_dir>
+        <info_dir>bayonet</info_dir>
 
         <!--
         时间精度，0：低，1：高。
@@ -101,7 +101,7 @@
         EnumStatLevelBrief = 1,             //统计所有的SELF和VALID
         EnumStatLevelFull  = 2,             //所有统计
         -->
-        <stat_level>2</stat_level>
+        <stat_level>1</stat_level>
     </stat>
 
 </data>
