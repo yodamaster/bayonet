@@ -277,7 +277,7 @@ int main(int argc, const char *argv[])
     param.proto_type = PROTO_TYPE_TCP;
     param.gc_maxcount = 10;
 
-    param.pAction = new CActionFirst();
+    param.action = new CActionFirst();
 
     int ret = srv.Init(param);
     if (ret != 0)

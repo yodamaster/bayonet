@@ -70,7 +70,7 @@ int CBayonetFrame::Init(const StFrameParam& param)
     m_epoller.SetFrame(this);
     return 0;
 }
-int CBayonetFrame::Init(const char* conf_path, IAction* pAction)
+int CBayonetFrame::Init(const char* conf_path, IAction* action)
 {
     int ret;
     StFrameParam param;
@@ -80,7 +80,7 @@ int CBayonetFrame::Init(const char* conf_path, IAction* pAction)
         fprintf(stderr,"ParseConf fail.ret:%d\n",ret);
         return -1;
     }
-    param.pAction = pAction;
+    param.action = action;
 
     return Init(param);
 }
@@ -109,7 +109,7 @@ int CBayonetFrame::Process()
             pSocketActorListenTcp->SetBackLog(m_StFrameParam.backlog);
             pSocketActorListenTcp->SetAttachedSocketMaxSize(m_StFrameParam.attached_socket_maxsize);
             pSocketActorListenTcp->SetKeepcnt(m_StFrameParam.keep_cnt);
-            pSocketActorListenTcp->SetIActionPtr(m_StFrameParam.pAction);
+            pSocketActorListenTcp->SetIActionPtr(m_StFrameParam.action);
             m_pSocketActorListen = pSocketActorListenTcp;
             //pSocketActorListenTcp->ChangeState(SOCKET_FSM_INIT);
             break;
@@ -123,7 +123,7 @@ int CBayonetFrame::Process()
                 return ret;
             }
             pSocketActorListenUdp->SetAttachedSocketMaxSize(m_StFrameParam.attached_socket_maxsize);
-            pSocketActorListenUdp->SetIActionPtr(m_StFrameParam.pAction);
+            pSocketActorListenUdp->SetIActionPtr(m_StFrameParam.action);
             m_pSocketActorListen = pSocketActorListenUdp;
             //pSocketActorListenUdp->ChangeState(SOCKET_FSM_INIT);
             break;
