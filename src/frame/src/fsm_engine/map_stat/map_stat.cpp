@@ -495,7 +495,7 @@ string CMapStat::GetStatInfo(const char * const stat_desc[], int stat_num)
         output.append("\n");
         for (int j = 0; j < num; j++)
         {
-            snprintf(buf,sizeof(buf), "\t%-40s:  %-20d\n", 
+            snprintf(buf,sizeof(buf), "\t%-40s:  %-20u\n", 
                      stat_desc[j], 
                      STATVAL_READ(p->arr_vals[j]));
             output.append(buf);
