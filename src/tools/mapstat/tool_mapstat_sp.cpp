@@ -100,7 +100,7 @@ string GetRichStatInfo(CMapStat& _stat, const char * const stat_desc[], int stat
         string output;
         for (int j = 0; j < num; j++)
         {
-            snprintf(buf,sizeof(buf), "\t\t%-40s:  %-20d\n", 
+            snprintf(buf,sizeof(buf), "\t\t%-40s:  %-20u\n", 
                      stat_desc[j], 
                      STATVAL_READ(p->arr_vals[j]));
             output.append(buf);
