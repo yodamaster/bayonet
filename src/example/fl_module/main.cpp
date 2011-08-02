@@ -62,11 +62,25 @@ int udp_process(
     inet_aton(serverIp, &serv_addr.sin_addr);
     serv_addr.sin_port = htons(serverPort);
 
-    ret = sendto(socketFd,sendBuf, sendLen, 0,(struct sockaddr *)(&serv_addr),addr_len);
-    if (ret != sendLen)
+    int nsend =0;
+    while(1)
+    {
+        ret = sendto(socketFd,sendBuf+nsend, (sendLen-nsend), 0,(struct sockaddr *)(&serv_addr),addr_len);
+        if (ret <= 0)
+        {
+            if (errno == EINTR) //信号中断，或者缓冲区满
+                continue;
+            else
+                break;
+        }
+        nsend += ret;
+        if ( nsend >= sendLen )
+            break;
+    }
+    if (nsend != sendLen)
     {
         close(socketFd);
-        return -2;
+        return -3;
     }
 
     struct sockaddr_in  recv_addr;
