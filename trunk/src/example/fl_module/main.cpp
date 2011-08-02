@@ -25,47 +25,47 @@ using namespace std;
 /**
  * @brief   告诉recv是否继续
  *
- * @param   pBuf
- * @param   bufLen
+ * @param   buf
+ * @param   len
  *
  * @return  >0          已经recv完毕，截取总长度
  *          =0          继续recv
  *          <0          协议解析出错
  */
-int net_handleinput(char* pBuf, int bufLen)
+int net_handleinput(char* buf, int len)
 {
-    return bufLen;
+    return len;
 }
 
 int udp_process(
-    const char* serverIp,int serverPort,uint32_t timeoutMs,
-    const char *sendBuf, int sendLen,
-    char *recvBuf,int maxLen,int& recvLen
+    const char* srv_ip,int srv_port,uint32_t timeout_ms,
+    const char *send_buf, int send_len,
+    char *recv_buf,int max_len,int& recv_len
     )
 {
     struct timeval timeout;
-    timeout.tv_sec = 0;
-    timeout.tv_usec = timeoutMs*1000;
+    timeout.tv_sec = timeout_ms / 1000;
+    timeout.tv_usec = (timeout_ms % 1000) * 1000;
 
     int ret;
 
-    int socketFd = socket(AF_INET,SOCK_DGRAM,0);
-    if(socketFd < 0)
+    int sockfd = socket(AF_INET,SOCK_DGRAM,0);
+    if(sockfd < 0)
     {
         return -1;
     }
 
-    struct sockaddr_in serv_addr;
-    socklen_t addr_len = sizeof(serv_addr);
-    bzero(&serv_addr, sizeof(serv_addr));
-    serv_addr.sin_family = AF_INET;
-    inet_aton(serverIp, &serv_addr.sin_addr);
-    serv_addr.sin_port = htons(serverPort);
+    struct sockaddr_in srv_addr;
+    socklen_t addr_len = sizeof(srv_addr);
+    bzero(&srv_addr, sizeof(srv_addr));
+    srv_addr.sin_family = AF_INET;
+    inet_aton(srv_ip, &srv_addr.sin_addr);
+    srv_addr.sin_port = htons(srv_port);
 
     int nsend =0;
     while(1)
     {
-        ret = sendto(socketFd,sendBuf+nsend, (sendLen-nsend), 0,(struct sockaddr *)(&serv_addr),addr_len);
+        ret = sendto(sockfd,send_buf+nsend, (send_len-nsend), 0,(struct sockaddr *)(&srv_addr),addr_len);
         if (ret <= 0)
         {
             if (errno == EINTR) //信号中断，或者缓冲区满
@@ -74,12 +74,12 @@ int udp_process(
                 break;
         }
         nsend += ret;
-        if ( nsend >= sendLen )
+        if ( nsend >= send_len )
             break;
     }
-    if (nsend != sendLen)
+    if (nsend != send_len)
     {
-        close(socketFd);
+        close(sockfd);
         return -3;
     }
 
@@ -87,20 +87,20 @@ int udp_process(
     int   recv_addr_len = sizeof(recv_addr);
     bzero(&recv_addr,sizeof(recv_addr));
 
-    setsockopt(socketFd , SOL_SOCKET,SO_RCVTIMEO,&timeout,sizeof(timeout));
+    setsockopt(sockfd , SOL_SOCKET,SO_RCVTIMEO,&timeout,sizeof(timeout));
 
-    recvLen = 0;
+    recv_len = 0;
     while(true)
     {
-        int leftLen = maxLen - recvLen;
-        if (leftLen <= 0)
+        int left_len = max_len - recv_len;
+        if (left_len <= 0)
         {
             return -4;
         }
-        ret = recvfrom(socketFd,recvBuf+recvLen ,leftLen , 0, (struct sockaddr*)&recv_addr,(socklen_t *) &recv_addr_len);
+        ret = recvfrom(sockfd,recv_buf+recv_len ,left_len , 0, (struct sockaddr*)&recv_addr,(socklen_t *) &recv_addr_len);
         if (ret == 0)
         {
-            close(socketFd);
+            close(sockfd);
             return -5;
         }
         else if (ret < 0)
@@ -109,71 +109,71 @@ int udp_process(
             {
                 continue;
             }
-            close(socketFd);
+            close(sockfd);
             return -6;
         }
 
-        recvLen += ret;
+        recv_len += ret;
 
-        ret = net_handleinput(recvBuf, recvLen);
+        ret = net_handleinput(recv_buf, recv_len);
         if (ret == 0)
         {   
             continue;
         }   
         else if (ret < 0)
         {   
-            close(socketFd);
+            close(sockfd);
             return -7;
         }   
         else
         {   
-            recvLen = ret;
+            recv_len = ret;
             break;
         } 
     }
-    close(socketFd);
+    close(sockfd);
     return 0;
 }
 
 int tcp_process(
-    const char* serverIp,int serverPort,uint32_t timeoutMs,
-    const char *sendBuf, int sendLen,
-    char *recvBuf,int maxLen,int& recvLen
+    const char* srv_ip,int srv_port,uint32_t timeout_ms,
+    const char *send_buf, int send_len,
+    char *recv_buf,int max_len,int& recv_len
     )
 {
     struct timeval timeout;
-    timeout.tv_sec = 0;
-    timeout.tv_usec = timeoutMs*1000;
+    timeout.tv_sec = timeout_ms / 1000;
+    timeout.tv_usec = (timeout_ms % 1000) * 1000;
 
     int ret;
 
-    int socketFd = socket(AF_INET, SOCK_STREAM, 0);
-    if ( socketFd < 0 )
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if ( sockfd < 0 )
     {
         return -2;
     }
 
-    struct sockaddr_in serv_addr;
-    bzero(&serv_addr, sizeof(serv_addr));
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port   = htons(serverPort);
-    if (inet_pton(AF_INET, serverIp, &serv_addr.sin_addr) <= 0)
+    struct sockaddr_in srv_addr;
+    bzero(&srv_addr, sizeof(srv_addr));
+    srv_addr.sin_family = AF_INET;
+    srv_addr.sin_port   = htons(srv_port);
+    if (inet_pton(AF_INET, srv_ip, &srv_addr.sin_addr) <= 0)
     {
-        close(socketFd);
+        close(sockfd);
         return -1;
     }
 
-    ret = connect(socketFd, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
+    ret = connect(sockfd, (struct sockaddr*)&srv_addr, sizeof(srv_addr));
     if (ret < 0)
     {
-        close(socketFd);
+        close(sockfd);
         return -2;
     }
 
     int nsend =0;
     while(1)
     {
-        ret = send(socketFd,sendBuf+nsend,(sendLen-nsend),0);
+        ret = send(sockfd,send_buf+nsend,(send_len-nsend),0);
         if (ret <= 0)
         {
             if (errno == EINTR) //信号中断，或者缓冲区满
@@ -182,29 +182,29 @@ int tcp_process(
                 break;
         }
         nsend += ret;
-        if ( nsend >= sendLen )
+        if ( nsend >= send_len )
             break;
     }
-    if (nsend != sendLen)
+    if (nsend != send_len)
     {
-        close(socketFd);
+        close(sockfd);
         return -3;
     }
 
-    setsockopt(socketFd , SOL_SOCKET,SO_RCVTIMEO,&timeout,sizeof(timeout));
+    setsockopt(sockfd , SOL_SOCKET,SO_RCVTIMEO,&timeout,sizeof(timeout));
 
-    recvLen = 0;
+    recv_len = 0;
     while(true)
     {
-        int leftLen = maxLen - recvLen;
-        if (leftLen <= 0)
+        int left_len = max_len - recv_len;
+        if (left_len <= 0)
         {
             return -4;
         }
-        ret = recv(socketFd, recvBuf+recvLen, leftLen, 0);
+        ret = recv(sockfd, recv_buf+recv_len, left_len, 0);
         if (ret == 0)
         {
-            close(socketFd);
+            close(sockfd);
             return -5;
         }
         else if (ret < 0)
@@ -213,30 +213,30 @@ int tcp_process(
             {
                 continue;
             }
-            close(socketFd);
+            close(sockfd);
             return -6;
         }
 
-        recvLen += ret;
+        recv_len += ret;
 
-        ret = net_handleinput(recvBuf, recvLen);
+        ret = net_handleinput(recv_buf, recv_len);
         if (ret == 0)
         {   
             continue;
         }   
         else if (ret < 0)
         {   
-            close(socketFd);
+            close(sockfd);
             return -7;
         }   
         else
         {   
-            recvLen = ret;
+            recv_len = ret;
             break;
         } 
     }
 
-    close(socketFd);
+    close(sockfd);
     return 0;
 }
 
