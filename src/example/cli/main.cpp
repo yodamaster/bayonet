@@ -21,8 +21,24 @@
 #include <set>
 #include <map>
 using namespace std;
+
+/**
+ * @brief   告诉recv是否继续
+ *
+ * @param   pBuf
+ * @param   bufLen
+ *
+ * @return  >0          已经recv完毕，截取总长度
+ *          =0          继续recv
+ *          <0          协议解析出错
+ */
+int net_handleinput(char* pBuf, int bufLen)
+{
+    return bufLen;
+}
+
 int udp_process(
-        const char* serverIp,int serverPort,unsigned timeoutMs,
+        const char* serverIp,int serverPort,uint32_t timeoutMs,
         const char *sendBuf, int sendLen,
         char *recvBuf,int maxLen,int& recvLen
         )
@@ -58,35 +74,158 @@ int udp_process(
     bzero(&recv_addr,sizeof(recv_addr));
 
     setsockopt(socketFd , SOL_SOCKET,SO_RCVTIMEO,&timeout,sizeof(timeout));
-    ret = recvfrom(socketFd,recvBuf,maxLen,0,(struct sockaddr*)&recv_addr,(socklen_t *) &recv_addr_len);
-    if ( ret <= 0 )
+
+    recvLen = 0;
+    while(true)
     {
-        close(socketFd);
-        return -3;
+        int leftLen = maxLen - recvLen;
+        if (leftLen <= 0)
+        {
+            return -4;
+        }
+        ret = recvfrom(socketFd,recvBuf+recvLen ,leftLen , 0, (struct sockaddr*)&recv_addr,(socklen_t *) &recv_addr_len);
+        if (ret == 0)
+        {
+            close(socketFd);
+            return -5;
+        }
+        else if (ret < 0)
+        {
+            if (errno == EINTR)
+            {
+                continue;
+            }
+            close(socketFd);
+            return -6;
+        }
+
+        recvLen += ret;
+
+        ret = net_handleinput(recvBuf, recvLen);
+        if (ret == 0)
+        {   
+            continue;
+        }   
+        else if (ret < 0)
+        {   
+            close(socketFd);
+            return -7;
+        }   
+        else
+        {   
+            recvLen = ret;
+            break;
+        } 
     }
-    recvLen = ret;
     close(socketFd);
     return 0;
 }
-//我们这里假定返回包中，和pymman那边server相同的协议。即：len(11字节) + data(len)
-//data = cmd(11) + ret(11) + body(len-33)
-int tcp_handleinput(char* pBuf, int bufLen)
+
+int tcp_process(
+        const char* serverIp,int serverPort,uint32_t timeoutMs,
+        const char *sendBuf, int sendLen,
+        char *recvBuf,int maxLen,int& recvLen
+        )
 {
-    printf("%d\n",bufLen);
-    return bufLen;
-    if (bufLen < 11)
+    struct timeval timeout;
+    timeout.tv_sec = 0;
+    timeout.tv_usec = timeoutMs*1000;
+
+    int ret;
+
+    int socketFd = socket(AF_INET, SOCK_STREAM, 0);
+    if ( socketFd < 0 )
     {
+        return -2;
+    }
+
+    struct sockaddr_in serv_addr;
+    bzero(&serv_addr, sizeof(serv_addr));
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_port   = htons(serverPort);
+    if (inet_pton(AF_INET, serverIp, &serv_addr.sin_addr) <= 0)
+    {
+        close(socketFd);
         return -1;
     }
-    char allLenBuf[12];
-    memcpy(allLenBuf,pBuf,11);
-    allLenBuf[11]='\0';
 
-    int allLen = atoi(allLenBuf);
-    return allLen;
+    ret = connect(socketFd, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
+    if (ret < 0)
+    {
+        close(socketFd);
+        return -2;
+    }
+
+    int nsend =0;
+    while(1)
+    {
+        ret = send(socketFd,sendBuf+nsend,(sendLen-nsend),0);
+        if (ret <= 0)
+        {
+            if (errno == EINTR) //信号中断，或者缓冲区满
+                continue;
+            else
+                break;
+        }
+        nsend += ret;
+        if ( nsend >= sendLen )
+            break;
+    }
+    if (nsend != sendLen)
+    {
+        return -3;
+    }
+
+    setsockopt(socketFd , SOL_SOCKET,SO_RCVTIMEO,&timeout,sizeof(timeout));
+
+    recvLen = 0;
+    while(true)
+    {
+        int leftLen = maxLen - recvLen;
+        if (leftLen <= 0)
+        {
+            return -4;
+        }
+        ret = recv(socketFd, recvBuf+recvLen, leftLen, 0);
+        if (ret == 0)
+        {
+            close(socketFd);
+            return -5;
+        }
+        else if (ret < 0)
+        {
+            if (errno == EINTR)
+            {
+                continue;
+            }
+            close(socketFd);
+            return -6;
+        }
+
+        recvLen += ret;
+
+        ret = net_handleinput(recvBuf, recvLen);
+        if (ret == 0)
+        {   
+            continue;
+        }   
+        else if (ret < 0)
+        {   
+            close(socketFd);
+            return -7;
+        }   
+        else
+        {   
+            recvLen = ret;
+            break;
+        } 
+    }
+
+    close(socketFd);
+    return 0;
 }
 
-int tcp_connect_poll(const char* serverIp,int serverPort,unsigned timeoutMs)
+int tcp_connect_poll(const char* serverIp,int serverPort,uint32_t timeoutMs)
 {
     struct sockaddr_in serv_addr;
     bzero(&serv_addr, sizeof(serv_addr));
@@ -171,6 +310,7 @@ int tcp_connect_poll(const char* serverIp,int serverPort,unsigned timeoutMs)
     }
     return socketFd;
 }
+
 int tcp_send_poll(int socketFd, const char *sendBuf, int sendLen)
 {
     int ret;
@@ -195,7 +335,8 @@ int tcp_send_poll(int socketFd, const char *sendBuf, int sendLen)
     }
     return 0;
 }
-int detect_single_read(int socketFd, unsigned timeoutMs)
+
+int detect_single_read(int socketFd, uint32_t timeoutMs)
 {
     struct pollfd conncet_client[1];
     int nfd = 1;
@@ -206,63 +347,63 @@ int detect_single_read(int socketFd, unsigned timeoutMs)
     return poll(conncet_client, nfd, timeoutMs);
 }
 
-int tcp_recv_poll(int socketFd,char *recvBuf,int maxLen,int& recvLen,unsigned timeoutMs)
+int tcp_recv_poll(int socketFd,char *recvBuf,int maxLen,int& recvLen,uint32_t timeoutMs)
 {
-    int ret = detect_single_read(socketFd,timeoutMs);
-    if (ret <= 0)
+    int ret;
+    recvLen = 0;
+    while(true)
     {
-        return -2;
-    }
-    ret = recv(socketFd, recvBuf, maxLen, 0);
-    if (ret <= 0)
-    {
-        return -3;
-    }
-    //已经接受到的数据长度
-    recvLen = ret;
-
-    ret = tcp_handleinput(recvBuf,recvLen);
-    if (ret <= 0)
-    {
-        return -4;
-    }
-
-    int allLen = ret;
-    int iRemain = allLen - recvLen;
-
-    if (allLen > maxLen)
-    {
-        return -5;
-    }
-
-    while (iRemain > 0)
-    {
-        ret = detect_single_read(socketFd,timeoutMs);
-        if(ret<=0)
+        int leftLen = maxLen - recvLen;
+        if (leftLen <= 0)
         {
+            return -4;
+        }
+
+        ret = detect_single_read(socketFd,timeoutMs);
+        if (ret <= 0)
+        {
+            return -1;
+        }
+
+        ret = recv(socketFd, recvBuf+recvLen, leftLen, 0);
+        if (ret == 0)
+        {
+            close(socketFd);
+            return -5;
+        }
+        else if (ret < 0)
+        {
+            if ( errno == EINTR || errno == EAGAIN )
+            {
+                continue;
+            }
+            close(socketFd);
             return -6;
         }
 
-        ret = recv(socketFd, recvBuf + recvLen, iRemain, 0);
-        if (ret <= 0)
-        {
-            if ( errno == EINTR || errno == EAGAIN ) //信号中断，或者缓冲区满
-                continue;
-            else
-                break;
-        }
         recvLen += ret;
-        iRemain -= ret;
-    }
-    if (recvLen != allLen)
-    {
-        return -7;
-    }
 
+        ret = net_handleinput(recvBuf, recvLen);
+        if (ret == 0)
+        {   
+            continue;
+        }   
+        else if (ret < 0)
+        {   
+            close(socketFd);
+            return -7;
+        }   
+        else
+        {   
+            recvLen = ret;
+            break;
+        } 
+    }
     return 0;
 }
+
 int tcp_process_poll(
-        const char* serverIp,int serverPort,unsigned timeoutMs,
+        const char* serverIp,int serverPort,uint32_t timeoutMs,
         const char *sendBuf, int sendLen,
         char *recvBuf,int maxLen,int& recvLen
         )
@@ -289,6 +430,7 @@ int tcp_process_poll(
     close(socketFd);
     return 0;
 }
+
 int main(int argc, const char *argv[])
 {
     string strSend = "woaini";
@@ -296,6 +438,7 @@ int main(int argc, const char *argv[])
     strRecv.resize(1024);
     int len;
     int ret =tcp_process_poll(
+    //int ret =tcp_process(
             "0.0.0.0",10001,1000,
     //int ret =udp_process(
             //"0.0.0.0",20000,1000,
