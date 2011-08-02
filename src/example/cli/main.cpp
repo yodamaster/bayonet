@@ -38,10 +38,10 @@ int net_handleinput(char* pBuf, int bufLen)
 }
 
 int udp_process(
-        const char* serverIp,int serverPort,uint32_t timeoutMs,
-        const char *sendBuf, int sendLen,
-        char *recvBuf,int maxLen,int& recvLen
-        )
+    const char* serverIp,int serverPort,uint32_t timeoutMs,
+    const char *sendBuf, int sendLen,
+    char *recvBuf,int maxLen,int& recvLen
+    )
 {
     struct timeval timeout;
     timeout.tv_sec = 0;
@@ -136,10 +136,10 @@ int udp_process(
 }
 
 int tcp_process(
-        const char* serverIp,int serverPort,uint32_t timeoutMs,
-        const char *sendBuf, int sendLen,
-        char *recvBuf,int maxLen,int& recvLen
-        )
+    const char* serverIp,int serverPort,uint32_t timeoutMs,
+    const char *sendBuf, int sendLen,
+    char *recvBuf,int maxLen,int& recvLen
+    )
 {
     struct timeval timeout;
     timeout.tv_sec = 0;
@@ -187,6 +187,7 @@ int tcp_process(
     }
     if (nsend != sendLen)
     {
+        close(socketFd);
         return -3;
     }
 
@@ -312,8 +313,8 @@ int tcp_connect_poll(const char* serverIp,int serverPort,uint32_t timeoutMs)
                     }
                 }
                 else if ((conncet_client[0].revents & POLLERR) ||
-                        (conncet_client[0].revents & POLLHUP) ||
-                        (conncet_client[0].revents & POLLNVAL))
+                         (conncet_client[0].revents & POLLHUP) ||
+                         (conncet_client[0].revents & POLLNVAL))
                 {
                     close(socketFd);
                     return -1;
@@ -417,10 +418,10 @@ int tcp_recv_poll(int socketFd,char *recvBuf,int maxLen,int& recvLen,uint32_t ti
 }
 
 int tcp_process_poll(
-        const char* serverIp,int serverPort,uint32_t timeoutMs,
-        const char *sendBuf, int sendLen,
-        char *recvBuf,int maxLen,int& recvLen
-        )
+    const char* serverIp,int serverPort,uint32_t timeoutMs,
+    const char *sendBuf, int sendLen,
+    char *recvBuf,int maxLen,int& recvLen
+    )
 {
     int ret;
     int socketFd = tcp_connect_poll(serverIp,serverPort,timeoutMs);
