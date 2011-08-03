@@ -118,7 +118,7 @@ int CSocketActorData::OnRecv()
         }
         m_recvFlag = 1;
     }
-    for(;;)
+    while(true)
     {
         ret = m_pNetHandler->Recv((char*)m_strSingleRecvBuf.c_str(),m_strSingleRecvBuf.size());
         if (ret == 0)
@@ -199,7 +199,7 @@ int CSocketActorData::OnSend()
             return SOCKET_FSM_CLOSING;
         }
     }
-    while (m_sendedLen != m_sendBufLen)
+    while (m_sendedLen < m_sendBufLen)
     {
         ret = m_pNetHandler->Send((char*)(m_strSendBuf.c_str()+m_sendedLen),m_sendBufLen-m_sendedLen);
         if ( ret == 0 )
