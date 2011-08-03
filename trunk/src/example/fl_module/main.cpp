@@ -72,10 +72,8 @@ int udp_process(
             {
                 continue;
             }
-            else
-            {
-                return -3;
-            }
+            close(sockfd);
+            return -3;
         }
         else
         {
@@ -95,6 +93,7 @@ int udp_process(
         int left_len = max_len - recv_len;
         if (left_len <= 0)
         {
+            close(sockfd);
             return -4;
         }
         ret = recvfrom(sockfd,recv_buf+recv_len ,left_len , 0, (struct sockaddr*)&recv_addr,(socklen_t *) &recv_addr_len);
@@ -180,10 +179,8 @@ int tcp_process(
             {
                 continue;
             }
-            else
-            {
-                return -3;
-            }
+            close(sockfd);
+            return -3;
         }
         else
         {
@@ -199,6 +196,7 @@ int tcp_process(
         int left_len = max_len - recv_len;
         if (left_len <= 0)
         {
+            close(sockfd);
             return -4;
         }
         ret = recv(sockfd, recv_buf+recv_len, left_len, 0);
