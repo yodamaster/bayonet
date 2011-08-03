@@ -63,24 +63,24 @@ int udp_process(
     srv_addr.sin_port = htons(srv_port);
 
     int nsend =0;
-    while(1)
+    while(nsend < send_len)
     {
         ret = sendto(sockfd,send_buf+nsend, (send_len-nsend), 0,(struct sockaddr *)(&srv_addr),addr_len);
-        if (ret <= 0)
+        if (ret < 0)
         {
             if (errno == EINTR) //信号中断，或者缓冲区满
+            {
                 continue;
+            }
             else
-                break;
+            {
+                return -3;
+            }
         }
-        nsend += ret;
-        if ( nsend >= send_len )
-            break;
-    }
-    if (nsend != send_len)
-    {
-        close(sockfd);
-        return -3;
+        else
+        {
+            nsend += ret;
+        }
     }
 
     struct sockaddr_in  recv_addr;
@@ -171,24 +171,24 @@ int tcp_process(
     }
 
     int nsend =0;
-    while(1)
+    while(nsend < send_len)
     {
         ret = send(sockfd,send_buf+nsend,(send_len-nsend),0);
-        if (ret <= 0)
+        if (ret < 0)
         {
             if (errno == EINTR) //信号中断，或者缓冲区满
+            {
                 continue;
+            }
             else
-                break;
+            {
+                return -3;
+            }
         }
-        nsend += ret;
-        if ( nsend >= send_len )
-            break;
-    }
-    if (nsend != send_len)
-    {
-        close(sockfd);
-        return -3;
+        else
+        {
+            nsend += ret;
+        }
     }
 
     setsockopt(sockfd , SOL_SOCKET,SO_RCVTIMEO,&timeout,sizeof(timeout));
