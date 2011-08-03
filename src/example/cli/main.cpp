@@ -72,10 +72,8 @@ int udp_process(
             {
                 continue;
             }
-            else
-            {
-                return -3;
-            }
+            close(sockfd);
+            return -3;
         }
         else
         {
@@ -95,6 +93,7 @@ int udp_process(
         int left_len = max_len - recv_len;
         if (left_len <= 0)
         {
+            close(sockfd);
             return -4;
         }
         ret = recvfrom(sockfd,recv_buf+recv_len ,left_len , 0, (struct sockaddr*)&recv_addr,(socklen_t *) &recv_addr_len);
@@ -180,10 +179,8 @@ int tcp_process(
             {
                 continue;
             }
-            else
-            {
-                return -3;
-            }
+            close(sockfd);
+            return -3;
         }
         else
         {
@@ -199,6 +196,7 @@ int tcp_process(
         int left_len = max_len - recv_len;
         if (left_len <= 0)
         {
+            close(sockfd);
             return -4;
         }
         ret = recv(sockfd, recv_buf+recv_len, left_len, 0);
@@ -339,10 +337,7 @@ int tcp_send_poll(int sockfd, const char *send_buf, int send_len)
             {
                 continue;
             }
-            else
-            {
-                return -1;
-            }
+            return -1;
         }
         else
         {
@@ -384,7 +379,6 @@ int tcp_recv_poll(int sockfd,char *recv_buf,int max_len,int& recv_len,uint32_t t
         ret = recv(sockfd, recv_buf+recv_len, left_len, 0);
         if (ret == 0)
         {
-            close(sockfd);
             return -5;
         }
         else if (ret < 0)
@@ -393,7 +387,6 @@ int tcp_recv_poll(int sockfd,char *recv_buf,int max_len,int& recv_len,uint32_t t
             {
                 continue;
             }
-            close(sockfd);
             return -6;
         }
 
@@ -406,7 +399,6 @@ int tcp_recv_poll(int sockfd,char *recv_buf,int max_len,int& recv_len,uint32_t t
         }   
         else if (ret < 0)
         {   
-            close(sockfd);
             return -7;
         }   
         else
