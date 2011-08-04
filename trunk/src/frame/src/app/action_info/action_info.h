@@ -12,6 +12,7 @@
 
 #include "fsm_achieve.h"
 #include "action.h"
+#include "comm_def.h"
 
 namespace bayonet {
 class IAction;
