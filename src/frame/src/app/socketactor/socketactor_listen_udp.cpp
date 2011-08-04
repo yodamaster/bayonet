@@ -29,7 +29,7 @@ int CSocketActorListenUdp::Init(string ip,int port,int timeout_ms,int protoType)
     m_SocketFd = socket(AF_INET,SOCK_DGRAM,0);
     if(m_SocketFd < 0)
     {   
-        error_log("[class:%s]Create socket error:%s\n",Name().c_str(),strerror(errno));
+        byt_error_log("[class:%s]Create socket error:%s\n",Name().c_str(),strerror(errno));
         return -1; 
     }   
     struct sockaddr_in myaddr;
@@ -43,14 +43,14 @@ int CSocketActorListenUdp::Init(string ip,int port,int timeout_ms,int protoType)
     {   
         //close(listen_fd);
         //到CLOSING状态会帮你关闭掉
-        error_log("[class:%s]CreateListen bind ip:%s port:%d sock:%d err:%s\n",
+        byt_error_log("[class:%s]CreateListen bind ip:%s port:%d sock:%d err:%s\n",
                   Name().c_str(),m_IP.c_str(),m_Port,m_SocketFd,strerror(errno));
         return -2; 
     }
     ret = m_pNetHandler->Init(m_SocketFd);
     if (ret)
     {
-        error_log("[class:%s]nethandler init error:%d",Name().c_str(),ret);
+        byt_error_log("[class:%s]nethandler init error:%d",Name().c_str(),ret);
         return -3; 
     }
     return 0;
@@ -101,7 +101,7 @@ int CSocketActorListenUdp::OnRecv()
     {
         if (pEpoller->GetAttachedSocketCount() > m_attachedSocketMaxSize)
         {
-            error_log("attachedSocketCount has reach the max:%d/%d",
+            byt_error_log("attachedSocketCount has reach the max:%d/%d",
                       pEpoller->GetAttachedSocketCount(),m_attachedSocketMaxSize);
             return SOCKET_FSM_WAITRECV;
         }
@@ -139,7 +139,7 @@ CSocketActorPassiveUdp* CSocketActorListenUdp::CreatePassiveActor()
         //重新指向一个新的
         m_pAppActorProxy = NULL;
 
-        trace_log("%s,%d",m_pNetHandler->GetClientIp().c_str(),m_pNetHandler->GetClientPort());
+        byt_trace_log("%s,%d",m_pNetHandler->GetClientIp().c_str(),m_pNetHandler->GetClientPort());
         pSocketActorAccept->Init(m_pNetHandler->GetClientIp(),m_pNetHandler->GetClientPort(),m_TimeoutMs,m_ProtoType);
         pSocketActorAccept->ChangeState(SOCKET_FSM_INIT);
         return pSocketActorAccept;

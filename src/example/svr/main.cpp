@@ -9,6 +9,15 @@ using namespace std;
 
 #define APP_FSM_LOGIC1 2000
 
+using bayonet::IAction;
+using bayonet::CActionInfo;
+using bayonet::CActionInfoSet;
+using bayonet::StActionInfoParam;
+using bayonet::CAppActorBase;
+using bayonet::CSocketActorData;
+using bayonet::CAppFsmBase;
+using bayonet::CBayonetFrame;
+
 class CAppFsmLogic1;
 class CActionFirst : public IAction
 {
@@ -19,7 +28,7 @@ public:
             string & strSendBuf,
             int &len)
     {
-        trace_log("send");
+        byt_trace_log("send");
         strSendBuf="msg from svr";
         len = strSendBuf.size();
         return 0;
@@ -44,7 +53,7 @@ public:
         app_actor->AttachFrame(pSocketActor->GetFrame());
         app_actor->AttachCommu(pSocketActor);
         app_actor->ChangeState(APP_FSM_LOGIC1);
-        trace_log("listen tcp HandleDecodeRecvBuf");
+        byt_trace_log("listen tcp HandleDecodeRecvBuf");
         return 0;
     }
 };
@@ -60,9 +69,9 @@ public:
         param.id = 1;
         param.ip = "127.0.0.1";
         param.port = 100;
-        param.protoType = PROTO_TYPE_UDP;
+        param.protoType = bayonet::PROTO_TYPE_UDP;
         param.pAction = &actionFirst;
-        param.actionType = ACTIONTYPE_SENDONLY;
+        param.actionType = bayonet::ACTIONTYPE_SENDONLY;
         param.timeout_ms = 1000;
 
         /*CActionInfo * pActionInfo = new CActionInfo();
@@ -73,13 +82,13 @@ public:
     }
     virtual int HandleProcess(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
     {
-        trace_log("HandleProcess");
+        byt_trace_log("HandleProcess");
         /*set<CActionInfo*> &setAction = pActionInfoSet->GetActionSet();
         for(set<CActionInfo*>::iterator it = setAction.begin(); it != setAction.end(); ++it)
         {
-            trace_log("error no:%d",(*it)->GetErrno());
+            byt_trace_log("error no:%d",(*it)->GetErrno());
         }*/
-        return APP_FSM_RSP;//代表要回复客户端啦
+        return bayonet::APP_FSM_RSP;//代表要回复客户端啦
     }
     virtual int HandleExit(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
     {

@@ -89,7 +89,7 @@ int CSocketActorData::OnInit()
     CEPoller* pEpoller = GetEpoller();
     if (!pEpoller)
     {
-        error_log("[class:%s]pEpoller is NULL",Name().c_str());
+        byt_error_log("[class:%s]pEpoller is NULL",Name().c_str());
         return SOCKET_FSM_CLOSING;
     }
     pEpoller->AttachSocket(this);//加入到epoll中
@@ -97,7 +97,7 @@ int CSocketActorData::OnInit()
     ret = ActionHandleInit();
     if (ret != 0)
     {
-        error_log("m_pAction HandleInit fail,ret:%d",ret);
+        byt_error_log("m_pAction HandleInit fail,ret:%d",ret);
         return SOCKET_FSM_CLOSING;
     }
     return SOCKET_FSM_INITOVER;
@@ -191,12 +191,12 @@ int CSocketActorData::OnSend()
         ret = ActionHandleEncodeSendBuf(m_strSendBuf,m_sendBufLen);
         if (ret)
         {
-            error_log("[class:%s]HandleEncodeSendBuf error :%d",Name().c_str(), ret);
+            byt_error_log("[class:%s]HandleEncodeSendBuf error :%d",Name().c_str(), ret);
             return SOCKET_FSM_CLOSING;
         }
         if ((int)m_strSendBuf.size() < m_sendBufLen)
         {
-            error_log("[class:%s]HandleEncodeSendBuf len error:%d/%d",Name().c_str(),m_strSendBuf.size(),m_sendBufLen);
+            byt_error_log("[class:%s]HandleEncodeSendBuf len error:%d/%d",Name().c_str(),m_strSendBuf.size(),m_sendBufLen);
             return SOCKET_FSM_CLOSING;
         }
     }
@@ -265,7 +265,7 @@ int CSocketActorData::ActionHandleInit()
 {
     if (m_pAction == NULL)
     {
-        error_log("m_pAction is null");
+        byt_error_log("m_pAction is null");
         return -1;
     }
     return m_pAction->HandleInit(this,(CAppActorBase*)m_pAppActorProxy.true_ptr());
@@ -276,7 +276,7 @@ int CSocketActorData::ActionHandleEncodeSendBuf(
 {
     if (m_pAction == NULL)
     {
-        error_log("m_pAction is null");
+        byt_error_log("m_pAction is null");
         return -1;
     }
     return m_pAction->HandleEncodeSendBuf(this,(CAppActorBase*)m_pAppActorProxy.true_ptr(),strSendBuf,len);
@@ -287,7 +287,7 @@ int CSocketActorData::ActionHandleInput(
 {
     if (m_pAction == NULL)
     {
-        error_log("m_pAction is null");
+        byt_error_log("m_pAction is null");
         return -1;
     }
     return m_pAction->HandleInput(this,(CAppActorBase*)m_pAppActorProxy.true_ptr(),buf,len);
@@ -296,7 +296,7 @@ int CSocketActorData::ActionHandleDecodeRecvBuf(const char *buf, int len)
 {
     if (m_pAction == NULL)
     {
-        error_log("m_pAction is null");
+        byt_error_log("m_pAction is null");
         return -1;
     }
     return m_pAction->HandleDecodeRecvBuf(this,(CAppActorBase*)m_pAppActorProxy.true_ptr(),buf,len);

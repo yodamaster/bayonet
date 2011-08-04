@@ -30,7 +30,7 @@ int CSocketActorListenTcp::Init(string ip,int port,int timeout_ms,int protoType)
     m_SocketFd = socket(AF_INET,SOCK_STREAM,0);
     if(m_SocketFd < 0)
     {   
-        error_log("[class:%s]Create socket error:%s\n",Name().c_str(), strerror(errno));
+        byt_error_log("[class:%s]Create socket error:%s\n",Name().c_str(), strerror(errno));
         return -1; 
     }   
     struct sockaddr_in myaddr;
@@ -44,7 +44,7 @@ int CSocketActorListenTcp::Init(string ip,int port,int timeout_ms,int protoType)
     {   
         //close(listen_fd);
         //到CLOSING状态会帮你关闭掉
-        error_log("[class:%s]CreateListen bind ip:%s port:%d sock:%d err:%s\n",
+        byt_error_log("[class:%s]CreateListen bind ip:%s port:%d sock:%d err:%s\n",
                 Name().c_str(), m_IP.c_str(),m_Port,m_SocketFd,strerror(errno));
         return -2; 
     }
@@ -73,14 +73,14 @@ int CSocketActorListenTcp::OnInit()
 {
     if(listen(m_SocketFd, m_BackLog)<0)
     {
-        error_log("[class:%s]CreateListen listen fd:%d err:%s\n",
+        byt_error_log("[class:%s]CreateListen listen fd:%d err:%s\n",
                 Name().c_str(), m_SocketFd,strerror(errno));
         return SOCKET_FSM_CLOSING;
     }
     CEPoller* pEpoller = GetEpoller();
     if (!pEpoller)
     {
-        error_log("[class:%s]pEpoller is NULL",Name().c_str());
+        byt_error_log("[class:%s]pEpoller is NULL",Name().c_str());
         return SOCKET_FSM_CLOSING;
     }
     pEpoller->AttachSocket(this);//加入到epoll中
@@ -103,7 +103,7 @@ int CSocketActorListenTcp::OnRecv()
     {
         if (pEpoller->GetAttachedSocketCount() > m_attachedSocketMaxSize)
         {
-            error_log("attachedSocketCount has reach the max:%d/%d",
+            byt_error_log("attachedSocketCount has reach the max:%d/%d",
                       pEpoller->GetAttachedSocketCount(),m_attachedSocketMaxSize);
             return SOCKET_FSM_WAITRECV;
         }
@@ -114,7 +114,7 @@ int CSocketActorListenTcp::OnRecv()
     int clientfd = accept(m_SocketFd,(struct sockaddr *)&addr,(socklen_t*)&length);
     if ( clientfd <= 0 )
     {
-        error_log("[class:%s]netlisten accept rtn:%d error:%s\n",
+        byt_error_log("[class:%s]netlisten accept rtn:%d error:%s\n",
                 Name().c_str(),clientfd,strerror(errno));
         return SOCKET_FSM_WAITRECV;
     }
@@ -122,7 +122,7 @@ int CSocketActorListenTcp::OnRecv()
     int flag = fcntl (clientfd, F_GETFL);
     if ( fcntl (clientfd, F_SETFL, O_NONBLOCK | flag) < 0 )
     {
-        error_log("[class:%s]HandleConnect set noblock socket:%d error:%s\n",
+        byt_error_log("[class:%s]HandleConnect set noblock socket:%d error:%s\n",
                 Name().c_str(),clientfd,strerror(errno));
         close(clientfd);
         return SOCKET_FSM_WAITRECV;

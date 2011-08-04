@@ -30,7 +30,7 @@ int CNetHandlerBase::Init(int socketFd)
     int ret = SetNoBlock(m_SocketFd);
     if (ret)
     {
-        error_log("SetNoBlock error:%d",ret);
+        byt_error_log("SetNoBlock error:%d",ret);
         return -1;
     }
     return 0;
@@ -53,12 +53,12 @@ int CNetHandlerBase::SetNoBlock(int socketFd)
     int val = fcntl(socketFd, F_GETFL, 0);
     if (val == -1)
     {
-        error_log("fcntl get error");
+        byt_error_log("fcntl get error");
         return -1;
     }
     if (fcntl(socketFd, F_SETFL, val | O_NONBLOCK | O_NDELAY) == -1)
     {
-        error_log("fcntl set error");
+        byt_error_log("fcntl set error");
         return -2;
     }
     return 0;
@@ -82,7 +82,7 @@ int CNetHandlerTcp::Create()
     int _fd = socket(AF_INET, SOCK_STREAM, 0);
     if ( _fd <= 0 )
     {
-        error_log("socket create error:%d",_fd);
+        byt_error_log("socket create error:%d",_fd);
         return -1;
     }
     m_SocketFd = _fd;
@@ -100,7 +100,7 @@ int CNetHandlerTcp::Create()
     ret = netConnect();
     if (ret)
     {
-        error_log("socket connect error:%d",_fd);
+        byt_error_log("socket connect error:%d",_fd);
         return -3;
     }
     return 0;
@@ -130,7 +130,7 @@ int CNetHandlerTcp::netConnect()
         if(errno != EINPROGRESS)
         {
             close(m_SocketFd);
-            error_log("socket connect error,ret:%d,error:%s,errno:%d",ret,strerror(errno),errno);
+            byt_error_log("socket connect error,ret:%d,error:%s,errno:%d",ret,strerror(errno),errno);
             return -1;
         }
     }
@@ -146,7 +146,7 @@ int CNetHandlerUdp::Create()
     int _fd = socket(AF_INET, SOCK_DGRAM, 0);
     if ( _fd <= 0 )
     {
-        error_log("socket create error:%d",_fd);
+        byt_error_log("socket create error:%d",_fd);
         return -1;
     }
     m_SocketFd = _fd;

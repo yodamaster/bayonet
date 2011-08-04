@@ -60,7 +60,7 @@ int CActionInfoSet::Start()
         ret = (*it)->HandleStart();
         if (ret)
         {
-            error_log("CActionInfo HandleStart error:%d", ret);
+            byt_error_log("CActionInfo HandleStart error:%d", ret);
             return -1;
         }
     }
