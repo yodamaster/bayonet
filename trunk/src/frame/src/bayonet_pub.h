@@ -21,6 +21,7 @@
 #include "fl_log.h"
 #include "fsm_base_def.h"
 #include "comm_def.h"
+#include "action.h"
 namespace bayonet {
 }
 
