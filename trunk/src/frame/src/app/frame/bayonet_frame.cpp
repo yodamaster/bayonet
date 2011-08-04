@@ -59,12 +59,12 @@ int CBayonetFrame::Init(const StFrameParam& param)
         return -1;
     }
 
-    log_init((LogLevel)m_StFrameParam.log_level,logDir.c_str(),m_StFrameParam.log_filename.c_str(),m_StFrameParam.log_maxsize);
+    byt_log_init((LogLevel)m_StFrameParam.log_level,logDir.c_str(),m_StFrameParam.log_filename.c_str(),m_StFrameParam.log_maxsize);
 
     ret = CFrameBase::Init((statDir+param.stat_filename).c_str(), param.stat_level, param.time_accuracy);
     if (ret != 0)
     {
-        error_log("CFrameBase init fail,ret:%d",ret);
+        byt_error_log("CFrameBase init fail,ret:%d",ret);
         return -1;
     }
 
@@ -104,7 +104,7 @@ int CBayonetFrame::Process()
             ret = pSocketActorListenTcp->Init(m_StFrameParam.ip,m_StFrameParam.port,m_StFrameParam.timeout_ms,m_StFrameParam.proto_type);
             if (ret)
             {
-                error_log("pSocketActorListenTcp init fail:%d",ret);
+                byt_error_log("pSocketActorListenTcp init fail:%d",ret);
                 return ret;
             }
             pSocketActorListenTcp->SetBackLog(m_StFrameParam.backlog);
@@ -120,7 +120,7 @@ int CBayonetFrame::Process()
             ret = pSocketActorListenUdp->Init(m_StFrameParam.ip,m_StFrameParam.port,m_StFrameParam.timeout_ms,m_StFrameParam.proto_type);
             if (ret)
             {
-                error_log("pSocketActorListenUdp init fail:%d",ret);
+                byt_error_log("pSocketActorListenUdp init fail:%d",ret);
                 return ret;
             }
             pSocketActorListenUdp->SetAttachedSocketMaxSize(m_StFrameParam.attached_socket_maxsize);
@@ -272,7 +272,7 @@ int CBayonetFrame::ChildWork()
                          m_StFrameParam.gc_maxcount);
     if (ret != 0)
     {
-        error_log("epoller init fail:%d",ret);
+        byt_error_log("epoller init fail:%d",ret);
         return -2;
     }
 
@@ -283,14 +283,14 @@ int CBayonetFrame::ChildWork()
     }
     else
     {
-        error_log("m_pSocketActorListen is NULL");
+        byt_error_log("m_pSocketActorListen is NULL");
         return -1;
     }
 
     ret = m_epoller.LoopForEvent();
     if (ret != 0)
     {
-        error_log("epoller LoopForEvent fail:%d",ret);
+        byt_error_log("epoller LoopForEvent fail:%d",ret);
         return -2;
     }
     return 0;
@@ -303,21 +303,21 @@ int CBayonetFrame::ForkWork()
 
     if(pid==-1)//err
     {
-        error_log("fork error");
+        byt_error_log("fork error");
     }
     else if(pid==0)//child
     {
         //执行
-        trace_log("i am child");
+        byt_trace_log("i am child");
         int ret = ChildWork();
         if (ret != 0)
         {
-            error_log("child error, ret: %d",ret);
+            byt_error_log("child error, ret: %d",ret);
         }
     }
     else
     {
-        error_log("i am farther,child is %d",pid);
+        byt_error_log("i am farther,child is %d",pid);
     }
     return pid;
 }

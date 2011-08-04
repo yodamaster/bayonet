@@ -83,12 +83,12 @@ int CActionInfo::HandleStart()
             m_pSocketActorActiveProxy = new CSocketActorActiveSendOnly();
             break;
         default:
-            error_log("actionType error:%d",m_stActionTypeParam.actionType);
+            byt_error_log("actionType error:%d",m_stActionTypeParam.actionType);
             return -1;
     }
     if (m_pAppActorProxy.is_null())
     {
-        error_log("m_pAppActor is null");
+        byt_error_log("m_pAppActor is null");
         return -1;
     }
     CSocketActorActive* pSocketActorActive = (CSocketActorActive*)(m_pSocketActorActiveProxy.true_ptr());

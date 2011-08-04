@@ -131,7 +131,7 @@ int CAppActorBase::Send2Client()
     }
     else
     {
-        error_log("[class:%s] ChangeState SOCKET_FSM_WAITSEND", Name().c_str());
+        byt_error_log("[class:%s] ChangeState SOCKET_FSM_WAITSEND", Name().c_str());
     }
     return 0;
 }

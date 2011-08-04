@@ -34,18 +34,18 @@ namespace bayonet {
 
 ////////////////////////////////////////////////////////////////////////////////
 // 直接调用的宏
-#define log_init(lvl, path, args...)    APILogInit(lvl, path, ##args) //log类初始化
+#define byt_log_init(lvl, path, args...)    APILogInit(lvl, path, ##args) //log类初始化
 
-#define LOG_DETAIL(lvl, fmt, args...)   APILogWrite(lvl, "[%s:%u][%s] " fmt "\n", __FILE__, __LINE__, __FUNCTION__, ##args)
+#define byt_log_detail(lvl, fmt, args...)   APILogWrite(lvl, "[%s:%u][%s] " fmt "\n", __FILE__, __LINE__, __FUNCTION__, ##args)
 
-#define trace_log(fmt, args...)     LOG_DETAIL(LM_TRACE, fmt, ##args)
-#define debug_log(fmt, args...)     LOG_DETAIL(LM_DEBUG, fmt, ##args)
-#define warn_log(fmt, args...)      LOG_DETAIL(LM_WARNING, fmt, ##args)
-#define info_log(fmt, args...)      LOG_DETAIL(LM_INFO, fmt, ##args)
-#define error_log(fmt, args...)     LOG_DETAIL(LM_ERROR, fmt, ##args)
-#define fatal_log(fmt, args...)     LOG_DETAIL(LM_FATAL, fmt, ##args)
+#define byt_trace_log(fmt, args...)     byt_log_detail(bayonet::LM_TRACE, fmt, ##args)
+#define byt_debug_log(fmt, args...)     byt_log_detail(bayonet::LM_DEBUG, fmt, ##args)
+#define byt_warn_log(fmt, args...)      byt_log_detail(bayonet::LM_WARNING, fmt, ##args)
+#define byt_info_log(fmt, args...)      byt_log_detail(bayonet::LM_INFO, fmt, ##args)
+#define byt_error_log(fmt, args...)     byt_log_detail(bayonet::LM_ERROR, fmt, ##args)
+#define byt_fatal_log(fmt, args...)     byt_log_detail(bayonet::LM_FATAL, fmt, ##args)
 
-#define screen_info(fmt, args...)   fprintf(stdout, fmt, ##args); fprintf(stdout, "\n")
+#define byt_screen_info(fmt, args...)   fprintf(stdout, fmt, ##args); fprintf(stdout, "\n")
 
 
 inline void screen_output(const char* fmt, ...)
@@ -71,14 +71,14 @@ inline void screen_output(const char* fmt, ...)
 ////////////////////////////////////////////////////////////////////////////////
 
 // log文件默认大小
-#define LOG_DEFAULT_SIZE        200000000
+const int LOG_DEFAULT_SIZE        = 200000000;
 // 同名log文件默认最大数量
-#define LOG_DEFAULT_MAXNUM      1000
+const int LOG_DEFAULT_MAXNUM      = 1000;
 // log level的数量
-#define LOG_LEVEL_MAXNUM        10
+const int LOG_LEVEL_MAXNUM        = 10;
 
 // 单条log的最长大小
-#define LOG_MSG_SIZE            4096
+const int LOG_MSG_SIZE            = 4096;
 
 typedef enum _Log_Level_
 {

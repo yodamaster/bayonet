@@ -10,6 +10,15 @@ using namespace std;
 
 #define APP_FSM_PROXY 2000
 
+using bayonet::IAction;
+using bayonet::CActionInfo;
+using bayonet::CActionInfoSet;
+using bayonet::StActionInfoParam;
+using bayonet::CAppActorBase;
+using bayonet::CSocketActorData;
+using bayonet::CAppFsmBase;
+using bayonet::CBayonetFrame;
+
 /**
  * @brief   获取ContentLen的数字的起始和长度
  *
@@ -239,9 +248,9 @@ public:
         param.id = 1;
         param.ip = "10.6.207.189";
         param.port = 80;
-        param.protoType = PROTO_TYPE_TCP;
+        param.protoType = bayonet::PROTO_TYPE_TCP;
         param.pAction = &actionGetData;
-        param.actionType = ACTIONTYPE_SENDRECV;
+        param.actionType = bayonet::ACTIONTYPE_SENDRECV;
         param.timeout_ms = 1000;
 
         CActionInfo * pActionInfo = new CActionInfo();
@@ -257,7 +266,7 @@ public:
         {
             trace_log("id:%d,error no:%d,timecost:%u ms",(*it)->GetID(),(*it)->GetErrno(),(*it)->GetTimeCost());
         }*/
-        return APP_FSM_RSP;//代表要回复客户端啦
+        return bayonet::APP_FSM_RSP;//代表要回复客户端啦
     }
     virtual int HandleExit(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
     {
@@ -268,13 +277,13 @@ public:
 int main(int argc, const char *argv[])
 {
     CBayonetFrame srv;
-    StFrameParam param;
+    bayonet::StFrameParam param;
     param.info_dir="bayonet";
     param.ip="0.0.0.0";
     param.port = 20001;
     //param.bKeepcnt= true;
     //param.protoType = PROTO_TYPE_UDP;
-    param.proto_type = PROTO_TYPE_TCP;
+    param.proto_type = bayonet::PROTO_TYPE_TCP;
     param.gc_maxcount = 10;
 
     param.action = new CActionFirst();

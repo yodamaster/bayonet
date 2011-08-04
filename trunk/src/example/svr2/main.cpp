@@ -10,6 +10,15 @@ using namespace std;
 #define APP_FSM_LOGIC1 2000
 #define APP_FSM_LOGIC2 2001
 
+using bayonet::IAction;
+using bayonet::CActionInfo;
+using bayonet::CActionInfoSet;
+using bayonet::StActionInfoParam;
+using bayonet::CAppActorBase;
+using bayonet::CSocketActorData;
+using bayonet::CAppFsmBase;
+using bayonet::CBayonetFrame;
+
 class CMyActor : public CAppActorBase
 {
 public:
@@ -119,11 +128,11 @@ public:
         param.id = 1;
         param.ip = "0.0.0.0";
         param.port = 20000;
-        param.protoType = PROTO_TYPE_UDP;
+        param.protoType = bayonet::PROTO_TYPE_UDP;
         //param.protoType = PROTO_TYPE_TCP;
         param.pAction = &actionGetData;
         //param.actionType = ACTIONTYPE_SENDONLY;
-        param.actionType = ACTIONTYPE_SENDRECV;
+        param.actionType = bayonet::ACTIONTYPE_SENDRECV;
         param.timeout_ms = 100;
 
         CActionInfo * pActionInfo = new CActionInfo();
@@ -134,11 +143,11 @@ public:
         param2.id = 2;
         param2.ip = "0.0.0.0";
         param2.port = 20000;
-        param2.protoType = PROTO_TYPE_UDP;
+        param2.protoType = bayonet::PROTO_TYPE_UDP;
         //param2.protoType = PROTO_TYPE_TCP;
         param2.pAction = &actionGetData;
         //param2.actionType = ACTIONTYPE_SENDONLY;
-        param2.actionType = ACTIONTYPE_SENDRECV;
+        param2.actionType = bayonet::ACTIONTYPE_SENDRECV;
         param2.timeout_ms = 100;
 
         /*CActionInfo * pActionInfo2 = new CActionInfo();
@@ -151,7 +160,7 @@ public:
         list<CActionInfo*> &setAction = pActionInfoSet->GetActionSet();
         for(list<CActionInfo*>::iterator it = setAction.begin(); it != setAction.end(); ++it)
         {
-            trace_log("id:%d,error no:%d,timecost:%u ms",(*it)->GetID(),(*it)->GetErrno(),(*it)->GetTimeCost());
+            byt_trace_log("id:%d,error no:%d,timecost:%u ms",(*it)->GetID(),(*it)->GetErrno(),(*it)->GetTimeCost());
         }
         //return APP_FSM_RSP;//代表要回复客户端啦
         return APP_FSM_LOGIC2;//代表要回复客户端啦
@@ -173,10 +182,10 @@ public:
         param.id = 1;
         param.ip = "0.0.0.0";
         param.port = 20000;
-        param.protoType = PROTO_TYPE_UDP;
+        param.protoType = bayonet::PROTO_TYPE_UDP;
         param.pAction = &actionGetData;
         //param.actionType = ACTIONTYPE_SENDONLY;
-        param.actionType = ACTIONTYPE_SENDRECV;
+        param.actionType = bayonet::ACTIONTYPE_SENDRECV;
         param.timeout_ms = 100;
 
         CActionInfo * pActionInfo = new CActionInfo();
@@ -187,10 +196,10 @@ public:
         param2.id = 2;
         param2.ip = "0.0.0.0";
         param2.port = 20000;
-        param2.protoType = PROTO_TYPE_UDP;
+        param2.protoType = bayonet::PROTO_TYPE_UDP;
         param2.pAction = &actionGetData;
         //param2.actionType = ACTIONTYPE_SENDONLY;
-        param2.actionType = ACTIONTYPE_SENDRECV;
+        param2.actionType = bayonet::ACTIONTYPE_SENDRECV;
         param2.timeout_ms = 100;
 
         /*CActionInfo * pActionInfo2 = new CActionInfo();
@@ -203,9 +212,9 @@ public:
         /*set<CActionInfo*> &setAction = pActionInfoSet->GetActionSet();
         for(set<CActionInfo*>::iterator it = setAction.begin(); it != setAction.end(); ++it)
         {
-            trace_log("id:%d,error no:%d,timecost:%u ms",(*it)->GetID(),(*it)->GetErrno(),(*it)->GetTimeCost());
+            byt_trace_log("id:%d,error no:%d,timecost:%u ms",(*it)->GetID(),(*it)->GetErrno(),(*it)->GetTimeCost());
         }*/
-        return APP_FSM_RSP;//代表要回复客户端啦
+        return bayonet::APP_FSM_RSP;//代表要回复客户端啦
     }
     virtual int HandleExit(CActionInfoSet *pActionInfoSet, CAppActorBase* pAppActor)
     {
