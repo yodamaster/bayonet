@@ -8,6 +8,7 @@
 #  History:
 =============================================================================*/
 #include "net_handler.h"
+#include "fl_log.h"
 namespace bayonet {
 CNetHandlerBase::CNetHandlerBase () {
     m_Port = 0;
