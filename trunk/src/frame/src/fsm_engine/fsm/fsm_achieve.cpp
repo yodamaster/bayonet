@@ -14,6 +14,7 @@
 #
 =============================================================================*/
 #include "fsm_achieve.h"
+#include "stat_def.h"
 namespace bayonet {
 
 /**

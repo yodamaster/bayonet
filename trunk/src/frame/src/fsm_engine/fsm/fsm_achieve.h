@@ -22,7 +22,6 @@
 #include <sys/time.h>
 
 #include "fsm_interface.h"
-#include "stat_def.h"
 #include "timer.h"
 #include "ptr_proxy.h"
 #include "map_stat.h"
