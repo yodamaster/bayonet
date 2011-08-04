@@ -12,7 +12,11 @@
 #include "bayonet_frame.h"
 #include "socketactor_listen_tcp.h"
 #include "socketactor_listen_udp.h"
+#include "appfsm_base.h"
+#include "socketfsm_base.h"
+#include "fl_log.h"
 #include "fsm_base_def.h"
+#include "comm_def.h"
 namespace bayonet {
 
 #define CONFVALUE2PARAM_STR(item_node, config_node, key_name)\

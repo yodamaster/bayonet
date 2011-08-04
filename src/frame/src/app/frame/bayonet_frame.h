@@ -17,10 +17,6 @@
 #include <set>
 #include <map>
 
-#include "comm_def.h"
-#include "fl_log.h"
-#include "socketfsm_base.h"
-#include "appfsm_base.h"
 #include "epoller.h"
 #include "action.h"
 
