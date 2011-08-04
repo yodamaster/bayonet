@@ -5,7 +5,8 @@
 #include <set>
 #include <map>
 
-#include "bayonet_frame.h"
+//#include "bayonet_frame.h"
+#include "bayonet_pub.h"
 using namespace std;
 
 #define APP_FSM_PROXY 2000
