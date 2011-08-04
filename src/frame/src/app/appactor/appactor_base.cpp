@@ -11,6 +11,7 @@
 #include "socketactor_base.h"
 #include "bayonet_frame.h"
 #include "fl_log.h"
+#include "epoller.h"
 namespace bayonet {
 CAppActorBase::CAppActorBase()
 {
