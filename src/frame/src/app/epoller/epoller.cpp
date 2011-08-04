@@ -16,6 +16,7 @@
 
 #include "epoller.h"
 #include "appactor_base.h"
+#include "socketactor_base.h"
 namespace bayonet {
 
 CEPoller::CEPoller()

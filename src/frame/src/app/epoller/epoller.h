@@ -31,7 +31,8 @@
 #include <sys/time.h>
 #include <time.h>
 #include <map>
-#include "socketactor_base.h"
+//#include "socketactor_base.h"
+#include "fsm_achieve.h"
 #include "comm_def.h"
 namespace bayonet {
 

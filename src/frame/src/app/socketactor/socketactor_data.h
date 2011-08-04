@@ -13,6 +13,7 @@
 #include "fsm_achieve.h"
 #include "epoller.h"
 #include "net_handler.h"
+#include "socketactor_base.h"
 #include "action.h"
 //=============================================================================
 namespace bayonet {
