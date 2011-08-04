@@ -10,6 +10,7 @@
 #include "socketactor_listen_tcp.h"
 #include "socketactor_passive.h"
 #include "appactor_base.h"
+#include "fl_log.h"
 namespace bayonet {
 CSocketActorListenTcp::CSocketActorListenTcp() 
 {

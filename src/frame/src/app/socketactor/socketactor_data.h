@@ -10,12 +10,9 @@
 #ifndef _SOCKETACTOR_DATA_H_20110630001730_
 #define _SOCKETACTOR_DATA_H_20110630001730_
 
-#include "comm_def.h"
 #include "fsm_achieve.h"
 #include "epoller.h"
-#include "fl_log.h"
 #include "net_handler.h"
-#include "socketactor_base.h"
 #include "action.h"
 //=============================================================================
 namespace bayonet {
