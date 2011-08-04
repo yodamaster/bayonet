@@ -9,6 +9,7 @@
 =============================================================================*/
 #include "socketactor_listen_udp.h"
 #include "appactor_base.h"
+namespace bayonet {
 CSocketActorListenUdp::CSocketActorListenUdp()
 {
     m_attachedSocketMaxSize = ATTACHED_SOCKET_MAXSIZE;
@@ -144,4 +145,5 @@ CSocketActorPassiveUdp* CSocketActorListenUdp::CreatePassiveActor()
         return pSocketActorAccept;
     }
     return NULL;
+}
 }

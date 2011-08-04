@@ -18,6 +18,7 @@
 #include "socketactor_base.h"
 #include "action.h"
 //=============================================================================
+namespace bayonet {
 class CSocketActorData:public CSocketActorBase
 {
 public:
@@ -74,5 +75,6 @@ protected:
     int m_sendFlag;
     int m_recvFlag;
 };
+}
 //=============================================================================
 #endif

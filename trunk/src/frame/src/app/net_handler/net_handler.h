@@ -35,6 +35,7 @@
 #include <time.h>
 
 #include "fl_log.h"
+namespace bayonet {
 using namespace std;
 class CNetHandlerBase
 {
@@ -86,5 +87,6 @@ public:
     virtual int Send(char* pBuf,int bufLen);
     virtual int Recv(char* pBuf,int bufSize);
 };
+}
 //=============================================================================
 #endif

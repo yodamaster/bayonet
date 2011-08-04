@@ -14,6 +14,7 @@
 #
 =============================================================================*/
 #include "socketactor_active.h"
+namespace bayonet {
 CSocketActorActive::CSocketActorActive () {
 }
 CSocketActorActive::~CSocketActorActive () {}
@@ -112,4 +113,5 @@ int CSocketActorActiveSendRecv::OnRecvOver()
 {
     SetDealOver(0);
     return SOCKET_FSM_CLOSING;
+}
 }

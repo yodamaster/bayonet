@@ -13,6 +13,7 @@
 #include "appactor_base.h"
 #include "action_info_set.h"
 
+namespace bayonet {
 class CAppFsmBase : public CFsmBase
 {
 public:
@@ -108,5 +109,6 @@ class CAppFsmFini : public CAppFsmBase
         return pAppActor->OnFini();
     }
 };
+}
 
 #endif

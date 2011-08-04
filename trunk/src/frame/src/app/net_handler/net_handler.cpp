@@ -8,6 +8,7 @@
 #  History:
 =============================================================================*/
 #include "net_handler.h"
+namespace bayonet {
 CNetHandlerBase::CNetHandlerBase () {
     m_Port = 0;
     m_SocketFd = -1;
@@ -174,4 +175,5 @@ int CNetHandlerUdp::Recv(char* pBuf,int bufSize)
     m_ClientIp = inet_ntoa(_servaddr.sin_addr);
     m_ClientPort = ntohs(_servaddr.sin_port);
     return ret;
+}
 }

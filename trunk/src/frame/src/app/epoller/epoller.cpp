@@ -1,5 +1,22 @@
+/*=============================================================================
+#
+#     FileName: epoller.cpp
+#         Desc: 
+#
+#       Author: dantezhu
+#        Email: zny2008@gmail.com
+#     HomePage: http://www.vimer.cn
+#
+#      Created: 2011-08-04 15:26:08
+#      Version: 0.0.1
+#      History:
+#               0.0.1 | dantezhu | 2011-08-04 15:26:08 | initialization
+#
+=============================================================================*/
+
 #include "epoller.h"
 #include "appactor_base.h"
+namespace bayonet {
 
 CEPoller::CEPoller()
 {
@@ -244,4 +261,5 @@ void CEPoller::CheckTimeOutAppActor()
         pActor->CheckTimeOut();
         ++it;
     }
+}
 }

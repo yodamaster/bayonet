@@ -20,6 +20,7 @@
 #include "fsm_achieve.h"
 #include "action_info.h"
 
+namespace bayonet {
 class CActionInfo;
 
 class CActionInfoSet
@@ -60,4 +61,5 @@ private:
     list<CActionInfo*> m_setHistorActionInfos;
     ptr_proxy<CActorBase> m_pAppActorProxy;
 };
+}
 #endif

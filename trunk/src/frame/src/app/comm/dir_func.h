@@ -23,6 +23,7 @@
 #include <sys/types.h>
 #include <error.h>
 #include <errno.h>
+namespace bayonet {
 using namespace std;
 
 /**
@@ -116,6 +117,7 @@ static int mkdirs(string dir, string::size_type index = 0)
     }
 
     return mkdirs(dir, pos+1);
+}
 }
 
 #endif

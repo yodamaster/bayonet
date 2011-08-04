@@ -18,6 +18,7 @@
 
 #include "socketactor_data.h"
 #include "appactor_base.h"
+namespace bayonet {
 
 class CSocketActorData;
 class CAppActorBase;
@@ -110,4 +111,5 @@ public:
             const char *buf, 
             int len)=0;
 };
+}
 #endif

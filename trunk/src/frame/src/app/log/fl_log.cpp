@@ -1,6 +1,7 @@
 #include "fl_log.h"
 #include<sys/file.h>
 
+namespace bayonet {
 
 CFLLog* CFLLog::m_instance = NULL;
 
@@ -245,4 +246,5 @@ int CFLLog::ShiftLogFiles(LogLevel logLevel, unsigned long maxsize, unsigned sho
     m_LogFileInfo.seq++;
 
     return 0;
+}
 }

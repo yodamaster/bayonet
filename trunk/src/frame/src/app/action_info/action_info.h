@@ -15,6 +15,7 @@
 #include "fsm_achieve.h"
 #include "action.h"
 
+namespace bayonet {
 class IAction;
 
 typedef struct _StActionInfoParam
@@ -122,4 +123,5 @@ protected:
 
     bool m_bDealOver;
 };
+}
 #endif

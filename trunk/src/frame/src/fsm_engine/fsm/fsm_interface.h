@@ -17,6 +17,7 @@
 #include <map>
 #include <string>
 #include "object_interface.h"
+namespace bayonet {
 using namespace std;
 
 class IFsm;
@@ -303,5 +304,6 @@ public:
      */
     virtual int Exit(IActor* pActor)=0;
 };
+}
 
 #endif

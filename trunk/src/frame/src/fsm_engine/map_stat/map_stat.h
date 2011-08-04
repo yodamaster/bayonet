@@ -29,48 +29,26 @@
 #include <map>
 
 #include <asm/atomic.h>
+namespace bayonet {
 using namespace std;
 
-#define STAT_MAGICNUM                       83846584                        //统计池幻数 
+const int STAT_MAGICNUM                       = 83846584;                       //统计池幻数 
 
-#define STAT_ID_MAX_SIZE                    128 
-#define STAT_ARRVAL_MAX_SIZE                128
+const int STAT_ID_MAX_SIZE                    = 128; 
+const int STAT_ARRVAL_MAX_SIZE                = 128;
 
-#define BUCKET_MAX_SIZE                     1024                           //统计对象桶个数
-#define STAT_ARROBJ_MAX_SIZE                1024                           //统计对象的总个数 
+const int BUCKET_MAX_SIZE                     = 1024;                           //统计对象桶个数
+const int STAT_ARROBJ_MAX_SIZE                = 1024;                           //统计对象的总个数 
 
-#define INVALID_HANDLE                      -1                              //无效的next指向
-
-
-#define StatVal                             atomic_t
-#define STATVAL_INC(val)                    atomic_inc(&(val))
-#define STATVAL_DEC(val)                    atomic_dec(&(val))
-#define STATVAL_ADD(val, lv)                atomic_add(lv, &(val))
-#define STATVAL_SET(val, lv)                atomic_set(&(val), lv)
-#define STATVAL_READ(val)                   atomic_read(&(val))
-
-#ifndef STAT_ERROR
-#define STAT_ERROR(fmt, args...) \
-    snprintf(m_szErrMsg, sizeof(m_szErrMsg), "[%s][%d][%s]"fmt, \
-             __FILE__, __LINE__,__FUNCTION__, ##args)
-#endif
-
-#ifndef STAT_CHECK_PSTATPOOL
-#define STAT_CHECK_PSTATPOOL(pStatPool)\
-    if(pStatPool == NULL) {\
-        STAT_ERROR("pStatPool is NULL");\
-        return -1;\
-    }
-#endif
+const int INVALID_HANDLE                      = -1;                             //无效的next指向
 
 typedef unsigned (*HASH_FUNC)(const char* id);
 
-
 typedef struct _StStatObj
 {
-    char id[STAT_ID_MAX_SIZE];                                              //统计ID
-    StatVal arr_vals[STAT_ARRVAL_MAX_SIZE];                                 //次数数组
-    int next;                                                               //下一个StStatObj
+    char id[STAT_ID_MAX_SIZE];                                                  //统计ID
+    atomic_t arr_vals[STAT_ARRVAL_MAX_SIZE];                                    //次数数组
+    int next;                                                                   //下一个StStatObj
 } StStatObj;
 
 typedef struct _StStatPool
@@ -211,5 +189,6 @@ private:
     StStatPool* m_pStatPool;
     char m_szErrMsg[1024];
 };
+}
 
 #endif

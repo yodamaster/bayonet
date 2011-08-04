@@ -9,6 +9,7 @@
 =============================================================================*/
 #include "action_info.h"
 #include "socketactor_active.h"
+namespace bayonet {
 CActionInfo::CActionInfo () {
     m_err_no = 0;
     m_timecost_ms= 0;
@@ -98,4 +99,5 @@ int CActionInfo::HandleStart()
     pSocketActorActive->Init(m_stActionTypeParam.ip,m_stActionTypeParam.port,m_stActionTypeParam.timeout_ms,m_stActionTypeParam.protoType);
     pSocketActorActive->ChangeState(SOCKET_FSM_INIT);
     return 0;
+}
 }

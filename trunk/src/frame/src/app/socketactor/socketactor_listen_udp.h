@@ -12,6 +12,7 @@
 
 #include "socketactor_data.h"
 #include "socketactor_passive.h"
+namespace bayonet {
 class CSocketActorListenUdp : public CSocketActorData
 {
 public:
@@ -43,4 +44,5 @@ protected:
 
     int m_attachedSocketMaxSize;
 };
+}
 #endif
