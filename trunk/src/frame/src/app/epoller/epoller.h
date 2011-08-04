@@ -32,6 +32,7 @@
 #include <time.h>
 #include <map>
 #include "socketactor_base.h"
+#include "comm_def.h"
 namespace bayonet {
 
 using namespace std;

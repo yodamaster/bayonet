@@ -10,6 +10,7 @@
 #include "appactor_base.h"
 #include "socketactor_base.h"
 #include "bayonet_frame.h"
+#include "fl_log.h"
 namespace bayonet {
 CAppActorBase::CAppActorBase()
 {

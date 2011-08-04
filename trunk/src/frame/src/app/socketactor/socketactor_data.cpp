@@ -9,6 +9,9 @@
 =============================================================================*/
 #include "socketactor_data.h"
 #include "bayonet_frame.h"
+#include "socketactor_base.h"
+#include "comm_def.h"
+#include "fl_log.h"
 namespace bayonet {
 CSocketActorData::CSocketActorData () {
     m_pNetHandler = NULL;

@@ -14,6 +14,7 @@
 #
 =============================================================================*/
 #include "action_info_set.h"
+#include "fl_log.h"
 namespace bayonet {
 
 CActionInfoSet::CActionInfoSet() {
