@@ -25,37 +25,24 @@
 #include "timer.h"
 #include "ptr_proxy.h"
 #include "map_stat.h"
-#include "fsm_base_def.h"
 namespace bayonet {
 using namespace std;
 
 /**
  * @brief   统计每个actor状态变化的路径以及经过的时间
  */
-typedef struct _StFsmNode
+struct StFsmNode
 {
     IFsm* fsm;
     struct timeval m_Start_TV;
     struct timeval m_Stop_TV;
 
-    _StFsmNode()
-    {
-        m_Start_TV = CRecordTime::Ins()->get_time();
-        fsm = NULL;
-    }
+    StFsmNode();
 
-    int Stop()
-    {
-        m_Stop_TV = CRecordTime::Ins()->get_time();
-        return 0;
-    }
-    int GetPastTime()
-    {
-        long past_time  = 0;
-        past_time = ((m_Stop_TV.tv_sec  - m_Start_TV.tv_sec ) * 1000000 + (m_Stop_TV.tv_usec - m_Start_TV.tv_usec)) / 1000;
-        return past_time;
-    }
-} StFsmNode;
+    int Stop();
+
+    int GetPastTime();
+};
 
 class CFrameBase : public IFrame
 {
