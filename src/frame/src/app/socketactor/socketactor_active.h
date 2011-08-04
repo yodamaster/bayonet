@@ -13,6 +13,7 @@
 #include "socketactor_data.h"
 #include "action_info.h"
 #include "timer.h"
+namespace bayonet {
 class CSocketActorActive : public CSocketActorData
 {
 public:
@@ -55,4 +56,5 @@ public:
     virtual int OnSendOver();
     virtual int OnRecvOver();
 };
+}
 #endif

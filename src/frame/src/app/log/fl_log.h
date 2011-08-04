@@ -30,6 +30,7 @@
 #include <fcntl.h>
 
 #include <assert.h>
+namespace bayonet {
 
 ////////////////////////////////////////////////////////////////////////////////
 // 直接调用的宏
@@ -129,5 +130,6 @@ class CFLLog
 
 extern int APILogInit(LogLevel logLevel, const char* logDir, const char* logName, unsigned long logSize);
 extern int APILogWrite(LogLevel logLevel, const char* logFormat, ...);
+}
 
 #endif

@@ -19,6 +19,7 @@
 #include <typeinfo>
 #include <iostream>
 #include <string>
+namespace bayonet {
 using namespace std;
 
 class IObject
@@ -42,5 +43,6 @@ public:
         return szTmp;
     }
 };
+}
 
 #endif

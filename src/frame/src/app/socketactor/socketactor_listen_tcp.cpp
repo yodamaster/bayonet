@@ -10,6 +10,7 @@
 #include "socketactor_listen_tcp.h"
 #include "socketactor_passive.h"
 #include "appactor_base.h"
+namespace bayonet {
 CSocketActorListenTcp::CSocketActorListenTcp() 
 {
     m_BackLog = TCP_BACKLOG_SIZE;
@@ -180,4 +181,5 @@ bool CSocketActorListenTcp::IsTimeOut()
 {
     //永不超时
     return false;
+}
 }

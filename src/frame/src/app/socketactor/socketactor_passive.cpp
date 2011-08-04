@@ -9,6 +9,7 @@
 =============================================================================*/
 #include "socketactor_passive.h"
 #include "appactor_base.h"
+namespace bayonet {
 
 CSocketActorPassive::~CSocketActorPassive ()
 {}
@@ -114,4 +115,5 @@ int CSocketActorPassiveUdp::OnRecvOver()
 {
     //不会走到这一步
     return SOCKET_FSM_WAITSEND;
+}
 }

@@ -24,6 +24,28 @@
 #include <sys/syscall.h>
 
 #include "map_stat.h"
+namespace bayonet {
+
+#define STATVAL_INC(val)                    atomic_inc(&(val))
+#define STATVAL_DEC(val)                    atomic_dec(&(val))
+#define STATVAL_ADD(val, lv)                atomic_add(lv, &(val))
+#define STATVAL_SET(val, lv)                atomic_set(&(val), lv)
+#define STATVAL_READ(val)                   atomic_read(&(val))
+
+#ifndef STAT_ERROR
+#define STAT_ERROR(fmt, args...) \
+    snprintf(m_szErrMsg, sizeof(m_szErrMsg), "[%s][%d][%s]"fmt, \
+             __FILE__, __LINE__,__FUNCTION__, ##args)
+#endif
+
+#ifndef STAT_CHECK_PSTATPOOL
+#define STAT_CHECK_PSTATPOOL(pStatPool)\
+    if(pStatPool == NULL) {\
+        STAT_ERROR("pStatPool is NULL");\
+        return -1;\
+    }
+#endif
+
 
 /**
  * @brief   哈希函数
@@ -504,4 +526,5 @@ string CMapStat::GetStatInfo(const char * const stat_desc[], int stat_num)
         ++p;
     }
     return output;
+}
 }

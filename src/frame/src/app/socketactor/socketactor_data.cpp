@@ -9,6 +9,7 @@
 =============================================================================*/
 #include "socketactor_data.h"
 #include "bayonet_frame.h"
+namespace bayonet {
 CSocketActorData::CSocketActorData () {
     m_pNetHandler = NULL;
     //m_strSingleRecvBuf.resize(1024);
@@ -299,5 +300,6 @@ int CSocketActorData::ActionHandleDecodeRecvBuf(const char *buf, int len)
         return -1;
     }
     return m_pAction->HandleDecodeRecvBuf(this,(CAppActorBase*)m_pAppActorProxy.true_ptr(),buf,len);
+}
 }
 //=============================================================================

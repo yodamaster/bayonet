@@ -24,6 +24,7 @@
 #include "epoller.h"
 #include "action.h"
 
+namespace bayonet {
 using namespace std;
 
 typedef struct _StFrameParam
@@ -142,4 +143,5 @@ protected:
     CEPoller m_epoller;
     CSocketActorBase* m_pSocketActorListen;
 };
+}
 #endif

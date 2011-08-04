@@ -9,6 +9,7 @@
 =============================================================================*/
 #include "socketactor_base.h"
 #include "bayonet_frame.h"
+namespace bayonet {
 CSocketActorBase::CSocketActorBase () 
 {
     m_SocketFd = -1;
@@ -198,4 +199,5 @@ int CSocketActorBase::DetachFromEpoller()
         return 0;
     }
     return 1;
+}
 }

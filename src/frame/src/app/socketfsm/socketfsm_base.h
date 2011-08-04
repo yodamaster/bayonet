@@ -14,6 +14,7 @@
 #include "fsm_interface.h"
 #include "fsm_achieve.h"
 #include "socketactor_base.h"
+namespace bayonet {
 
 class CSocketFsmBase:public CFsmBase
 {
@@ -211,5 +212,6 @@ public:
         return pSocketActor->OnTimeout();
     }
 };
+}
 //=============================================================================
 #endif

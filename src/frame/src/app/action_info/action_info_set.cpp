@@ -14,6 +14,7 @@
 #
 =============================================================================*/
 #include "action_info_set.h"
+namespace bayonet {
 
 CActionInfoSet::CActionInfoSet() {
 }
@@ -84,4 +85,5 @@ void CActionInfoSet::FreeAllHistoryActionInfos()
             delete (*it);
         }
     }
+}
 }

@@ -27,6 +27,7 @@
 #include <vector>
 #include <set>
 #include <map>
+namespace bayonet {
 using namespace std;
 
 template <typename T>
@@ -225,5 +226,6 @@ public:
 protected:
     ptr_proxy<T> m_ptr_proxy;
 };
+}
 
 #endif

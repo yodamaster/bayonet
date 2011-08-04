@@ -32,6 +32,8 @@
 #include <time.h>
 #include <map>
 #include "socketactor_base.h"
+namespace bayonet {
+
 using namespace std;
 
 
@@ -78,5 +80,6 @@ protected:
     map<int,ptr_proxy<CActorBase> > m_mapSocketActorProxy;
     list<ptr_proxy<CActorBase> > m_listAppActorProxy;
 };
+}
 
 #endif

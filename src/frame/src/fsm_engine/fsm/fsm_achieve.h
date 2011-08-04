@@ -27,6 +27,7 @@
 #include "ptr_proxy.h"
 #include "map_stat.h"
 #include "fsm_base_def.h"
+namespace bayonet {
 using namespace std;
 
 /**
@@ -224,4 +225,5 @@ private:
 
     int m_stateID;
 };
+}
 #endif

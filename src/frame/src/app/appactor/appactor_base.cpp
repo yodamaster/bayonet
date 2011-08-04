@@ -10,6 +10,7 @@
 #include "appactor_base.h"
 #include "socketactor_base.h"
 #include "bayonet_frame.h"
+namespace bayonet {
 CAppActorBase::CAppActorBase()
 {
     m_TimeoutMs = -1;
@@ -144,4 +145,5 @@ CEPoller* CAppActorBase::GetEpoller()
     CBayonetFrame* pBayonetFrame = (CBayonetFrame*)pFrame;
     CEPoller * pEpoller = pBayonetFrame->GetEpoller();
     return pEpoller;
+}
 }

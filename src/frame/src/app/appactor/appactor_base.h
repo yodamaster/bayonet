@@ -19,6 +19,7 @@
 #include "fsm_achieve.h"
 #include "action_info_set.h"
 
+namespace bayonet {
 using namespace std;
 
 class CActionInfoSet;
@@ -55,4 +56,5 @@ private:
 
     int m_TimeoutMs;//超时时间
 };
+}
 #endif

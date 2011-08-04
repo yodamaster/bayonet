@@ -11,6 +11,7 @@
 #include "socketactor_listen_tcp.h"
 #include "socketactor_listen_udp.h"
 #include "tinyxml.h"
+namespace bayonet {
 
 #define CONFVALUE2PARAM_STR(item_node, config_node, key_name)\
         item_node = config_node->FirstChildElement(#key_name); \
@@ -319,4 +320,5 @@ int CBayonetFrame::ForkWork()
         error_log("i am farther,child is %d",pid);
     }
     return pid;
+}
 }

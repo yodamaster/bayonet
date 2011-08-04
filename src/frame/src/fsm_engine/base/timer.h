@@ -12,6 +12,7 @@
 
 #include "record_time.h"
 #include <sys/time.h>
+namespace bayonet {
 class CTimer
 {
 public:
@@ -39,4 +40,5 @@ public:
 private:
     struct timeval m_Start_TV;
 };
+}
 #endif

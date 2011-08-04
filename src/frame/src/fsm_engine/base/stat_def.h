@@ -9,6 +9,7 @@
 =============================================================================*/
 #ifndef _STAT_DEF_H_20110630001853_
 #define _STAT_DEF_H_20110630001853_
+namespace bayonet {
 
 typedef enum
 {
@@ -47,4 +48,5 @@ const char * const stat_desc[] =
     "STAT_5000MS_REQ",
     "STAT_MORE_REQ",
 };
+}
 #endif

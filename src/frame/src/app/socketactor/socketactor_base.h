@@ -16,6 +16,7 @@
 #include "fl_log.h"
 #include "net_handler.h"
 //#include "appactor_base.h"
+namespace bayonet {
 class IAction;
 
 class CEpollEvent : public IEvent
@@ -104,4 +105,5 @@ protected:
 
     ptr_proxy<CActorBase> m_pAppActorProxy;
 };
+}
 #endif

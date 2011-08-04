@@ -15,6 +15,7 @@
 =============================================================================*/
 #ifndef _FSM_BASE_DEF_H_20110629235706_
 #define _FSM_BASE_DEF_H_20110629235706_
+namespace bayonet {
 //统计等级，数字越大，性能越差
 //测试过，能让性能降低一半
 enum EnumStatLevel
@@ -23,4 +24,5 @@ enum EnumStatLevel
     EnumStatLevelBrief = 1,             //统计所有的SELF和VALID
     EnumStatLevelFull  = 2,             //所有统计
 };
+}
 #endif

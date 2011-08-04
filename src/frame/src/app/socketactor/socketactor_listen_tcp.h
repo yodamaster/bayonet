@@ -14,6 +14,7 @@
 #include "fsm_achieve.h"
 #include "socketactor_data.h"
 
+namespace bayonet {
 class CSocketActorListenTcp:public CSocketActorBase
 {
 public:
@@ -57,4 +58,5 @@ protected:
 
     int m_attachedSocketMaxSize;
 };
+}
 #endif

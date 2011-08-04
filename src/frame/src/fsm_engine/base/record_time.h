@@ -29,6 +29,7 @@
 #include <map>
 
 #include <sys/time.h>
+namespace bayonet {
 using namespace std;
 class CRecordTime
 {
@@ -96,4 +97,5 @@ protected:
     //高精度采用每个都真实取时间
     int m_accuracy;
 };
+}
 #endif

@@ -11,6 +11,7 @@
 #define _SOCKETACTOR_PASSIVE_H_20110630001756_
 
 #include "socketactor_data.h"
+namespace bayonet {
 class CSocketActorPassive : public CSocketActorData
 {
 public:
@@ -48,4 +49,5 @@ public:
     virtual int OnInitOver();
     virtual int OnRecvOver();
 };
+}
 #endif

@@ -14,6 +14,7 @@
 #
 =============================================================================*/
 #include "fsm_achieve.h"
+namespace bayonet {
 
 /**
 * @brief    映射时间到统计
@@ -475,4 +476,5 @@ int CFsmBase::Exit(IActor* pActor)
         m_pFrame->StatChangeFsm(this, pActor, __func__);
     }
     return HandleExit(pActor);
+}
 }
