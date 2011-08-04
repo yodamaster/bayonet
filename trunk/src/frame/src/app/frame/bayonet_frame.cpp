@@ -7,10 +7,12 @@
 #  LastChange:      2011-01-26 17:27:51
 #  History:         
 =============================================================================*/
+#include "tinyxml.h"
+
 #include "bayonet_frame.h"
 #include "socketactor_listen_tcp.h"
 #include "socketactor_listen_udp.h"
-#include "tinyxml.h"
+#include "fsm_base_def.h"
 namespace bayonet {
 
 #define CONFVALUE2PARAM_STR(item_node, config_node, key_name)\
@@ -28,7 +30,41 @@ namespace bayonet {
             fprintf(stdout,"init from config.[%s]:[%s]\n", #key_name, item_node->GetText());\
             param.key_name = atoi(item_node->GetText());\
         }
+//=============================================================================
+StFrameParam::StFrameParam()
+{
 
+    port = 0;
+    proto_type = PROTO_TYPE_TCP;
+    backlog = TCP_BACKLOG_SIZE;
+    keep_cnt = false;
+    timeout_ms = -1;         // 默认就是收到链接之后就不超时
+    attached_socket_maxsize = ATTACHED_SOCKET_MAXSIZE;
+
+    action = NULL;
+
+    worker_num = 1;
+
+    info_dir = BAYONET_INFO_DIR;
+
+    time_accuracy = 0; // 默认低精度
+
+    epoll_size = EPOLL_FD_MAXSIZE;
+    epoll_wait_time_ms = EPOLL_WAIT_TIMEMS;
+
+    check_sock_interval_time_ms = CHECK_SOCK_INTERVAL_TIMEMS;
+    check_app_interval_time_ms = CHECK_APP_INTERVAL_TIMEMS;
+
+    gc_maxcount = GC_MAX_COUNT;
+
+    log_level = LM_ERROR;
+    log_filename = BAYONET_LOGFILE_NAME;
+    log_maxsize = LOG_DEFAULT_SIZE;
+
+    stat_filename = BAYONET_STATFILE_NAME;
+    stat_level = EnumStatLevelFull;
+}
+//=============================================================================
 CBayonetFrame::CBayonetFrame()
 {
     m_pSocketActorListen = NULL;

@@ -15,6 +15,7 @@
 =============================================================================*/
 #include "fsm_achieve.h"
 #include "stat_def.h"
+#include "fsm_base_def.h"
 namespace bayonet {
 
 /**
@@ -53,6 +54,24 @@ static int MapTime2StatIndex(int msec,int baseLine)
     return statTimeIndex;
 }
 
+//=============================================================================
+StFsmNode::StFsmNode()
+{
+    m_Start_TV = CRecordTime::Ins()->get_time();
+    fsm = NULL;
+}
+
+int StFsmNode::Stop()
+{
+    m_Stop_TV = CRecordTime::Ins()->get_time();
+    return 0;
+}
+int StFsmNode::GetPastTime()
+{
+    long past_time  = 0;
+    past_time = ((m_Stop_TV.tv_sec  - m_Start_TV.tv_sec ) * 1000000 + (m_Stop_TV.tv_usec - m_Start_TV.tv_usec)) / 1000;
+    return past_time;
+}
 //=============================================================================
 CFrameBase::CFrameBase () {
     m_needGCCount = 0;
