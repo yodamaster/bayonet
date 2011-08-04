@@ -71,11 +71,20 @@ StFrameParam::StFrameParam()
 //=============================================================================
 CBayonetFrame::CBayonetFrame()
 {
+    m_pEPoller = NULL;
+    m_pEPoller = new CEPoller();
     m_pSocketActorListen = NULL;
     RegDefaultSocketFsms();
     RegDefaultAppFsms();
 }
-CBayonetFrame::~CBayonetFrame(){}
+CBayonetFrame::~CBayonetFrame()
+{
+    if (m_pEPoller)
+    {
+        delete m_pEPoller;
+        m_pEPoller = NULL;
+    }
+}
 
 int CBayonetFrame::Init(const StFrameParam& param)
 {
@@ -108,7 +117,7 @@ int CBayonetFrame::Init(const StFrameParam& param)
         return -1;
     }
 
-    m_epoller.SetFrame(this);
+    m_pEPoller->SetFrame(this);
     return 0;
 }
 int CBayonetFrame::Init(const char* conf_path, IAction* action)
@@ -128,7 +137,7 @@ int CBayonetFrame::Init(const char* conf_path, IAction* action)
 
 CEPoller* CBayonetFrame::GetEpoller()
 {
-    return &m_epoller;
+    return m_pEPoller;
 }
 int CBayonetFrame::Process()
 {
@@ -305,7 +314,7 @@ int CBayonetFrame::ChildWork()
 {
     int ret;
     //epoll的fd和select一样，不能被fork
-    ret = m_epoller.Init(m_StFrameParam.epoll_size,
+    ret = m_pEPoller->Init(m_StFrameParam.epoll_size,
                          m_StFrameParam.epoll_wait_time_ms,
                          m_StFrameParam.check_sock_interval_time_ms,
                          m_StFrameParam.check_app_interval_time_ms,
@@ -327,7 +336,7 @@ int CBayonetFrame::ChildWork()
         return -1;
     }
 
-    ret = m_epoller.LoopForEvent();
+    ret = m_pEPoller->LoopForEvent();
     if (ret != 0)
     {
         byt_error_log("epoller LoopForEvent fail:%d",ret);

@@ -17,12 +17,14 @@
 #include <set>
 #include <map>
 
-#include "epoller.h"
-#include "action.h"
+#include "fsm_achieve.h"
 
 namespace bayonet {
 using namespace std;
 
+class CEPoller;
+class IAction;
+class CSocketActorBase;
 struct StFrameParam
 {
 
@@ -104,7 +106,7 @@ protected:
 
 protected:
     StFrameParam m_StFrameParam;
-    CEPoller m_epoller;
+    CEPoller* m_pEPoller;
     CSocketActorBase* m_pSocketActorListen;
 };
 }
