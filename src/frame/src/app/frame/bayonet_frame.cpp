@@ -7,16 +7,10 @@
 #  LastChange:      2011-01-26 17:27:51
 #  History:         
 =============================================================================*/
-#include "tinyxml.h"
-
 #include "bayonet_frame.h"
 #include "socketactor_listen_tcp.h"
 #include "socketactor_listen_udp.h"
-#include "appfsm_base.h"
-#include "socketfsm_base.h"
-#include "fl_log.h"
-#include "fsm_base_def.h"
-#include "comm_def.h"
+#include "tinyxml.h"
 namespace bayonet {
 
 #define CONFVALUE2PARAM_STR(item_node, config_node, key_name)\
@@ -34,57 +28,14 @@ namespace bayonet {
             fprintf(stdout,"init from config.[%s]:[%s]\n", #key_name, item_node->GetText());\
             param.key_name = atoi(item_node->GetText());\
         }
-//=============================================================================
-StFrameParam::StFrameParam()
-{
 
-    port = 0;
-    proto_type = PROTO_TYPE_TCP;
-    backlog = TCP_BACKLOG_SIZE;
-    keep_cnt = false;
-    timeout_ms = -1;         // 默认就是收到链接之后就不超时
-    attached_socket_maxsize = ATTACHED_SOCKET_MAXSIZE;
-
-    action = NULL;
-
-    worker_num = 1;
-
-    info_dir = BAYONET_INFO_DIR;
-
-    time_accuracy = 0; // 默认低精度
-
-    epoll_size = EPOLL_FD_MAXSIZE;
-    epoll_wait_time_ms = EPOLL_WAIT_TIMEMS;
-
-    check_sock_interval_time_ms = CHECK_SOCK_INTERVAL_TIMEMS;
-    check_app_interval_time_ms = CHECK_APP_INTERVAL_TIMEMS;
-
-    gc_maxcount = GC_MAX_COUNT;
-
-    log_level = LM_ERROR;
-    log_filename = BAYONET_LOGFILE_NAME;
-    log_maxsize = LOG_DEFAULT_SIZE;
-
-    stat_filename = BAYONET_STATFILE_NAME;
-    stat_level = EnumStatLevelFull;
-}
-//=============================================================================
 CBayonetFrame::CBayonetFrame()
 {
-    m_pEPoller = NULL;
-    m_pEPoller = new CEPoller();
     m_pSocketActorListen = NULL;
     RegDefaultSocketFsms();
     RegDefaultAppFsms();
 }
-CBayonetFrame::~CBayonetFrame()
-{
-    if (m_pEPoller)
-    {
-        delete m_pEPoller;
-        m_pEPoller = NULL;
-    }
-}
+CBayonetFrame::~CBayonetFrame(){}
 
 int CBayonetFrame::Init(const StFrameParam& param)
 {
@@ -117,7 +68,7 @@ int CBayonetFrame::Init(const StFrameParam& param)
         return -1;
     }
 
-    m_pEPoller->SetFrame(this);
+    m_epoller.SetFrame(this);
     return 0;
 }
 int CBayonetFrame::Init(const char* conf_path, IAction* action)
@@ -137,7 +88,7 @@ int CBayonetFrame::Init(const char* conf_path, IAction* action)
 
 CEPoller* CBayonetFrame::GetEpoller()
 {
-    return m_pEPoller;
+    return &m_epoller;
 }
 int CBayonetFrame::Process()
 {
@@ -314,7 +265,7 @@ int CBayonetFrame::ChildWork()
 {
     int ret;
     //epoll的fd和select一样，不能被fork
-    ret = m_pEPoller->Init(m_StFrameParam.epoll_size,
+    ret = m_epoller.Init(m_StFrameParam.epoll_size,
                          m_StFrameParam.epoll_wait_time_ms,
                          m_StFrameParam.check_sock_interval_time_ms,
                          m_StFrameParam.check_app_interval_time_ms,
@@ -336,7 +287,7 @@ int CBayonetFrame::ChildWork()
         return -1;
     }
 
-    ret = m_pEPoller->LoopForEvent();
+    ret = m_epoller.LoopForEvent();
     if (ret != 0)
     {
         byt_error_log("epoller LoopForEvent fail:%d",ret);

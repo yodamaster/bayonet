@@ -22,7 +22,6 @@
 namespace bayonet {
 using namespace std;
 
-class CEPoller;
 class CActionInfoSet;
 
 class CAppActorBase : public CActorBase
