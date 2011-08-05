@@ -7,7 +7,7 @@
 #  LastChange:      2011-01-26 17:27:51
 #  History:         
 =============================================================================*/
-#include "bayonet_frame.h"
+#include "byt_frame.h"
 #include "socketactor_listen_tcp.h"
 #include "socketactor_listen_udp.h"
 #include "tinyxml.h"
@@ -29,15 +29,15 @@ namespace bayonet {
             param.key_name = atoi(item_node->GetText());\
         }
 
-CBayonetFrame::CBayonetFrame()
+CBytFrame::CBytFrame()
 {
     m_pSocketActorListen = NULL;
     RegDefaultSocketFsms();
     RegDefaultAppFsms();
 }
-CBayonetFrame::~CBayonetFrame(){}
+CBytFrame::~CBytFrame(){}
 
-int CBayonetFrame::Init(const StFrameParam& param)
+int CBytFrame::Init(const StFrameParam& param)
 {
     m_StFrameParam = param;
 
@@ -71,7 +71,7 @@ int CBayonetFrame::Init(const StFrameParam& param)
     m_epoller.SetFrame(this);
     return 0;
 }
-int CBayonetFrame::Init(const char* conf_path, IAction* action)
+int CBytFrame::Init(const char* conf_path, IAction* action)
 {
     int ret;
     StFrameParam param;
@@ -86,11 +86,11 @@ int CBayonetFrame::Init(const char* conf_path, IAction* action)
     return Init(param);
 }
 
-CEPoller* CBayonetFrame::GetEpoller()
+CEPoller* CBytFrame::GetEpoller()
 {
     return &m_epoller;
 }
-int CBayonetFrame::Process()
+int CBytFrame::Process()
 {
     int ret = 0;
 
@@ -163,7 +163,7 @@ int CBayonetFrame::Process()
 }
 
 
-int CBayonetFrame::ParseConf(const char* conf_path, StFrameParam& param)
+int CBytFrame::ParseConf(const char* conf_path, StFrameParam& param)
 {
     if (conf_path == NULL)
     {
@@ -239,12 +239,12 @@ int CBayonetFrame::ParseConf(const char* conf_path, StFrameParam& param)
     return 0;
 }
 
-void CBayonetFrame::RegDefaultAppFsms()
+void CBytFrame::RegDefaultAppFsms()
 {
     RegFsm(APP_FSM_RSP,new CAppFsmRsp());
     RegFsm(APP_FSM_FINI,new CAppFsmFini());
 }
-void CBayonetFrame::RegDefaultSocketFsms()
+void CBytFrame::RegDefaultSocketFsms()
 {
     RegFsm(SOCKET_FSM_INIT, new CSocketFsmInit());
     RegFsm(SOCKET_FSM_INITOVER, new CSocketFsmInitOver());
@@ -261,7 +261,7 @@ void CBayonetFrame::RegDefaultSocketFsms()
     RegFsm(SOCKET_FSM_ERROR, new CSocketFsmError());
     RegFsm(SOCKET_FSM_TIMEOUT, new CSocketFsmTimeout());
 }
-int CBayonetFrame::ChildWork()
+int CBytFrame::ChildWork()
 {
     int ret;
     //epoll的fd和select一样，不能被fork
@@ -295,7 +295,7 @@ int CBayonetFrame::ChildWork()
     }
     return 0;
 }
-int CBayonetFrame::ForkWork()
+int CBytFrame::ForkWork()
 {
     pid_t pid=0;
 
