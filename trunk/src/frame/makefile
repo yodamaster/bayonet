@@ -22,9 +22,7 @@ DEPENDS = $(patsubst %.o, %.d, $(OBJS))
 
 .PHONY: all clean init
 
-all: init $(TARGET)
-	find . -name "*.h" | xargs -If cp f $(RELEASE_INC_DIR)
-	cp $(TARGET) $(RELEASE_LIB_DIR)
+all: init $(TARGET) release
 	@echo -e "\033[1;32m\nSuccess!\033[0m"
 
 $(TARGET): $(OBJS)
@@ -44,5 +42,9 @@ clean:
 
 init:
 	mkdir -p $(sort ./ $(TAR_DIR) $(SRC_DIR) $(OBJ_DIR) $(OBJ_SUB_DIRS) $(RELEASE_INC_DIR) $(RELEASE_LIB_DIR))
+
+release:
+	find . -name "*.h" | xargs -If cp f $(RELEASE_INC_DIR)
+	cp $(TARGET) $(RELEASE_LIB_DIR)
 
 -include $(DEPENDS)
