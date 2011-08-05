@@ -14,6 +14,17 @@
 #
 =============================================================================*/
 
+#include <stdio.h>
+#include <string.h>
+#include <stdint.h>
+#include <iostream>
+#include <memory>
+#include <sstream>
+#include <algorithm>
+#include <string>
+#include <vector>
+#include <set>
+#include <map>
 #include <errno.h>
 #include <error.h>
 #include <sys/shm.h>
@@ -24,10 +35,15 @@
 #include "map_stat.h"
 #include "stat_def.h"
 
+using namespace std;
+
 #ifndef foreach
 #define foreach(container,it) \
     for(typeof((container).begin()) it = (container).begin();it!=(container).end();++it)
 #endif
+
+//定义一下
+#define STATVAL_READ(val)                   atomic_read(&(val))
 
 int _clear_flag = 0;
 int _loop_flag = 0;
@@ -65,11 +81,11 @@ int SplitString(const string &srcStr,const string &splitStr,vector<string> &dest
     return 0;
 }
 
-string GetRichStatInfo(CMapStat& _stat, const char * const stat_desc[], int stat_num, vector<string>& vecKey1, vector<string>& vecKey2)
+string GetRichStatInfo(bayonet::CMapStat& _stat, const char * const stat_desc[], int stat_num, vector<string>& vecKey1, vector<string>& vecKey2)
 {
-    int num = stat_num <= STAT_ARRVAL_MAX_SIZE ? stat_num : STAT_ARRVAL_MAX_SIZE;
+    int num = stat_num <= bayonet::STAT_ARRVAL_MAX_SIZE ? stat_num : bayonet::STAT_ARRVAL_MAX_SIZE;
 
-    StStatObj* pObj;
+    bayonet::StStatObj* pObj;
     int count;
 
     pObj = _stat.GetValidObjs(count);
@@ -80,7 +96,7 @@ string GetRichStatInfo(CMapStat& _stat, const char * const stat_desc[], int stat
 
     for (int i = 0; i < count; i++)
     {
-        StStatObj* p = pObj+i;
+        bayonet::StStatObj* p = pObj+i;
         vector<string> vecRes;
         SplitString(p->id,"*",vecRes);
 
@@ -168,7 +184,7 @@ int main(int argc,char** argv)
     SplitString(key1,"*",vecKey1);
     SplitString(key2,"*",vecKey2);
 
-    CMapStat _stat;
+    bayonet::CMapStat _stat;
     if ( _stat.Init(_stat_file.c_str()) < 0 )
     {
         printf("open stat error\n");
@@ -177,7 +193,7 @@ int main(int argc,char** argv)
 
     while(1)
     {
-        printf("%s\n",GetRichStatInfo(_stat, stat_desc,STAT_OVER,vecKey1,vecKey2).c_str());
+        printf("%s\n",GetRichStatInfo(_stat, bayonet::stat_desc,bayonet::STAT_OVER,vecKey1,vecKey2).c_str());
         if ( _clear_flag )
         {
             _stat.ResetStat();
