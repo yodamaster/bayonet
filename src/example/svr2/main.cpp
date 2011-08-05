@@ -5,7 +5,7 @@
 #include <set>
 #include <map>
 using namespace std;
-#include "bayonet_frame.h"
+#include "bayonet/byt_frame.h"
 
 #define APP_FSM_LOGIC1 2000
 #define APP_FSM_LOGIC2 2001
@@ -17,7 +17,7 @@ using bayonet::StActionInfoParam;
 using bayonet::CAppActorBase;
 using bayonet::CSocketActorData;
 using bayonet::CAppFsmBase;
-using bayonet::CBayonetFrame;
+using bayonet::CBytFrame;
 
 class CMyActor : public CAppActorBase
 {
@@ -229,7 +229,7 @@ int main(int argc, const char *argv[])
 {
     signal( SIGUSR1, sighandler );
 
-    CBayonetFrame srv;
+    CBytFrame srv;
     int ret = srv.Init("./bayonet.xml", new CActionFirst());
     if (ret != 0)
     {

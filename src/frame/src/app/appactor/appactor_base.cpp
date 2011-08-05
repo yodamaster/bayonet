@@ -9,7 +9,7 @@
 =============================================================================*/
 #include "appactor_base.h"
 #include "socketactor_base.h"
-#include "bayonet_frame.h"
+#include "byt_frame.h"
 namespace bayonet {
 CAppActorBase::CAppActorBase()
 {
@@ -142,8 +142,8 @@ CEPoller* CAppActorBase::GetEpoller()
     {
         return NULL;
     }
-    CBayonetFrame* pBayonetFrame = (CBayonetFrame*)pFrame;
-    CEPoller * pEpoller = pBayonetFrame->GetEpoller();
+    CBytFrame* pBytFrame = (CBytFrame*)pFrame;
+    CEPoller * pEpoller = pBytFrame->GetEpoller();
     return pEpoller;
 }
 }

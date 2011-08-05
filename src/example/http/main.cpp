@@ -5,7 +5,7 @@
 #include <set>
 #include <map>
 
-#include "bayonet_frame.h"
+#include "bayonet/byt_frame.h"
 using namespace std;
 
 #define APP_FSM_PROXY 2000
@@ -17,7 +17,7 @@ using bayonet::StActionInfoParam;
 using bayonet::CAppActorBase;
 using bayonet::CSocketActorData;
 using bayonet::CAppFsmBase;
-using bayonet::CBayonetFrame;
+using bayonet::CBytFrame;
 
 /**
  * @brief   获取ContentLen的数字的起始和长度
@@ -276,7 +276,7 @@ public:
 
 int main(int argc, const char *argv[])
 {
-    CBayonetFrame srv;
+    CBytFrame srv;
     bayonet::StFrameParam param;
     param.info_dir="bayonet";
     param.ip="0.0.0.0";

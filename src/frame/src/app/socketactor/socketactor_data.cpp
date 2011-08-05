@@ -8,7 +8,7 @@
 #  History:         
 =============================================================================*/
 #include "socketactor_data.h"
-#include "bayonet_frame.h"
+#include "byt_frame.h"
 namespace bayonet {
 CSocketActorData::CSocketActorData () {
     m_pNetHandler = NULL;
