@@ -5,7 +5,7 @@
 #include <set>
 #include <map>
 using namespace std;
-#include "bayonet/byt_frame.h"
+#include "byt_pub.h"
 
 #define APP_FSM_LOGIC1 2000
 #define APP_FSM_LOGIC2 2001
