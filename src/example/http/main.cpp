@@ -70,7 +70,7 @@ int HttpHandleInput(const char* buf, int len)
     size_t contentLenPos = GetContentLenPos(strHttpBuf,contentLenLen);
     if (contentLenPos == string::npos)
     {
-        //说明直接接收完了
+        //TODO (dantezhu | 2011-08-05 12:26:50): 再检查一下chunked，当为0时，代表可以结束了
         return len;
     }
 
