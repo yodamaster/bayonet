@@ -1,6 +1,6 @@
 /*=============================================================================
 #
-#     FileName: fl_log.h
+#     FileName: byt_log.h
 #         Desc: 打印log
 #
 #       Author: dantezhu
@@ -14,8 +14,8 @@
 #
 =============================================================================*/
 
-#ifndef _FL_LOG_H_20110630001931_
-#define _FL_LOG_H_20110630001931_
+#ifndef _BYT_LOG_H_20110805110834_
+#define _BYT_LOG_H_20110805110834_
 
 #include <string.h>
 #include <stdio.h>
@@ -30,9 +30,8 @@
 #include <fcntl.h>
 
 #include <assert.h>
-namespace bayonet {
 
-////////////////////////////////////////////////////////////////////////////////
+//=============================================================================
 // 直接调用的宏
 #define byt_log_init(lvl, path, args...)    APILogInit(lvl, path, ##args) //log类初始化
 
@@ -46,7 +45,9 @@ namespace bayonet {
 #define byt_fatal_log(fmt, args...)     byt_log_detail(bayonet::LM_FATAL, fmt, ##args)
 
 #define byt_screen_info(fmt, args...)   fprintf(stdout, fmt, ##args); fprintf(stdout, "\n")
+//=============================================================================
 
+namespace bayonet {
 
 inline void screen_output(const char* fmt, ...)
 {
@@ -67,7 +68,7 @@ inline void screen_output(const char* fmt, ...)
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// CFLLog
+// CBytLog
 ////////////////////////////////////////////////////////////////////////////////
 
 // log文件默认大小
@@ -98,11 +99,11 @@ typedef struct
     int seq;
 }LogFileInfo;
 
-class CFLLog
+class CBytLog
 {
     public:
-        CFLLog();
-        ~CFLLog();
+        CBytLog();
+        ~CBytLog();
 
     public:
         int Init(LogLevel logLevel, const char* logDir, const char* logName, unsigned long logSize=LOG_DEFAULT_SIZE);
@@ -124,8 +125,8 @@ class CFLLog
         LogFileInfo m_LogFileInfo;
 
     public:
-        static CFLLog* m_instance;
-        static CFLLog* instance();
+        static CBytLog* m_instance;
+        static CBytLog* instance();
 };
 
 extern int APILogInit(LogLevel logLevel, const char* logDir, const char* logName, unsigned long logSize);

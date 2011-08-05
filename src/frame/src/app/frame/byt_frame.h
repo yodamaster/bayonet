@@ -1,14 +1,14 @@
 /*=============================================================================
 #  Author:          dantezhu - http://www.vimer.cn
 #  Email:           zny2008@gmail.com
-#  FileName:        bayonet_frame.h
+#  FileName:        byt_frame.h
 #  Description:     异步框架,务必打开快速回收-echo 1 > /proc/sys/net/ipv4/tcp_tw_recycle 
 #  Version:         1.0
-#  LastChange:      2011-01-26 17:12:23
+#  LastChange:      2011-08-05 11:10:00
 #  History:         
 =============================================================================*/
-#ifndef _BAYONET_FRAME_H_20110630001658_
-#define _BAYONET_FRAME_H_20110630001658_
+#ifndef _BYT_FRAME_H_20110805110958_
+#define _BYT_FRAME_H_20110805110958_
 
 #include <iostream>
 #include <memory>
@@ -18,7 +18,7 @@
 #include <map>
 
 #include "comm_def.h"
-#include "fl_log.h"
+#include "byt_log.h"
 #include "socketfsm_base.h"
 #include "appfsm_base.h"
 #include "epoller.h"
@@ -102,11 +102,11 @@ typedef struct _StFrameParam
     }
 } StFrameParam;
 
-class CBayonetFrame : public CFrameBase
+class CBytFrame : public CFrameBase
 {
 public:
-    CBayonetFrame();
-    virtual ~CBayonetFrame();
+    CBytFrame();
+    virtual ~CBytFrame();
 
     int Init(const StFrameParam& param);
 

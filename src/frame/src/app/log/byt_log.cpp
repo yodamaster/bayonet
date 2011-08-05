@@ -1,9 +1,9 @@
-#include "fl_log.h"
 #include<sys/file.h>
+#include "byt_log.h"
 
 namespace bayonet {
 
-CFLLog* CFLLog::m_instance = NULL;
+CBytLog* CBytLog::m_instance = NULL;
 
 char gLogLevelName[LOG_LEVEL_MAXNUM][16] = {    
     "NONE",
@@ -18,13 +18,13 @@ char gLogLevelName[LOG_LEVEL_MAXNUM][16] = {
 
 int APILogInit(LogLevel logLevel, const char* logDir, const char* logName, unsigned long logSize=LOG_DEFAULT_SIZE)
 {
-    return CFLLog::instance()->Init(logLevel,logDir,logName,logSize);
+    return CBytLog::instance()->Init(logLevel,logDir,logName,logSize);
 }
 int APILogWrite(LogLevel logLevel, const char* logFormat, ...)
 {
     va_list ap;
     va_start(ap, logFormat);
-    int ret = CFLLog::instance()->VWriteLog(logLevel,logFormat,ap);
+    int ret = CBytLog::instance()->VWriteLog(logLevel,logFormat,ap);
     va_end(ap);
 
     return ret;
@@ -32,13 +32,13 @@ int APILogWrite(LogLevel logLevel, const char* logFormat, ...)
 
 ////////////////////////////////////////////////////////////////////////////////
 // constructor & destructor
-CFLLog::CFLLog()
+CBytLog::CBytLog()
 {
     m_LogBuf = NULL;
     m_LogFileInfo.fd = -1;
     m_LogFileInfo.seq = 0;
 }
-CFLLog::~CFLLog()
+CBytLog::~CBytLog()
 {
     if (m_LogFileInfo.fd > 0)
     {
@@ -61,11 +61,11 @@ CFLLog::~CFLLog()
 
 ////////////////////////////////////////////////////////////////////////////////
 // instance
-CFLLog* CFLLog::instance()
+CBytLog* CBytLog::instance()
 {
     if (m_instance == NULL)
     {
-        m_instance = new CFLLog();
+        m_instance = new CBytLog();
     }
     return m_instance;
 }
@@ -73,7 +73,7 @@ CFLLog* CFLLog::instance()
 
 ////////////////////////////////////////////////////////////////////////////////
 // main functions
-int CFLLog::Init(LogLevel logLevel, const char* logDir, const char* logName, unsigned long logSize)
+int CBytLog::Init(LogLevel logLevel, const char* logDir, const char* logName, unsigned long logSize)
 {
     if (logLevel < LM_ALL || logLevel > LM_NONE)
     {
@@ -119,7 +119,7 @@ int CFLLog::Init(LogLevel logLevel, const char* logDir, const char* logName, uns
 }
 
 
-int CFLLog::WriteLog(LogLevel logLevel, const char* logFormat, ...)
+int CBytLog::WriteLog(LogLevel logLevel, const char* logFormat, ...)
 {   
     va_list ap;
     va_start(ap, logFormat);
@@ -128,7 +128,7 @@ int CFLLog::WriteLog(LogLevel logLevel, const char* logFormat, ...)
 
     return ret;
 }
-int CFLLog::VWriteLog(LogLevel logLevel, const char* logFormat, va_list ap)
+int CBytLog::VWriteLog(LogLevel logLevel, const char* logFormat, va_list ap)
 {   
     if (logLevel < m_LogLevel)
         return 0;
@@ -160,7 +160,7 @@ int CFLLog::VWriteLog(LogLevel logLevel, const char* logFormat, va_list ap)
     return 0;
 }
 
-int CFLLog::OpenLogFile()
+int CBytLog::OpenLogFile()
 {
     if (m_LogFileInfo.fd > -1)
     {
@@ -191,7 +191,7 @@ int CFLLog::OpenLogFile()
     return m_LogFileInfo.fd;
 }
 
-int CFLLog::GetLogFileName(char* logFile, int iLen)
+int CBytLog::GetLogFileName(char* logFile, int iLen)
 {
     //寻找当前日期的日志文件最大序号
     for (int seq = m_LogFileInfo.seq + 1; seq < LOG_DEFAULT_MAXNUM; seq++) 
@@ -223,7 +223,7 @@ int CFLLog::GetLogFileName(char* logFile, int iLen)
     return -1;
 }
 
-int CFLLog::ShiftLogFiles(LogLevel logLevel, unsigned long maxsize, unsigned short maxnum)
+int CBytLog::ShiftLogFiles(LogLevel logLevel, unsigned long maxsize, unsigned short maxnum)
 {
     if (m_LogFileInfo.fd < 0)
     {
