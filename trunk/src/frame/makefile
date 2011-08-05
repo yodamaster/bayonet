@@ -3,7 +3,7 @@ MYFLAGS = -MMD -g -Wall -pthread
 TAR_DIR = lib/
 SRC_DIR = src/
 OBJ_DIR = obj/
-RELEASE_INC_DIR = ../../release/include/
+RELEASE_INC_DIR = ../../release/include/bayonet/
 RELEASE_LIB_DIR = ../../release/lib/
 
 TARGET = $(TAR_DIR)libbayonet.a

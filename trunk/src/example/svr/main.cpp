@@ -5,7 +5,7 @@
 #include <set>
 #include <map>
 using namespace std;
-#include "bayonet_frame.h"
+#include "bayonet/byt_frame.h"
 
 #define APP_FSM_LOGIC1 2000
 
@@ -16,7 +16,7 @@ using bayonet::StActionInfoParam;
 using bayonet::CAppActorBase;
 using bayonet::CSocketActorData;
 using bayonet::CAppFsmBase;
-using bayonet::CBayonetFrame;
+using bayonet::CBytFrame;
 
 class CAppFsmLogic1;
 class CActionFirst : public IAction
@@ -97,7 +97,7 @@ public:
 };
 int main(int argc, const char *argv[])
 {
-    CBayonetFrame srv;
+    CBytFrame srv;
     int ret = srv.Init("./bayonet.xml", new CActionFirst());
     if (ret != 0)
     {
