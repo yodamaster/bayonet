@@ -34,13 +34,7 @@ public:
      */
     virtual string Name()
     {
-        const char * name = typeid(*this).name();
-
-        char szTmp[strlen(name)+1];
-
-        sscanf(name, "%*d%s", szTmp);
-
-        return szTmp;
+        return typeid(*this).name();
     }
 };
 }

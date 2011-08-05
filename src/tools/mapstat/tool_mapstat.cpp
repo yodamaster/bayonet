@@ -55,7 +55,7 @@ int main(int argc,char** argv)
         return -1;
     }
 
-    CMapStat _stat;
+    bayonet::CMapStat _stat;
     if ( _stat.Init(_stat_file.c_str()) < 0 )
     {
         printf("open stat error\n");
@@ -64,7 +64,7 @@ int main(int argc,char** argv)
 
     while(1)
     {
-        printf("%s\n",_stat.GetStatInfo(stat_desc,STAT_OVER).c_str());
+        printf("%s\n",_stat.GetStatInfo(bayonet::stat_desc,bayonet::STAT_OVER).c_str());
         if ( _clear_flag )
         {
             _stat.ResetStat();

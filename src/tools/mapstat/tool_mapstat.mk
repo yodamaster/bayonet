@@ -9,7 +9,7 @@ OBJ_DIR = ./
 
 TARGET = $(TAR_DIR)tool_mapstat
 
-INC += -I../../../release/include
+INC += -I../../../release/include/bayonet/
 LIB += -L../../../release/lib -lbayonet
 
 OBJS = \
