@@ -3,7 +3,8 @@ MYFLAGS = -MMD -g -Wall -pthread
 TAR_DIR = lib/
 SRC_DIR = src/
 OBJ_DIR = obj/
-RELEASE_INC_DIR = ../../release/include/bayonet/
+RELEASE_INC_DIR = ../../release/include/
+RELEASE_INC_SUB_DIR = $(RELEASE_INC_DIR)/bayonet/
 RELEASE_LIB_DIR = ../../release/lib/
 
 TARGET = $(TAR_DIR)libbayonet.a
@@ -41,10 +42,11 @@ clean:
 	rm -f $(OBJS) $(TARGET) $(DEPENDS)
 
 init:
-	mkdir -p $(sort ./ $(TAR_DIR) $(SRC_DIR) $(OBJ_DIR) $(OBJ_SUB_DIRS) $(RELEASE_INC_DIR) $(RELEASE_LIB_DIR))
+	mkdir -p $(sort ./ $(TAR_DIR) $(SRC_DIR) $(OBJ_DIR) $(OBJ_SUB_DIRS) $(RELEASE_INC_DIR) $(RELEASE_INC_SUB_DIR) $(RELEASE_LIB_DIR))
 
 release:
-	find . -name "*.h" | xargs -If cp f $(RELEASE_INC_DIR)
+	find . -name "byt_pub.h" | xargs -If cp f $(RELEASE_INC_DIR)
+	find . -name "*.h" | grep -v "byt_pub.h" | xargs -If cp f $(RELEASE_INC_SUB_DIR)
 	cp $(TARGET) $(RELEASE_LIB_DIR)
 
 -include $(DEPENDS)
