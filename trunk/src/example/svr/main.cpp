@@ -5,8 +5,7 @@
 #include <set>
 #include <map>
 using namespace std;
-//#include "bayonet_frame.h"
-#include "bayonet_pub.h"
+#include "bayonet_frame.h"
 
 #define APP_FSM_LOGIC1 2000
 

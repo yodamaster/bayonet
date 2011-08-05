@@ -10,7 +10,7 @@
 #ifndef _SOCKETACTOR_LISTEN_TCP_H_20110630001737_
 #define _SOCKETACTOR_LISTEN_TCP_H_20110630001737_
 
-//#include "comm_def.h"
+#include "comm_def.h"
 #include "fsm_achieve.h"
 #include "socketactor_data.h"
 

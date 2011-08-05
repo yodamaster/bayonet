@@ -34,6 +34,7 @@
 #include <stdio.h>
 #include <time.h>
 
+#include "fl_log.h"
 namespace bayonet {
 using namespace std;
 class CNetHandlerBase

@@ -10,7 +10,12 @@
 #ifndef _SOCKETACTOR_BASE_H_20110630001720_
 #define _SOCKETACTOR_BASE_H_20110630001720_
 
+#include "comm_def.h"
 #include "fsm_achieve.h"
+#include "epoller.h"
+#include "fl_log.h"
+#include "net_handler.h"
+//#include "appactor_base.h"
 namespace bayonet {
 class IAction;
 

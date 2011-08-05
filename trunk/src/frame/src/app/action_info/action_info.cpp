@@ -9,19 +9,7 @@
 =============================================================================*/
 #include "action_info.h"
 #include "socketactor_active.h"
-#include "comm_def.h"
-#include "fl_log.h"
 namespace bayonet {
-
-StActionInfoParam::StActionInfoParam ()
-{
-    id = 0;
-    port = 0;
-    protoType = PROTO_TYPE_TCP;
-    pAction = NULL;
-    actionType = ACTIONTYPE_SENDRECV;
-}
-//=============================================================================
 CActionInfo::CActionInfo () {
     m_err_no = 0;
     m_timecost_ms= 0;

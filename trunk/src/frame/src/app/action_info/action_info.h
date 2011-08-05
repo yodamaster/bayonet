@@ -10,14 +10,15 @@
 #ifndef _ACTION_INFO_H_20110630001523_
 #define _ACTION_INFO_H_20110630001523_
 
+#include "comm_def.h"
+#include "fl_log.h"
 #include "fsm_achieve.h"
 #include "action.h"
-#include "comm_def.h"
 
 namespace bayonet {
 class IAction;
 
-struct StActionInfoParam
+typedef struct _StActionInfoParam
 {
     int id;             //用来做标识
     string ip;          //ip
@@ -27,8 +28,15 @@ struct StActionInfoParam
     IAction* pAction;   //最开始的Action
 
     ACTIONTYPE actionType;//发送接受类型
-    StActionInfoParam ();
-};
+    _StActionInfoParam ()
+    {
+        id = 0;
+        port = 0;
+        protoType = PROTO_TYPE_TCP;
+        pAction = NULL;
+        actionType = ACTIONTYPE_SENDRECV;
+    }
+} StActionInfoParam;
 
 class CActionInfo:public IPtrProxy<CActionInfo>
 {
