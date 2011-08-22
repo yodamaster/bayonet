@@ -56,6 +56,24 @@ int udp_process(
         return -1;
     }
 
+    struct StSockFree
+    {
+        StSockFree(int* p_sockfd)
+        {
+            m_p_sockfd = p_sockfd;
+        }
+        ~StSockFree()
+        {
+            if (m_p_sockfd && (*m_p_sockfd) > 0)
+            {
+                close(*m_p_sockfd);
+                (*m_p_sockfd) = -1;
+                m_p_sockfd = NULL;
+            }
+        }
+        int* m_p_sockfd;
+    } st_sock_free(&sockfd);
+
     struct sockaddr_in srv_addr;
     socklen_t addr_len = sizeof(srv_addr);
     bzero(&srv_addr, sizeof(srv_addr));
@@ -63,23 +81,10 @@ int udp_process(
     inet_aton(srv_ip, &srv_addr.sin_addr);
     srv_addr.sin_port = htons(srv_port);
 
-    int nsend =0;
-    while(nsend < send_len)
+    ret = sendto(sockfd,send_buf, send_len, 0,(struct sockaddr *)(&srv_addr),addr_len);
+    if (ret != send_len)
     {
-        ret = sendto(sockfd,send_buf+nsend, (send_len-nsend), 0,(struct sockaddr *)(&srv_addr),addr_len);
-        if (ret < 0)
-        {
-            if (errno == EINTR) //信号中断，或者缓冲区满
-            {
-                continue;
-            }
-            close(sockfd);
-            return -3;
-        }
-        else
-        {
-            nsend += ret;
-        }
+        return -3;
     }
 
     struct sockaddr_in  recv_addr;
@@ -88,50 +93,23 @@ int udp_process(
 
     setsockopt(sockfd , SOL_SOCKET,SO_RCVTIMEO,&timeout,sizeof(timeout));
 
-    recv_len = 0;
-    while(true)
+    ret = recvfrom(sockfd, recv_buf, max_len , 0, (struct sockaddr*)&recv_addr,(socklen_t *) &recv_addr_len);
+    if (ret <= 0)
     {
-        int left_len = max_len - recv_len;
-        if (left_len <= 0)
-        {
-            close(sockfd);
-            return -4;
-        }
-        ret = recvfrom(sockfd,recv_buf+recv_len ,left_len , 0, (struct sockaddr*)&recv_addr,(socklen_t *) &recv_addr_len);
-        if (ret == 0)
-        {
-            close(sockfd);
-            return -5;
-        }
-        else if (ret < 0)
-        {
-            if (errno == EINTR)
-            {
-                continue;
-            }
-            close(sockfd);
-            return -6;
-        }
-
-        recv_len += ret;
-
-        ret = net_handleinput(recv_buf, recv_len);
-        if (ret == 0)
-        {   
-            continue;
-        }   
-        else if (ret < 0)
-        {   
-            close(sockfd);
-            return -7;
-        }   
-        else
-        {   
-            recv_len = ret;
-            break;
-        } 
+        return -4;
     }
-    close(sockfd);
+    recv_len = ret;
+
+    ret = net_handleinput(recv_buf, recv_len);
+    if (ret == 0)
+    {   
+        return -5;
+    }   
+    else if (ret < 0)
+    {   
+        return -6;
+    }   
+
     return 0;
 }
 
