@@ -58,21 +58,20 @@ int udp_process(
 
     struct StSockFree
     {
-        StSockFree(int* p_sockfd)
+        StSockFree(int sockfd)
         {
-            m_p_sockfd = p_sockfd;
+            m_sockfd = sockfd;
         }
         ~StSockFree()
         {
-            if (m_p_sockfd && (*m_p_sockfd) > 0)
+            if (m_sockfd > 0)
             {
-                close(*m_p_sockfd);
-                (*m_p_sockfd) = -1;
-                m_p_sockfd = NULL;
+                close(m_sockfd);
+                m_sockfd = -1;
             }
         }
-        int* m_p_sockfd;
-    } st_sock_free(&sockfd);
+        int m_sockfd;
+    } st_sock_free(sockfd);
 
     struct sockaddr_in srv_addr;
     socklen_t addr_len = sizeof(srv_addr);
@@ -84,7 +83,7 @@ int udp_process(
     ret = sendto(sockfd,send_buf, send_len, 0,(struct sockaddr *)(&srv_addr),addr_len);
     if (ret != send_len)
     {
-        return -3;
+        return -2;
     }
 
     struct sockaddr_in  recv_addr;
@@ -96,18 +95,18 @@ int udp_process(
     ret = recvfrom(sockfd, recv_buf, max_len , 0, (struct sockaddr*)&recv_addr,(socklen_t *) &recv_addr_len);
     if (ret <= 0)
     {
-        return -4;
+        return -3;
     }
     recv_len = ret;
 
     ret = net_handleinput(recv_buf, recv_len);
     if (ret == 0)
     {   
-        return -5;
+        return -4;
     }   
     else if (ret < 0)
     {   
-        return -6;
+        return -5;
     }   
 
     return 0;
