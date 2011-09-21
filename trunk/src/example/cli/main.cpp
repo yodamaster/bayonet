@@ -57,21 +57,20 @@ int udp_process(
 
     struct StSockFree
     {
-        StSockFree(int* p_sockfd)
+        StSockFree(int sockfd)
         {
-            m_p_sockfd = p_sockfd;
+            m_sockfd = sockfd;
         }
         ~StSockFree()
         {
-            if (m_p_sockfd && (*m_p_sockfd) > 0)
+            if (m_sockfd > 0)
             {
-                close(*m_p_sockfd);
-                (*m_p_sockfd) = -1;
-                m_p_sockfd = NULL;
+                close(m_sockfd);
+                m_sockfd = -1;
             }
         }
-        int* m_p_sockfd;
-    } st_sock_free(&sockfd);
+        int m_sockfd;
+    } st_sock_free(sockfd);
 
     struct sockaddr_in srv_addr;
     socklen_t addr_len = sizeof(srv_addr);
@@ -83,7 +82,7 @@ int udp_process(
     ret = sendto(sockfd,send_buf, send_len, 0,(struct sockaddr *)(&srv_addr),addr_len);
     if (ret != send_len)
     {
-        return -3;
+        return -2;
     }
 
     struct sockaddr_in  recv_addr;
@@ -95,18 +94,18 @@ int udp_process(
     ret = recvfrom(sockfd, recv_buf, max_len , 0, (struct sockaddr*)&recv_addr,(socklen_t *) &recv_addr_len);
     if (ret <= 0)
     {
-        return -4;
+        return -3;
     }
     recv_len = ret;
 
     ret = net_handleinput(recv_buf, recv_len);
     if (ret == 0)
     {   
-        return -5;
+        return -4;
     }   
     else if (ret < 0)
     {   
-        return -6;
+        return -5;
     }   
 
     return 0;
@@ -127,26 +126,25 @@ int tcp_process(
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if ( sockfd < 0 )
     {
-        return -2;
+        return -1;
     }
 
     struct StSockFree
     {
-        StSockFree(int* p_sockfd)
+        StSockFree(int sockfd)
         {
-            m_p_sockfd = p_sockfd;
+            m_sockfd = sockfd;
         }
         ~StSockFree()
         {
-            if (m_p_sockfd && (*m_p_sockfd) > 0)
+            if (m_sockfd > 0)
             {
-                close(*m_p_sockfd);
-                (*m_p_sockfd) = -1;
-                m_p_sockfd = NULL;
+                close(m_sockfd);
+                m_sockfd = -1;
             }
         }
-        int* m_p_sockfd;
-    } st_sock_free(&sockfd);
+        int m_sockfd;
+    } st_sock_free(sockfd);
 
     struct sockaddr_in srv_addr;
     bzero(&srv_addr, sizeof(srv_addr));
@@ -154,13 +152,13 @@ int tcp_process(
     srv_addr.sin_port   = htons(srv_port);
     if (inet_pton(AF_INET, srv_ip, &srv_addr.sin_addr) <= 0)
     {
-        return -1;
+        return -2;
     }
 
     ret = connect(sockfd, (struct sockaddr*)&srv_addr, sizeof(srv_addr));
     if (ret < 0)
     {
-        return -2;
+        return -3;
     }
 
     int nsend =0;
@@ -173,7 +171,7 @@ int tcp_process(
             {
                 continue;
             }
-            return -3;
+            return -4;
         }
         else
         {
@@ -189,12 +187,12 @@ int tcp_process(
         int left_len = max_len - recv_len;
         if (left_len <= 0)
         {
-            return -4;
+            return -5;
         }
         ret = recv(sockfd, recv_buf+recv_len, left_len, 0);
         if (ret == 0)
         {
-            return -5;
+            return -6;
         }
         else if (ret < 0)
         {
@@ -202,7 +200,7 @@ int tcp_process(
             {
                 continue;
             }
-            return -6;
+            return -7;
         }
 
         recv_len += ret;
@@ -214,7 +212,7 @@ int tcp_process(
         }   
         else if (ret < 0)
         {   
-            return -7;
+            return -8;
         }   
         else
         {   
@@ -434,10 +432,10 @@ int main(int argc, const char *argv[])
     strRecv.resize(1024);
     int len;
     //int ret =tcp_process_poll(
-    //int ret =tcp_process(
-            //"0.0.0.0",10001,1000,
-    int ret =udp_process(
-            "0.0.0.0",20000,1000,
+    int ret =tcp_process(
+            "0.0.0.0",10001,1000,
+    //int ret =udp_process(
+            //"0.0.0.0",20000,1000,
             strSend.c_str(),strSend.size(),
             (char*)strRecv.c_str(),strRecv.size(),len
             );
