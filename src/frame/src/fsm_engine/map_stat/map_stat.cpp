@@ -509,22 +509,49 @@ string CMapStat::GetStatInfo(const char * const stat_desc[], int stat_num)
     int count = m_pStatPool->objs_used;
 
     char buf[512];
-    string output;
+    stringstream ss;
 
     for (int i = 0; i < count; i++)
     {
-        output.append(p->id);
-        output.append("\n");
+        ss << p->id << endl;
         for (int j = 0; j < num; j++)
         {
             snprintf(buf,sizeof(buf), "\t%-40s:  %-20u\n", 
                      stat_desc[j], 
                      STATVAL_READ(p->arr_vals[j]));
-            output.append(buf);
+            ss << buf;
         }
-        output.append("\n");
+        ss << endl;
         ++p;
     }
-    return output;
+    return ss.str();
+}
+
+string CMapStat::GetBriefStatInfo()
+{
+    if (m_pStatPool == NULL)
+    {
+        STAT_ERROR("pStatPool is NULL");
+        return "";
+    }
+
+    StStatObj* p = m_pStatPool->arr_objs;
+    if (p == NULL)
+    {
+        return "";
+    }
+
+    int count = m_pStatPool->objs_used;
+
+    stringstream ss;
+
+    char buf[512];
+    for (int i = 0; i < count; i++)
+    {
+        snprintf(buf,sizeof(buf), "%-40s:  %-20u", p->id, STATVAL_READ(p->arr_vals[0]));
+        ss << buf << endl;
+        ++p;
+    }
+    return ss.str();
 }
 }
