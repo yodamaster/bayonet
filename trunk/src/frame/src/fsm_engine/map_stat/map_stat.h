@@ -127,6 +127,13 @@ public:
      */
     string GetStatInfo(const char * const stat_desc[], int stat_num);
 
+    /**
+     * @brief   获取一层的统计展现
+     *
+     * @return  字符串
+     */
+    string GetBriefStatInfo();
+
 public:
     /**
      * @brief   查找obj
