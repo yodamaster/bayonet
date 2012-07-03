@@ -63,9 +63,9 @@ public:
     }
 
     /**
-     * @brief   copy构造函数
+     * @brief   赋值函数
      *
-     * @param   rhs         被拷贝对象
+     * @param   rhs         源对象
      *
      * @return  自己的引用
      */
