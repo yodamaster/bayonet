@@ -48,6 +48,12 @@ int CSocketActorListenTcp::Init(string ip,int port,int timeout_ms,int protoType)
                 Name().c_str(), m_IP.c_str(),m_Port,m_SocketFd,strerror(errno));
         return -2; 
     }
+    if(listen(m_SocketFd, m_BackLog)<0)
+    {
+        byt_error_log("[class:%s]CreateListen listen fd:%d err:%s\n",
+                Name().c_str(), m_SocketFd,strerror(errno));
+        return -3;
+    }
     return 0;
 }
 
@@ -71,12 +77,6 @@ int CSocketActorListenTcp::GetAttachedSocketMaxSize()
 
 int CSocketActorListenTcp::OnInit()
 {
-    if(listen(m_SocketFd, m_BackLog)<0)
-    {
-        byt_error_log("[class:%s]CreateListen listen fd:%d err:%s\n",
-                Name().c_str(), m_SocketFd,strerror(errno));
-        return SOCKET_FSM_CLOSING;
-    }
     CEPoller* pEpoller = GetEpoller();
     if (!pEpoller)
     {
