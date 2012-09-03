@@ -33,9 +33,9 @@
 
 //=============================================================================
 // 直接调用的宏
-#define byt_log_init(lvl, path, args...)    APILogInit(lvl, path, ##args) //log类初始化
+#define byt_log_init(lvl, path, args...)    bayonet::APILogInit(lvl, path, ##args) //log类初始化
 
-#define byt_log_detail(lvl, fmt, args...)   APILogWrite(lvl, "[%s:%u][%s] " fmt "\n", __FILE__, __LINE__, __FUNCTION__, ##args)
+#define byt_log_detail(lvl, fmt, args...)   bayonet::APILogWrite(lvl, "[%s:%u][%s] " fmt "\n", __FILE__, __LINE__, __FUNCTION__, ##args)
 
 #define byt_trace_log(fmt, args...)     byt_log_detail(bayonet::LM_TRACE, fmt, ##args)
 #define byt_debug_log(fmt, args...)     byt_log_detail(bayonet::LM_DEBUG, fmt, ##args)
