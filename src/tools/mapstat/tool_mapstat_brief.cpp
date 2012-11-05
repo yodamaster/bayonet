@@ -68,7 +68,6 @@ int main(int argc,char** argv)
         {
             _stat.ResetStat();
         }
-        printf("\n");
         printf(".............................................\n");
         printf("\n");
         sleep(1);
