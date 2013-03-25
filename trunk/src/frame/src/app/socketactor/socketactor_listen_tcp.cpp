@@ -48,11 +48,18 @@ int CSocketActorListenTcp::Init(string ip,int port,int timeout_ms,int protoType)
                 Name().c_str(), m_IP.c_str(),m_Port,m_SocketFd,strerror(errno));
         return -2; 
     }
+    int flag = fcntl (clientfd, F_GETFL);
+    if ( fcntl (m_SocketFd, F_SETFL, O_NONBLOCK | flag) < 0 )
+    {
+        byt_error_log("[class:%s]CreateListen set noblock socket:%d error:%s\n",
+                Name().c_str(), m_SocketFd, strerror(errno));
+        return -3;
+    }
     if(listen(m_SocketFd, m_BackLog)<0)
     {
         byt_error_log("[class:%s]CreateListen listen fd:%d err:%s\n",
                 Name().c_str(), m_SocketFd,strerror(errno));
-        return -3;
+        return -4;
     }
     return 0;
 }
@@ -114,8 +121,12 @@ int CSocketActorListenTcp::OnRecv()
     int clientfd = accept(m_SocketFd,(struct sockaddr *)&addr,(socklen_t*)&length);
     if ( clientfd <= 0 )
     {
-        byt_error_log("[class:%s]netlisten accept rtn:%d error:%s\n",
-                Name().c_str(),clientfd,strerror(errno));
+        // 多进程情况下，会争着accept，所以导致有些报错
+        if (clientfd != -1)
+        {
+            byt_error_log("[class:%s]netlisten accept rtn:%d error:%s\n",
+                          Name().c_str(),clientfd,strerror(errno));
+        }
         return SOCKET_FSM_WAITRECV;
     }
 
