@@ -48,7 +48,7 @@ int CSocketActorListenTcp::Init(string ip,int port,int timeout_ms,int protoType)
                 Name().c_str(), m_IP.c_str(),m_Port,m_SocketFd,strerror(errno));
         return -2; 
     }
-    int flag = fcntl (clientfd, F_GETFL);
+    int flag = fcntl (m_SocketFd, F_GETFL);
     if ( fcntl (m_SocketFd, F_SETFL, O_NONBLOCK | flag) < 0 )
     {
         byt_error_log("[class:%s]CreateListen set noblock socket:%d error:%s\n",
